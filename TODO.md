@@ -21,9 +21,13 @@ Open items, each with the reason it is open. Dates are real.
   (2026-07-29): `anchor_statement` verifies the chain and returns the
   byte-stable portable record to store elsewhere.** Which external system
   receives it (a signed note, an independent log, another repository's
-  history) remains Daniel's decision, deliberately unmade here; until a
-  statement actually lives in a system the chain does not control, the tip
-  is still unbound and the limitation stands.
+  history) was decided 2026-07-29: a dedicated
+  append-only anchors repository (`../anchors`, its own git history, no
+  code). The first two anchors are stored there — the worked chain at
+  length 3 (tip `5c8aaa1d8674…`, including the completed return) and the
+  same-subject chain at length 2 (tip `a3d87025dbce…`). The limitation's
+  first instance is closed for the local set; anchoring in a system outside
+  this machine entirely (a remote, a signed note) remains open.
 
 ## Done (2026-07-29)
 
