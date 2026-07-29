@@ -1,0 +1,22 @@
+# witness_register — standalone project ignores.
+#
+# This file must be tracked. Without it a clone of this repository inherits no
+# ignore rules at all, and the generated, disposable artifacts below show up as
+# untracked content — contradicting the project's own documentation, which
+# states that `output/` is generated and git-ignored. `uv.lock` is tracked on
+# purpose: the pinned development environment is part of the reproducibility
+# statement.
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.coverage
+.coverage.*
+htmlcov/
+output/
+.benchmarks/

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "witness_register"
+version = "0.1.0"
+description = "A shared witness register: co-registration of line report envelopes without aggregation"
+authors = [{name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}]
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=7.4.0", "pytest-cov>=4.1.0", "ruff>=0.4.0"]
+
+[tool.ruff]
+# Pinned so "ruff clean" is a reproducible statement rather than a claim about
+# whichever settings happened to be in effect. target-version matters: the
+# tests reach the declared 3.10 floor, and ruff is what catches a construct
+# that only parses on a later interpreter while passing locally on 3.12.
+target-version = "py310"
+
+[tool.ruff.lint]
+# Ruff's default set: pyflakes plus the syntax and logic subset of pycodestyle.
+# Line length and import ordering are deliberately not enforced, matching the
+# sibling line repositories' pinned configuration.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+precision = 2

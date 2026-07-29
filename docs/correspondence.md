@@ -1,0 +1,75 @@
+# Correspondence: the review this work answers
+
+This repository EXISTS because of one design review: **"The Space Between
+the Lines" (Marek Bargiel, with Simba as analytic reader, 2026-07-29)**, a
+two-voiced reading of the collected line set. Its central proposal — the
+missing layer is a separate SHARED WITNESS REGISTER that co-registers each
+line's report envelope, stores cross-line relations as separate records,
+keeps history append-only, and never ranks, averages, merges, scores, or
+overrides the lines — is this work. The review's own mottos are the
+register's: *precedence without information destruction*; *no crown without
+return*.
+
+The review's per-line proposals (typed evidence surfaces, facet
+factorization, return contracts, conflict co-presence, the envelope export)
+were adopted inside `black_line` and `white_line` on the same date and are
+recorded in those repositories' own `docs/correspondence.md`. The register
+was deliberately NOT built inside any line repository.
+
+## Implemented essentially verbatim
+
+- **The common report envelope as the register's intake.** One record per
+  line report: `line_report_ref` (here `report_ref`, a digest pointer to the
+  complete native report), `line_id`, `subject_id`, `review_date`, registry
+  version + digest, `native_status` in the line's own vocabulary,
+  `source_snapshot_refs`, `scope_and_nonclaims` — pointing at, never
+  reinterpreting, the native report (`envelopes.py`).
+- **Cross-line relations as separate records** with the review's
+  relation kinds — non-compensatory block, unresolved dependency, protected
+  absence, directional tension, unclassified observation, return due,
+  cannot-compare, agreement (`relations.py`).
+- **Append-only history.** Sealed states chained by digest; updates must
+  carry every prior record unchanged, fail-closed; completed returns close
+  only the verified part (`state.py`, `returns.py`).
+- **Pre-categorical holding.** `UnclassifiedHeld` outside every alphabet;
+  promotion requires a human decision reference and links back to the
+  holding — the disposition White Line's correspondence explicitly deferred
+  to "the register work" (`held.py`).
+- **The 3×3 canonical witness test as a shipped battery** with
+  injected-wrong variants proving the checks can reject (`battery.py`).
+- **The three first-pass measures**: relation fidelity, return
+  recoverability, premature crowning rate (`metrics.py`).
+
+## Adapted, with reasons
+
+- **Projection invariants are driven by relation records, not by native
+  statuses.** The review states the invariants over the lines' findings
+  (e.g. "any line's block forces the joint posture down"). Enforcing that
+  literally would require the register to parse each line's vocabulary —
+  which the same review forbids. Resolution: the constraint enters the
+  register as a typed relation, and `project` enforces non-compensatory
+  invariants over relations only. The lines stay authoritative; the
+  register stays illiterate in their languages, on purpose.
+- **`RelationRecord.promoted_from_ref` was added** beyond the review's field
+  list, because "new category links to the earlier unclassified record"
+  needs a typed link, not prose in a description.
+- **A completed return is a NEW record beside the open one** (same contract
+  id, open/completed pair checked by invariant) rather than an in-place
+  update, because in-place would contradict append-only history.
+- **The posture's `0` is an enumeration.** `witness_hold_reasons` returns
+  structured hold reasons so `0` can never be read as a vague middle — the
+  review's "tension kept, not reduced" requirement, made inspectable.
+
+## Open (not yet built, with reasons)
+
+Tracked in [TODO.md](../TODO.md): the full manuscript with scholarship and
+figures; per-line adapter recipes (worked examples importing nothing);
+EXTERNAL anchoring of the chain tip, which the code names as its own
+unsolved limitation. Each is open because doing it honestly needs material
+this window did not produce — not because it was overlooked.
+
+## Status of the review itself
+
+Unpublished correspondence, named in prose here and in the manuscript. It is
+not a bibliography entry anywhere in this repository, because there is no
+published artifact to cite.
