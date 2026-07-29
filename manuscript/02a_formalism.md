@@ -68,6 +68,9 @@ met or a human decision explicitly rescopes it, and a whitespace-only
 verification is refused at construction rather than counted as met.
 :::
 
+![The projection zone measured: each row is one constructed state and the value project() actually returned in this build, with a human decision reference offered at projection time so the rows also show what a decision argument does not lift — it never resolves a block and never lifts a protected absence. A non-compensatory block forces -1 alone and under fifty AGREES relations alike; an empty register is -1, not permission; every hold row is 0 with its reason; +1 appears only where an envelope exists and nothing recorded forbids the use.](../output/figures/wr_zone.png){#fig:wr-zone width=100%}
+
+
 ::: {.proposition title="No auto-categories, no manufactured decisions"}
 An observation that fits no current category is held raw, outside every
 alphabet, and holding is not permission: an unreviewed holding caps the
@@ -91,3 +94,21 @@ recoverability $1.0$, relation fidelity $1.0$, and the posture for treating
 the co-registration as a live subject record held at $0$ with both records
 named in the reasons. The held posture is the demonstration: real data,
 honest relations, and a register that declines to crown them.
+
+The return was then met the way the contract said it must be: four further
+envelopes, each line's real evaluator run over ONE declared work —
+witness_register 0.1.0 itself, with registrar-authored inputs whose
+provenance is recorded beside the records. The instruments answered in
+their own vocabularies: a declaration-coverage `ALIGNED`, an honest
+`outside_scope` for the one action asked about, two directional `TOWARD`
+readings with seven `NOT_OBSERVED`, and an absence ledger naming the
+unobserved tip-anchor dependency and one `UNRESOLVED` question. Completing
+the contract lifts exactly the `return_due` hold and nothing else — the
+incomparability relation still holds the first chain at $0$ — and the
+same-subject state's own posture is also held at $0$, because the honest
+reading of the ledger's open question enters as an unresolved dependency.
+Three favorable readings and one open question is a held posture, not a
+crown; `tests/test_same_subject.py` measures every sentence of this
+paragraph.
+
+![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behaviour was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../output/figures/wr_battery.png){#fig:wr-battery width=100%}

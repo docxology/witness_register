@@ -168,3 +168,35 @@ def test_promotion_links_back_and_preserves_history(envelope) -> None:
     assert promoted.human_decision_ref == "decision:daniel-2026-07-29"
     assert second.unclassified == (holding,)
     assert verify_chain((first, second)) == ()
+
+
+def test_anchor_statement_is_portable_stable_and_fail_closed(
+    envelope, second_envelope
+) -> None:
+    """The tip statement verifies the chain, is byte-stable per declared
+    date, and refuses unsound chains, empty chains, and non-date inputs."""
+
+    import json
+
+    from witness_register import anchor_statement, canonical_json, verify_chain
+
+    first = genesis_state("subject-1", "2026-07-01", (envelope,))
+    second = update_state(first, "2026-07-29", envelopes=(second_envelope,))
+    statement = anchor_statement((first, second), anchored_on="2026-07-29")
+    assert statement["record_schema"] == "witness-register.anchor-statement/1.0"
+    assert statement["tip_digest"] == second.state_digest
+    assert statement["chain_length"] == 2
+    assert "anchors nothing until" in statement["boundary"]
+    assert json.loads(canonical_json(statement)) == statement
+    assert canonical_json(
+        anchor_statement((first, second), anchored_on="2026-07-29")
+    ) == canonical_json(statement)
+
+    with pytest.raises(ValueError, match="empty chain"):
+        anchor_statement((), anchored_on="2026-07-29")
+    with pytest.raises(ValueError, match="ISO"):
+        anchor_statement((first, second), anchored_on="yesterday")
+    second_envelope.native_status["verdict"] = "rewritten"
+    assert verify_chain((first, second))
+    with pytest.raises(ValueError, match="unsound"):
+        anchor_statement((first, second), anchored_on="2026-07-29")

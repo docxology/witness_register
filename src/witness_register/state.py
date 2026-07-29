@@ -261,6 +261,52 @@ def seal_tip(state: WitnessState) -> str:
     return state.state_digest
 
 
+#: The anchor statement's own schema string, versioned like every stored shape.
+ANCHOR_STATEMENT_SCHEMA = "witness-register.anchor-statement/1.0"
+
+
+def anchor_statement(chain: Sequence[WitnessState], anchored_on: str) -> dict:
+    """A portable statement of the chain tip, for storage OUTSIDE the chain.
+
+    The register's stated limitation is that nothing inside an append-only
+    chain can detect a discarded tip. This helper prepares the code side of
+    the remedy without choosing the external system: it verifies the whole
+    chain, re-derives the tip's seal through :func:`seal_tip`, and returns a
+    small strict-JSON-compatible record — schema string, subject, chain
+    length, review moment, tip digest, and the operator-supplied anchoring
+    date — to be written into a system the chain does not control (a signed
+    note, an independent log, another repository's history). Storing the
+    statement inside this repository would anchor nothing; where it goes is
+    an operator decision, deliberately not made here. ``anchored_on`` is
+    supplied, not read from a clock, so regenerating the statement for the
+    same tip on the same declared date is byte-stable.
+    """
+
+    if not chain:
+        raise ValueError("an empty chain has no tip to anchor")
+    if not ISO_DATE_RE.match(anchored_on):
+        raise ValueError("anchored_on must be an ISO YYYY-MM-DD date")
+    violations = verify_chain(chain)
+    if violations:
+        raise ValueError(
+            "refusing to anchor an unsound chain: " + "; ".join(violations)
+        )
+    tip = chain[-1]
+    return {
+        "record_schema": ANCHOR_STATEMENT_SCHEMA,
+        "subject_id": tip.subject_id,
+        "chain_length": len(chain),
+        "tip_review_moment": tip.review_moment,
+        "tip_digest": seal_tip(tip),
+        "anchored_on": anchored_on,
+        "boundary": (
+            "this statement anchors nothing until it is stored in a system "
+            "the chain does not control; it asserts chain-internal "
+            "consistency at the stated tip, never the truth of any report"
+        ),
+    }
+
+
 def promote_unclassified(
     held: UnclassifiedHeld,
     relation_id: str,

@@ -4,25 +4,26 @@ Open items, each with the reason it is open. Dates are real.
 
 ## Open (2026-07-29)
 
-- **Full manuscript with scholarship and figures.** The current manuscript
-  is a minimal honest core (problem, design, limits). A real scholarly
-  treatment — provenance/witness literature, append-only log literature,
-  non-compensatory decision theory — needs a dedicated reading pass that
-  this window did not include; citing from memory would violate the sibling
-  works' scholarship discipline.
-- **Figures.** None are built. Sibling-grade means: a deterministic SVG
-  builder module with a figure registry (caption, alt, source,
-  interpretive-claim and epistemic-boundary fields), rendered-point
-  legibility floors gated by test, double-build byte-identity, and honest
-  plates only — the natural first three are a state-chain schematic, the
-  projection-invariant table, and the 3x3 battery grid, each drawn from the
-  live code the way the lines draw theirs. Copy the pattern from white_line's
-  figures architecture, written natively; do not copy its code.
-- **External anchoring of the chain tip.** `seal_tip` names the limitation:
-  the tip is unbound without an anchor the chain does not control. A worked
-  anchoring recipe (e.g. a signed note or an independent log) is deliberately
-  out of this package's non-claims and needs a decision about which external
-  system Daniel wants to bind to.
+- **Scholarship: SHIPPED (2026-07-29, third window)** — six traditions
+  cited with every bibliographic record verified against Crossref, the RFC
+  Editor, or the W3C before use (see `manuscript/02b_scholarship.md`).
+  Still open: a deeper reading pass could add the audit-culture and
+  documentality literatures the sibling works carry; nothing is cited from
+  memory, so those wait for a real reading session.
+- **Figures: BUILT (2026-07-29, third window)** — see CHANGELOG. What
+  remains open here is only the greyscale-print human check the siblings
+  also carry: no person has yet read the three plates in a greyscale print.
+  The original sibling-grade spec this entry carried is satisfied: builder
+  with registry (interpretive claim + epistemic boundary per plate),
+  rendered-point legibility floor derived from the manuscript geometry and
+  gated by test, double-build byte-identity, plates drawn from live calls.
+- **External anchoring of the chain tip — code side prepared
+  (2026-07-29): `anchor_statement` verifies the chain and returns the
+  byte-stable portable record to store elsewhere.** Which external system
+  receives it (a signed note, an independent log, another repository's
+  history) remains Daniel's decision, deliberately unmade here; until a
+  statement actually lives in a system the chain does not control, the tip
+  is still unbound and the limitation stands.
 
 ## Done (2026-07-29)
 

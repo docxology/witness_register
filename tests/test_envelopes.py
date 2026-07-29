@@ -151,3 +151,32 @@ def test_multiple_defects_are_all_reported_not_only_the_first() -> None:
         "review_date",
         "report_ref",
     }
+
+
+def test_every_stored_export_carries_the_identical_sorted_key_set() -> None:
+    """Cross-exporter consistency, checked over the stored corpus.
+
+    All five repositories serialize the envelope with sorted keys by
+    convention; this test reads every envelope actually stored under
+    ``data/envelopes/`` and requires one identical ten-key set, serialized
+    in sorted order. A sibling exporter drifting its field roster or its
+    serialization order fails here the next time its export is stored.
+    """
+
+    import json
+    import re
+    from pathlib import Path
+
+    from witness_register import REQUIRED_FIELDS
+
+    base = Path(__file__).resolve().parents[1] / "data" / "envelopes"
+    files = sorted(base.glob("*.json")) + sorted((base / "same_subject").glob("*.json"))
+    assert len(files) >= 8, "the stored corpus shrank; this gate would go vacuous"
+    for path in files:
+        raw = path.read_text(encoding="utf-8")
+        payload = json.loads(raw)
+        assert set(payload) == set(REQUIRED_FIELDS), path.name
+        serialized_order = re.findall(r'"(\w+)":', raw)
+        top_level = [key for key in serialized_order if key in REQUIRED_FIELDS]
+        deduped = list(dict.fromkeys(top_level))
+        assert deduped == sorted(REQUIRED_FIELDS), path.name

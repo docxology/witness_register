@@ -108,3 +108,54 @@ references, validation passing (five bare-URL warnings fixed in
 - Re-rendered through the external engine: full validation pass, zero
   undefined references, definitions auto-numbered. Measured at close: 170
   passed (163 + 7), branch coverage 98.65%, both ruff gates clean.
+
+### 2026-07-29 third window — figures, scholarship, the return met, and the anchor prepared
+
+- **Three derived plates** (`figures.py`, `scripts/build_figures.py`):
+  `wr_chain` (the worked chain sealed and verified live, with the actual
+  tamper refusal quoted from a live `update_state` raise), `wr_zone` (the
+  projection precedence table, every posture a fresh `project()` return,
+  rows explicit about which offered a rescope decision and what it did and
+  did not lift), and `wr_battery` (the 3×3 battery run in the build,
+  including the 9/9 injected-wrong rejection proof). Greyscale on paper —
+  the register has no colour in the set's sense. Legibility floor 18
+  canvas units (6.20 pt at 100% embed, derived from the manuscript
+  geometry and re-derived in tests), double builds byte-identical, figure
+  registry with per-artifact SHA-256 and interpretive-claim /
+  epistemic-boundary fields, captions bound verbatim to the manuscript
+  embeds by test (drift planted and caught).
+- **Scholarship** (`manuscript/02b_scholarship.md`, `references.bib`):
+  linked timestamping (Haber & Stornetta 1991), hash authentication
+  (Merkle, CRYPTO '89 proceedings 1990), transparency logs and the
+  observer-consistency problem (RFC 6962, RFC 9162), non-compensatory
+  decision rules (Fishburn 1974), provenance-as-records (W3C PROV-DM 2013),
+  and boundary objects (Star & Griesemer 1989) — every bibliographic record
+  verified against Crossref, the RFC Editor, or the W3C on 2026-07-29
+  before use, and each citation scoped to the mechanism borrowed, never to
+  any judgment.
+- **The first chain's return contract was met** the way it said it must be:
+  `data/envelopes/same_subject/` holds four further envelopes, each line's
+  real evaluator run over ONE declared work — witness_register 0.1.0
+  itself, registrar-authored inputs with provenance recorded beside the
+  records and inside each `subject_id`. The instruments answered in their
+  own vocabularies (`ALIGNED`; an honest `outside_scope`; two `TOWARD` with
+  seven `NOT_OBSERVED`; `NAMED`/`UNRESOLVED`/`NAMED` with eight
+  `NOT_RECORDED`). `tests/test_same_subject.py` measures the whole arc:
+  completing the contract lifts exactly the `return_due` hold (the
+  incomparability hold remains, honestly), and the same-subject state's own
+  posture is held at 0 because the ledger's open question enters as an
+  unresolved dependency — three favorable readings and one open question is
+  a held posture, not a crown.
+- **`anchor_statement`** prepares the code side of tip anchoring without
+  choosing the external system: verifies the whole chain, re-derives the
+  tip seal, and returns a byte-stable strict-JSON record to be stored in a
+  system the chain does not control. Storing it here would anchor nothing;
+  the boundary sentence travels inside the record.
+- **Cross-exporter consistency bound over the stored corpus**: all eight
+  stored envelopes carry the identical sorted ten-key set and sorted
+  serialization; a sibling exporter drifting its roster or order fails
+  `tests/test_envelopes.py` the next time its export is stored.
+- Measured at close: 188 passed (186 + consistency + anchor tests), both
+  ruff gates clean, figure double-build byte-identical (7 artifacts), and
+  the full suite also passing under a real Python 3.10 interpreter
+  (`uv run --python 3.10 --isolated pytest`, 2026-07-29).

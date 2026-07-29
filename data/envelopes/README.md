@@ -42,3 +42,24 @@ overwrite these files. A regenerated file may differ if the exporting line's
 worked case, registry, or version moved; the test suite reads whatever is on
 disk and re-checks the shape, so a stale pointer fails loudly rather than
 silently.
+
+## `same_subject/` — the return, completed
+
+The open return contract in the first worked co-registration named its
+acceptance condition: four envelopes about ONE declared work. These four
+records meet it. The declared subject is **witness_register 0.1.0 itself**
+(commits 56962fe + 49ebea4, 2026-07-29), and the registrar (the operator's
+assistant, recorded as such in each `subject_id`) authored each instrument's
+inputs from the repository's own records:
+
+| File | Native verdict | What was declared/observed (all real artifacts) |
+| --- | --- | --- |
+| `black_line_same_subject.json` | `ALIGNED` | all 22 required labels declared, each `source_snapshot_ref` naming the artifact behind it (manuscript sections, CHANGELOG hardening entry, tests, uv.lock, git commits, TODO, correspondence, provenance README) |
+| `red_line_same_subject.json` | `outside_scope` | the real proposed action "publish this repository publicly"; red_line's registry declares no line near it, and says so rather than manufacturing a verdict |
+| `golden_line_same_subject.json` | 2 × `TOWARD`, 7 × `NOT_OBSERVED` | `repairable-systems` (four failures named + revised in CHANGELOG) and `honest-uncertainty` (limits stated beside claims); no other marker was actually observed, so no other entry was filed |
+| `white_line_same_subject.json` | `NAMED`, `UNRESOLVED`, `NAMED`, 8 × `NOT_RECORDED` | the unobserved tip-anchor dependency, the open aggregate-invitation question, and the deliberately fallow anchoring work |
+
+Registrar-authored means exactly what it says: the declarations and
+observations were filed by the assistant operating the instruments, not by
+Daniel, and each envelope's `subject_id` carries that provenance. The
+verdicts themselves are what each line's real evaluator returned.

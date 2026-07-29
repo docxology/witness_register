@@ -10,6 +10,10 @@ relative path):
 - Friedman, D. A. *White Line*. [github.com/docxology/white_line](https://github.com/docxology/white_line)
 - Friedman, D. A. *Line Set*. [github.com/docxology/line_set](https://github.com/docxology/line_set)
 
+The scholarly references cited in the design and scholarship sections are
+carried in `references.bib`, each verified against Crossref, the RFC Editor,
+or the W3C on 2026-07-29 before use.
+
 The design review this work answers — "The Space Between the Lines" (Marek
 Bargiel, with Simba as analytic reader, 2026-07-29) — is unpublished
 correspondence and is therefore named here in prose rather than entered as a

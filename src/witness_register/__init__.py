@@ -86,7 +86,9 @@ from .serialization import (
     unclassified_digest,
 )
 from .state import (
+    ANCHOR_STATEMENT_SCHEMA,
     WitnessState,
+    anchor_statement,
     genesis_state,
     promote_unclassified,
     seal_tip,
@@ -97,6 +99,7 @@ from .state import (
 from .version import __version__
 
 __all__ = [
+    "ANCHOR_STATEMENT_SCHEMA",
     "BatteryError",
     "CASE_IDS",
     "CaseCheck",
@@ -123,6 +126,7 @@ __all__ = [
     "UnclassifiedHeld",
     "WitnessState",
     "__version__",
+    "anchor_statement",
     "canonical_envelope",
     "canonical_json",
     "canonical_relation",

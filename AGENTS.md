@@ -28,10 +28,15 @@ Rules and gates for any agent (or human) working in this repository.
 ## Gates (run all, from this repository's root)
 
 ```bash
+uv run python scripts/build_figures.py            # first: deterministic plates + registry (needs rsvg-convert)
 uv run pytest tests/ --cov=src --cov-branch -q   # suite + branch coverage, fail_under=90
-uv run ruff check src tests                       # lint (E4,E7,E9,F pinned in pyproject)
-uv run ruff format --check src tests              # formatting
+uv run ruff check src tests scripts               # lint (E4,E7,E9,F pinned in pyproject)
+uv run ruff format --check src tests scripts      # formatting
 ```
+
+Run the figure build twice when touching `figures.py` and byte-compare
+`output/figures/` — two runs must be identical; `tests/test_register_figures.py`
+gates the same property through temp directories.
 
 The suite includes its own proof-of-detection layers; a change that makes a
 guard undiscriminating fails the guard's positive control, not just review:

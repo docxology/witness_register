@@ -34,7 +34,10 @@ can score perfectly on all three while every underlying report is wrong;
 that would be the lines' failure to catch, each in its own vocabulary, and
 the register's success at not hiding it.
 
-**This window is minimal.** No figures were built, no scholarly apparatus
-beyond the sibling works and the answered correspondence is cited, and the
-per-line adapter recipes remain open — each recorded with its reason in the
-repository's TODO.
+**The scholarship is scoped to mechanisms.** The cited traditions —
+linked timestamping, transparency logs, non-compensatory decision rules,
+provenance records, boundary objects — are cited for how they keep books,
+with every bibliographic record verified before use. None of them underwrites
+any judgment, because the register makes none, and the borrowings stop where
+each tradition's larger ambitions begin (distributed trust, gossip
+infrastructure, utility theory, inference engines).
