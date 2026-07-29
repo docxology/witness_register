@@ -9,19 +9,31 @@ Open items, each with the reason it is open. Dates are real.
   treatment — provenance/witness literature, append-only log literature,
   non-compensatory decision theory — needs a dedicated reading pass that
   this window did not include; citing from memory would violate the sibling
-  works' scholarship discipline. No figures were built this window, so none
-  are claimed.
-- **Per-line adapter recipes.** Worked, copy-pasteable examples showing each
-  line's exported envelope entering the register (by value, no imports).
-  Open because honest recipes should be generated against each line's REAL
-  current export, run and captured, not sketched from recollection of their
-  APIs.
+  works' scholarship discipline.
+- **Figures.** None are built. Sibling-grade means: a deterministic SVG
+  builder module with a figure registry (caption, alt, source,
+  interpretive-claim and epistemic-boundary fields), rendered-point
+  legibility floors gated by test, double-build byte-identity, and honest
+  plates only — the natural first three are a state-chain schematic, the
+  projection-invariant table, and the 3x3 battery grid, each drawn from the
+  live code the way the lines draw theirs. Copy the pattern from white_line's
+  figures architecture, written natively; do not copy its code.
 - **External anchoring of the chain tip.** `seal_tip` names the limitation:
   the tip is unbound without an anchor the chain does not control. A worked
   anchoring recipe (e.g. a signed note or an independent log) is deliberately
   out of this package's non-claims and needs a decision about which external
   system Daniel wants to bind to.
+
 ## Done (2026-07-29)
+
+- **Per-line worked example over real exports** — `data/envelopes/` (four
+  records with provenance README) + `tests/test_worked_example.py`; see
+  CHANGELOG second window. The narrower "adapter recipes" item is subsumed:
+  the provenance README records the exact per-line command that produced
+  each export.
+- **Manuscript formalism window** — `manuscript/02a_formalism.md` bound by
+  `tests/test_formalism.py`, drifts planted and caught, re-rendered green.
+
 
 - **Render verification.** First render through the external
   `docxology/template` engine completed 2026-07-29: a valid PDF with zero
