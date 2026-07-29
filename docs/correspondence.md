@@ -1,7 +1,10 @@
 # Correspondence: the review this work answers
 
+Note (2026-07-29): Reviewer attribution is anonymized pending explicit consent
+for DOI archiving. Will be restored on confirmation.
+
 This repository EXISTS because of one design review: **"The Space Between
-the Lines" (Marek Bargiel, with Simba as analytic reader, 2026-07-29)**, a
+the Lines" (an external reviewer, with an analytic reader, 2026-07-29)**, a
 two-voiced reading of the collected line set. Its central proposal — the
 missing layer is a separate SHARED WITNESS REGISTER that co-registers each
 line's report envelope, stores cross-line relations as separate records,
@@ -12,7 +15,10 @@ return*.
 
 The review's per-line proposals (typed evidence surfaces, facet
 factorization, return contracts, conflict co-presence, the envelope export)
-were adopted inside `black_line` and `white_line` on the same date and are
+were adopted inside all four line repositories on the same date — the
+envelope export in all four; typed evidence surfaces in `black_line`; facet
+factorization, return contracts, and conflict co-presence in `white_line`;
+and the canonical native report in `red_line` — and are
 recorded in those repositories' own `docs/correspondence.md`. The register
 was deliberately NOT built inside any line repository.
 

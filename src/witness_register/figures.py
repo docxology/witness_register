@@ -643,7 +643,7 @@ PLATES: tuple[PlateSpec, ...] = (
             "exists and nothing recorded forbids the use."
         ),
         alt=(
-            "Seven-row table: state description, returned posture (-1, 0, or "
+            "8-row table: state description, returned posture (-1, 0, or "
             "+1) with a word, and the first reason string project() returned."
         ),
         source="witness_register.projection.project over constructed states",

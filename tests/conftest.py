@@ -7,6 +7,11 @@ is built through the register's own public API.
 
 from __future__ import annotations
 
+import subprocess
+import sys
+import warnings
+from pathlib import Path
+
 import pytest
 
 from witness_register import (
@@ -19,6 +24,33 @@ from witness_register import (
     intake_envelope,
     sha256_hex,
 )
+
+
+@pytest.fixture(scope="session", autouse=True)
+def build_figures_before_tests() -> None:
+    """Build figures into output/figures/ before the link-resolution gate runs.
+
+    Required for
+    test_standalone.py::test_every_relative_markdown_link_points_at_a_file_that_exists,
+    which checks that output/figures/*.png embeds in manuscript/ resolve. The
+    output/ directory is gitignored; a fresh clone must build before testing.
+    """
+
+    root = Path(__file__).resolve().parents[1]
+    build_script = root / "scripts" / "build_figures.py"
+    if not build_script.exists():
+        return
+    result = subprocess.run(
+        [sys.executable, str(build_script)],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        warnings.warn(
+            f"build_figures.py exited {result.returncode}: {result.stderr[:200]}",
+            stacklevel=1,
+        )
 
 
 def make_payload(**overrides) -> dict:

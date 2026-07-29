@@ -1,0 +1,78 @@
+cff-version: 1.2.0
+message: "If you use or refer to this work, please cite it as below."
+type: software
+title: "The Witness Register: Co-Registration Without Aggregation"
+version: "0.1.0"
+date-released: "2026-07-29"
+authors:
+  - family-names: "Friedman"
+    given-names: "Daniel Ari"
+    orcid: "https://orcid.org/0000-0001-6232-9096"
+    affiliation: "Active Inference Institute"
+    email: "daniel@activeinference.institute"
+repository-code: "https://github.com/docxology/witness_register"
+url: "https://github.com/docxology/witness_register"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - "co-registration"
+  - "append-only log"
+  - "provenance"
+  - "non-compensatory decision rules"
+  - "boundary objects"
+  - "research infrastructure"
+  - "open science"
+abstract: >-
+  A shared register that co-registers independent instruments' report
+  envelopes without aggregating them. It stores each report's envelope
+  verbatim, records cross-instrument relations as separate describing
+  records, keeps history append-only and sealed, and — only when asked,
+  for one declared next use — emits a bounded posture that always points
+  back at the state that earned it. It never parses, compares, ranks,
+  averages, or merges any instrument's native status.
+# No DOI is recorded here because none has been minted for this work.
+# When a Zenodo DOI is reserved, add it under `identifiers:` AND to the
+# verified list in tests/test_publication_metadata.py — the gate refuses
+# any DOI-shaped string that has not been asserted as real by a person.
+references:
+  - type: software
+    title: "red_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/red_line"
+    notes: "line — what I refuse (personal security boundary)"
+  - type: software
+    title: "black_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/black_line"
+    notes: "line — how I try to do strong work (declaration coverage)"
+  - type: software
+    title: "golden_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/golden_line"
+    notes: "line — what is worth reaching toward (directional readings)"
+  - type: software
+    title: "white_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/white_line"
+    notes: "line — what is absent, withheld, or unknowable (absence ledger)"
+  - type: software
+    title: "line_set"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/line_set"
+    notes: "the reader that declares the set and checks vocabulary separation"

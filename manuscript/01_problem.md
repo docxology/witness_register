@@ -7,7 +7,7 @@ long institutional history: collapse them into one number. Average the
 verdicts, rank the instruments, let the loudest status become the state.
 
 The 2026-07-29 design review of the collected line set ("The Space Between
-the Lines", Marek Bargiel with Simba as analytic reader — unpublished
+the Lines", an external reviewer, with an analytic reader — unpublished
 correspondence, answered in this repository's `docs/correspondence.md`)
 names what that collapse destroys. A selected status is a SAFE PROJECTION of
 a richer state, and the projection must not become the whole state: strong

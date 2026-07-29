@@ -108,3 +108,8 @@ class RelationRecord:
             raise ValueError(
                 f"relation_type must be a RelationType, got {self.relation_type!r}"
             )
+        if self.human_decision_ref and not self.human_decision_ref.strip():
+            raise ValueError(
+                "human_decision_ref must be empty (NOT_RECORDED) or non-blank; "
+                "whitespace-only is not a recorded decision"
+            )

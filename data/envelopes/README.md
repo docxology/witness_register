@@ -63,3 +63,14 @@ Registrar-authored means exactly what it says: the declarations and
 observations were filed by the assistant operating the instruments, not by
 Daniel, and each envelope's `subject_id` carries that provenance. The
 verdicts themselves are what each line's real evaluator returned.
+
+## Stale envelopes note (2026-07-29)
+
+The `same_subject/` envelopes reference the reviewer by name and private commit
+hashes in their `subject_id` and `source_snapshot_refs` fields. Before formal
+DOI publication, regenerate these envelopes from the respective line
+evaluators using the `v0.1.0` tag as the subject reference. The reviewer
+attribution was anonymized in `docs/correspondence.md` and
+`manuscript/99_references.md` on 2026-07-29 but not in these stored records,
+so the envelope's stored digest for this record is stale with respect to the
+anonymized prose.

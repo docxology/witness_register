@@ -100,7 +100,7 @@ def _unresolved_blocks(state: WitnessState) -> tuple[RelationRecord, ...]:
         relation
         for relation in state.relations
         if relation.relation_type is RelationType.NON_COMPENSATORY_BLOCK
-        and not relation.human_decision_ref
+        and not relation.human_decision_ref.strip()
     )
 
 
@@ -129,7 +129,7 @@ def witness_hold_reasons(state: WitnessState) -> tuple[HoldReason, ...]:
                 )
             )
         elif relation.relation_type is RelationType.RETURN_DUE:
-            if relation.human_decision_ref:
+            if relation.human_decision_ref.strip():
                 continue
             if not _contract_met(state, relation.return_contract_ref):
                 holds.append(
@@ -146,7 +146,7 @@ def witness_hold_reasons(state: WitnessState) -> tuple[HoldReason, ...]:
                     )
                 )
         elif relation.relation_type in _HOLDING_TYPES:
-            if not relation.human_decision_ref:
+            if not relation.human_decision_ref.strip():
                 holds.append(
                     HoldReason(
                         kind="unresolved_relation",
@@ -161,7 +161,7 @@ def witness_hold_reasons(state: WitnessState) -> tuple[HoldReason, ...]:
     promoted = {
         relation.promoted_from_ref
         for relation in state.relations
-        if relation.promoted_from_ref
+        if relation.promoted_from_ref and relation.human_decision_ref.strip()
     }
     for holding in state.unclassified:
         if holding.held_id not in promoted:

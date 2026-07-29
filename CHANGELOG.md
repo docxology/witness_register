@@ -4,7 +4,7 @@
 
 First window. The Shared Witness Register, built as a sixth work beside the
 line set in answer to the 2026-07-29 design review "The Space Between the
-Lines" (Marek Bargiel, with Simba) — see
+Lines" (an external reviewer, with an analytic reader) — see
 [docs/correspondence.md](docs/correspondence.md).
 
 - `envelopes.py` — typed intake of `line.report-envelope/1.0` payloads by
@@ -159,3 +159,16 @@ references, validation passing (five bare-URL warnings fixed in
   ruff gates clean, figure double-build byte-identical (7 artifacts), and
   the full suite also passing under a real Python 3.10 interpreter
   (`uv run --python 3.10 --isolated pytest`, 2026-07-29).
+
+### 2026-07-29 cross-reference correction
+
+- **The cross-adoption record was understated.**
+  [docs/correspondence.md](docs/correspondence.md) said the review's per-line
+  proposals were adopted inside `black_line` and `white_line` only. The
+  envelope export in fact landed in all four line repositories on the same
+  date — `black_line`, `white_line`, `golden_line`, and `red_line` — as the
+  provenance table in [data/envelopes/README.md](data/envelopes/README.md)
+  shows, with typed evidence surfaces in `black_line`; facet factorization,
+  return contracts, and conflict co-presence in `white_line`; and the
+  canonical native report in `red_line`. The sentence now names all four and
+  attributes each proposal to the repository that adopted it.

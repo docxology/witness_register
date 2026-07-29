@@ -130,7 +130,7 @@ def check_refs_resolve(state: WitnessState) -> tuple[str, ...]:
                     f"{relation.promoted_from_ref!r} does not resolve to a "
                     "held record in this state"
                 )
-            if not relation.human_decision_ref:
+            if not relation.human_decision_ref.strip():
                 violations.append(
                     f"relation {relation.relation_id}: a promotion must "
                     "carry a non-empty human_decision_ref; the register "

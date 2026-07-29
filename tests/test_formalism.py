@@ -128,16 +128,19 @@ def test_projection_precedence_sentences_are_the_measured_order() -> None:
     assert "$+1$ is reachable only when at least one envelope exists" in text
 
 
+#: Shared so the positive-control test can never use a different pattern than
+#: the real gate and silently become vacuous.
+_HAND_NUMBER_PATTERN = re.compile(r"\b(Definition|Proposition)\s+\d+\b")
+
+
 def test_no_hand_written_formalism_numbers() -> None:
     """The renderer numbers the blocks; the source must not."""
 
-    pattern = re.compile(r"\b(Definition|Proposition)\s+\d+\b")
-    assert pattern.search(FORMALISM.read_text(encoding="utf-8")) is None
+    assert _HAND_NUMBER_PATTERN.search(FORMALISM.read_text(encoding="utf-8")) is None
 
 
 def test_the_hand_number_guard_rejects_a_planted_literal() -> None:
-    pattern = re.compile(r"\b(Definition|Proposition)\s+\d+\b")
-    assert pattern.search("as Definition 3 states") is not None
+    assert _HAND_NUMBER_PATTERN.search("as Definition 3 states") is not None
 
 
 def test_worked_example_numbers_in_prose_match_the_measured_run() -> None:
