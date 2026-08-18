@@ -19,7 +19,7 @@ instrument's vocabulary, and the difference is the point.
 | File | Exporting repo (version) | Command run there | native_status shape |
 | --- | --- | --- | --- |
 | `white_line_worked.json` | white_line 0.7.0 | `worked_report()` → `report_envelope(...)` → `canonical_envelope(...)` | ordered per-record state pairs |
-| `black_line_worked.json` | black_line 0.3.0 | `evaluate_work(SURFACES_ATTEMPT, as_of=SURFACES_AS_OF, max_evidence_age_days=SURFACES_WINDOW)` → `assessment_envelope(...)` → `canonical_envelope(...)` | one status word |
+| `black_line_worked.json` | black_line 0.4.0 | `evaluate_work(SURFACES_ATTEMPT, as_of=SURFACES_AS_OF, max_evidence_age_days=SURFACES_WINDOW)` → `assessment_envelope(...)` → `canonical_envelope(...)` | one status word |
 | `golden_line_worked.json` | golden_line 0.4.0 | `progress_report([two admitted entries], as_of="2026-07-29")` → `report_envelope(...)` → `canonical_envelope(...)` | ordered per-aspiration pairs |
 | `red_line_worked.json` | red_line 0.3.0 | `review_engagement(action("Targeting component…", {"targeting"}), reviewed_on="2026-07-15")` → `finding_envelope(...)` → `canonical_envelope(...)` | one classification word |
 
@@ -74,3 +74,5 @@ attribution was anonymized in `docs/correspondence.md` and
 `manuscript/99_references.md` on 2026-07-29 but not in these stored records,
 so the envelope's stored digest for this record is stale with respect to the
 anonymized prose.
+
+See [AGENTS.md](AGENTS.md) for the working contract.

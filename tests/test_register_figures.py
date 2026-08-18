@@ -21,6 +21,7 @@ from witness_register.figures import (
     battery_plate,
     build_figures,
     chain_plate,
+    cover_plate,
     projection_plate,
     svg_document,
     text,
@@ -31,7 +32,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RSVG_AVAILABLE = shutil.which("rsvg-convert") is not None
 
 #: Text-block width in inches: letter paper less the config's side margins.
-TEXT_BLOCK_INCHES = 8.5 - 2 * 0.42
+TEXT_BLOCK_INCHES = 8.5 - 2 * 0.33
 
 
 def _config_side_margins() -> tuple[float, float]:
@@ -64,6 +65,50 @@ def test_svg_document_refuses_a_canvas_wider_than_the_cap() -> None:
 def test_every_plate_svg_is_deterministic_across_two_calls() -> None:
     for build in (chain_plate, projection_plate, battery_plate):
         assert build() == build(), build.__name__
+
+
+def test_no_text_overflows_the_canvas_extent() -> None:
+    """No plate may draw a label that runs past its own canvas edge.
+
+    A label that clips at the canvas boundary is an illegible label — the
+    same class of defect as one below the size floor, and one a reviewer
+    would only find in a print. This scans every emitted text run (both
+    anchors) against the canvas ``viewBox`` it belongs to, so a cover label
+    moved flush against the right edge cannot silently escape it.
+    """
+
+    import re as _re
+
+    anchor_re = _re.compile(
+        r'<text x="(\d+(?:\.\d+)?)"[^>]*text-anchor="end"[^>]*>(.*?)</text>'
+    )
+    left_re = _re.compile(r'<text x="(\d+(?:\.\d+)?)"[^>]*>(.*?)</text>')
+    for build in (cover_plate, chain_plate, projection_plate, battery_plate):
+        svg = build()
+        width = int(_re.search(r'width="(\d+)"', svg).group(1))
+        for m in anchor_re.finditer(svg):
+            x = float(m.group(1))
+            # A right-anchored run's left edge is unknown; it must sit left
+            # of the canvas and its anchor must not exceed the canvas edge.
+            assert x <= width, f"{build.__name__}: right-anchored text at {x} > {width}"
+        for m in left_re.finditer(svg):
+            escaped = m.group(2)
+            # Recover a rough glyph width: the longest plausible 18-unit run
+            # of text at ~0.5 em per glyph, matched against the remaining room.
+            raw = (
+                escaped.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+            )
+            if 'text-anchor="end"' in m.group(0):
+                continue
+            x = float(m.group(1))
+            size = 18
+            size_m = _re.search(r'font-size="(\d+)"', m.group(0))
+            if size_m:
+                size = float(size_m.group(1))
+            width_estimate = len(raw) * size * 0.5
+            assert x + width_estimate <= width + 1, (
+                f"{build.__name__}: '{raw[:40]}…' at x={x} may overflow {width}"
+            )
 
 
 def test_the_chain_plate_carries_live_seals_and_the_refusal() -> None:
@@ -155,7 +200,7 @@ def test_every_plate_is_embedded_with_its_registered_caption() -> None:
     """
 
     manuscript = ""
-    for name in ("02_design.md", "02a_formalism.md"):
+    for name in ("01_problem.md", "02_design.md", "02a_formalism.md"):
         manuscript += (PROJECT_ROOT / "manuscript" / name).read_text("utf-8")
     flat = " ".join(manuscript.split())
     for plate in PLATES:

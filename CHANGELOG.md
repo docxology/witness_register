@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.1.0 — 2026-07-29 (autonomous assessment pass, 2026-08-01)
+
+A review pass over both intelligence and visualizations, all fixes verified:
+
+- **Claim drift repaired.** The publication pass had tightened the manuscript
+  geometry to `0.33` in side margins but the figure suite still assumed
+  `0.42` in / a 7.66 in text block / a 6.20 pt rendered floor. The legibility
+  test failed exactly there. Re-derived to the live config: 7.84 in text
+  block, `MIN_TEXT_SIZE` = 18 units renders at 6.35 pt (still above the 6 pt
+  gate); the module docstring and the test's `TEXT_BLOCK_INCHES` now match
+  the config's one source.
+- **Broken manuscript references fixed.** Prose cited
+  `tests/test_witness_battery.py`, which does not exist (the battery lives in
+  `tests/test_battery.py`); two references corrected. A truncated sentence in
+  `03_examples.md` that ended mid-figure-reference was completed.
+- **Release packet made current.** `docs/releases/v0.1.0.md` still recorded
+  the pre-cover state (194 passed, 7 artifacts, 3 plates); updated to the
+  measured tree (200→202 passed over the pass, 98.10% branch coverage, 9
+  artifacts across 4 plates: cover, chain, zone, battery).
+- **Visualization fixes.** The projection plate's right-hand reason column
+  and value chips are now truncated within their cells instead of running
+  past the canvas; a `text_right` right-anchored label helper lets the
+  cover's version panel and footer sit flush against the edge without
+  clipping (the two previously clipped at x=1500 on a 1600-wide canvas).
+- **Gates added for the classes of bug found.** A new test scans every
+  `tests/...` reference in the whole manuscript and asserts the file (and, if
+  named, the function) exists — the battery-reference drift now fails rather
+  than passing review. A new figure test asserts no text run overflows its
+  canvas, covering both label anchors.
+- `ruff check` and `ruff format --check` clean (an unused import and two dead
+  assignments fixed); figure double-build byte-identical (9 artifacts).
+
 ## 0.1.0 — 2026-07-29
 
 First window. The Shared Witness Register, built as a sixth work beside the

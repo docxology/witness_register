@@ -1,4 +1,4 @@
-# References
+# References {#sec:references}
 
 The four line works and their set reader, referenced by name and repository
 URL in the set's convention (by published convention, never by import or

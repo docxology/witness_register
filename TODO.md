@@ -2,7 +2,7 @@
 
 Open items, each with the reason it is open. Dates are real.
 
-## Open (2026-07-29)
+## Open (2026-08-01)
 
 - **Scholarship: SHIPPED (2026-07-29, third window)** — six traditions
   cited with every bibliographic record verified against Crossref, the RFC
@@ -10,13 +10,15 @@ Open items, each with the reason it is open. Dates are real.
   Still open: a deeper reading pass could add the audit-culture and
   documentality literatures the sibling works carry; nothing is cited from
   memory, so those wait for a real reading session.
-- **Figures: BUILT (2026-07-29, third window)** — see CHANGELOG. What
+- **Figures: BUILT (2026-07-29, third window); geometry re-derived and
+  visual gaps closed (2026-08-01, assessment pass)** — see CHANGELOG. What
   remains open here is only the greyscale-print human check the siblings
-  also carry: no person has yet read the three plates in a greyscale print.
-  The original sibling-grade spec this entry carried is satisfied: builder
-  with registry (interpretive claim + epistemic boundary per plate),
-  rendered-point legibility floor derived from the manuscript geometry and
-  gated by test, double-build byte-identity, plates drawn from live calls.
+  also carry: no person has yet read the plates in a greyscale print. The
+  2026-08-01 pass re-derived the legibility floor to the manuscript's
+  current 0.33 in side margins (7.84 in text block, 6.35 pt rendered),
+  right-anchored the cover's edge labels so they no longer clip, bounded the
+  projection plate's reason column within its cells, and added a test that
+  no text run may overflow its canvas.
 - **External anchoring of the chain tip — code side prepared
   (2026-07-29): `anchor_statement` verifies the chain and returns the
   byte-stable portable record to store elsewhere.** Which external system
@@ -28,6 +30,25 @@ Open items, each with the reason it is open. Dates are real.
   same-subject chain at length 2 (tip `a3d87025dbce…`). The limitation's
   first instance is closed for the local set; anchoring in a system outside
   this machine entirely (a remote, a signed note) remains open.
+
+## Done (2026-08-01 assessment pass)
+
+- **Legibility-floor claim drift repaired.** The publication pass tightened
+  the manuscript geometry to `0.33` in side margins but the figure test and
+  docstring still assumed `0.42` in / 7.66 in / 6.20 pt. Both re-derived to
+  the config's one source. See CHANGELOG "0.1.0 — 2026-07-29 (autonomous
+  assessment pass, 2026-08-01)".
+- **Broken manuscript test references fixed.** Prose twice cited
+  `tests/test_witness_battery.py`; the battery lives in
+  `tests/test_battery.py`. A truncated sentence in `03_examples.md` was
+  completed.
+- **Figure-visualization gaps closed.** Projection plate reason column and
+  value chips bounded within their cells; cover's right-edge labels
+  right-anchored so `LIVING REGISTER` and the footer no longer clip at
+  x=1500 on the 1600-wide canvas.
+- **Gates added for the found bug classes.** New tests: every `tests/...`
+  reference in the manuscript must resolve to a real file/function; no text
+  run may overflow its canvas. Release packet updated to the measured tree.
 
 ## Done (2026-07-29)
 

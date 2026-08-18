@@ -1,4 +1,6 @@
-# The Problem
+# The Problem {#sec:problem}
+
+![The Witness Register cover plate: four vertical ledger columns with distinct greyscale hatch textures run in parallel without converging; a horizontal register band carries the title across all four; four seal circles mark the instruments below, and the witness mark sits above and alone. The cover uses only the register's greyscale palette — no colour that would affiliate it with any one instrument.](../output/figures/wr_cover.png){#fig:wr-cover width=100%}
 
 Four independent instruments — the line works — each answer their own
 substantive question about a subject in their own vocabulary, and each ends
@@ -32,3 +34,10 @@ non-claims. The register accepts those envelopes by value — the schema
 string is aligned across repositories by published convention, never by
 import — and holds them beside one another without reading past their
 covers.
+
+\`\`\`{=latex}
+\clearpage
+\`\`\`
+
+The paper proceeds as follows. [Section @sec:design](#sec:design) describes the register's architecture — the envelope contract, relations, chain, and projection. [Section @sec:method](#sec:method) documents how the register is built and operated. [Section @sec:formalism](#sec:formalism) states the instrument formally, from the definition of an envelope record (@def:envelope-record) through the projection invariants (@prop:non-compensatory). [Section @sec:scholarship](#sec:scholarship) situates the work in its intellectual lineage. [Section @sec:examples](#sec:examples) presents two worked examples — the co-registration of four instruments and the same-subject return contract — together with the 3×3 battery. [Section @sec:limits](#sec:limits) states the epistemic boundaries and non-claims, and [Section @sec:conclusion](#sec:conclusion) closes.
+

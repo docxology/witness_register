@@ -1,4 +1,4 @@
-# The Design
+# The Design {#sec:design}
 
 ## Non-sovereignty, stated first
 
@@ -43,12 +43,14 @@ original holding, which stays in history verbatim.
 States are sealed by a digest over their complete canonical content —
 including record order — and chained by `prior_ref`. An update must carry
 every prior record unchanged; the prior seal is re-derived from live content
-first, so in-place tampering fails closed. Return contracts record what must
+first, so in-place tampering fails closed
+(formalized in [the formal core](#sec:formalism); construction documented in [the method section](#sec:method)). Return contracts record what must
 come back, from whom, under what trigger, and with what observable
 acceptance condition; a completed return is a new record beside the open one
 and closes only the verified part, the remainder keeping its trigger. The
 review's 3×3 canonical witness cases ship as an executable battery whose
-checks are themselves proven able to reject.
+checks are themselves proven able to reject
+(described in [the examples section](#sec:examples)).
 
 ![The worked two-state chain, built live from the four stored real envelopes at figure-build time: the genesis seal, the update's prior_ref pointing at it, verify_chain's verdict on the pair, and — run in the same build — the exact refusal update_state raises when one stored value is mutated after sealing. Chain integrity is internal consistency only; the tip is unbound without an anchor the chain does not control.](../output/figures/wr_chain.png){#fig:wr-chain width=100%}
 
@@ -62,6 +64,7 @@ condition is met or a referenced human decision rescopes; an empty register
 is `-1`, because nothing to witness is not permission. The symbols are
 interface values, not the ontology: every projection carries the digest of
 the state that earned it and the reasons it holds, and a held `0` is a
-structured enumeration, never a vague middle. Three first-pass measures —
+structured enumeration, never a vague middle
+(formalized in [the formal core](#sec:formalism)). Three first-pass measures —
 relation fidelity, return recoverability, premature crowning rate — evaluate
 the register's own bookkeeping, never the truth of any report.

@@ -125,7 +125,7 @@ def test_projection_precedence_sentences_are_the_measured_order() -> None:
     text = _normalized()
     assert "blank $u$ raises" in text
     assert "nothing to witness is not permission" in text
-    assert "$+1$ is reachable only when at least one envelope exists" in text
+    assert "$+1$ is reachable only when at least one envelope record" in text
 
 
 #: Shared so the positive-control test can never use a different pattern than

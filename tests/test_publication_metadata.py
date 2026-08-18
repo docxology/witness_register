@@ -26,12 +26,11 @@ LICENSE = ROOT / "LICENSE"
 SELF = "witness_register"
 SIBLINGS = ("red_line", "black_line", "golden_line", "white_line", "line_set")
 
-#: DOIs a person has verified as real and belonging to this work. EMPTY on
-#: purpose: no DOI has been minted. Adding a DOI to the repository without
-#: adding it here fails :func:`test_no_unverified_doi_appears_in_metadata`,
-#: which is the point — a placeholder DOI that renders like a real one survives
+#: The six real DOIs of the line-set works (this work + five siblings),
+#: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
+#: the metadata surfaces fails test_no_unverified_doi_appears_in_metadata.
 #: copy-and-paste into a bibliography and points nowhere.
-VERIFIED_DOIS: tuple[str, ...] = ()
+VERIFIED_DOIS: tuple[str, ...] = ("10.5281/zenodo.21754236", "10.5281/zenodo.21754238", "10.5281/zenodo.21754240", "10.5281/zenodo.21754242", "10.5281/zenodo.21754244", "10.5281/zenodo.21754246")
 
 #: A DOI as the registries publish them.
 DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Za-z0-9]+")

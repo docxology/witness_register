@@ -10,14 +10,15 @@ literal that the code could have produced.
 
 Design constraints, shared with the sibling line works but written natively:
 
-- **Legibility floor.** The manuscript's text block is 7.66 in wide (letter
-  paper less the 0.42 in side margins declared in ``manuscript/config.yaml``),
+- **Legibility floor.** The manuscript's text block is 7.84 in wide (letter
+  paper less the 0.33 in side margins declared in ``manuscript/config.yaml``),
   and every plate is embedded at ``width=100%`` on a canvas at most
   ``MAX_CANVAS_WIDTH`` units wide, so an ``N``-unit label renders at
-  ``N * 7.66 * 72 / MAX_CANVAS_WIDTH`` points. ``MIN_TEXT_SIZE`` = 18 units
-  therefore renders at 6.20 pt, above the 6 pt print-legibility gate;
+  ``N * 7.84 * 72 / MAX_CANVAS_WIDTH`` points. ``MIN_TEXT_SIZE`` = 18 units
+  therefore renders at 6.35 pt, above the 6 pt print-legibility gate;
   :func:`text` raises below the floor rather than shipping an unreadable
-  label. ``tests/test_figures.py`` re-derives the arithmetic from the config.
+  label. ``tests/test_register_figures.py`` re-derives the arithmetic from
+  the config.
 - **No colour of its own.** The register is not a line and has no colour in
   the set's sense; the plates are greyscale on paper, and no meaning is
   carried by ink alone — every distinction also has a word.
@@ -55,7 +56,7 @@ FIGURE_REGISTRY_SCHEMA = "witness-register.figure-registry/1.0"
 #: Widest canvas any plate may open; caps how small an embedded label prints.
 MAX_CANVAS_WIDTH = 1600
 
-#: Smallest label, in canvas units, any plate may draw (6.20 pt rendered).
+#: Smallest label, in canvas units, any plate may draw (6.35 pt rendered).
 MIN_TEXT_SIZE = 18
 
 # Greyscale palette. The register has no colour in the set's sense.
@@ -97,6 +98,29 @@ def text(
     )
 
 
+def text_right(
+    x: int, y: int, value: str, size: int, fill: str = INK, weight: str = "400"
+) -> str:
+    """One right-anchored SVG text element, refusing a size below the floor.
+
+    ``x`` is the RIGHT edge of the glyph run, so a label can sit flush
+    against a known column or canvas edge without the author guessing its
+    rendered width.
+    """
+
+    if size < MIN_TEXT_SIZE:
+        raise ValueError(
+            f"figure text size {size} is below the {MIN_TEXT_SIZE}-unit "
+            "legibility floor; an illegible label is a defect, not a style"
+        )
+    return (
+        f'<text x="{x}" y="{y}" text-anchor="end" '
+        f'font-family="Helvetica, Arial, sans-serif" font-size="{size}" '
+        f'fill="{fill}" font-weight="{weight}">'
+        f"{escape_text(value)}</text>"
+    )
+
+
 def rect(
     x: int,
     y: int,
@@ -120,18 +144,24 @@ def line(x1: int, y1: int, x2: int, y2: int, stroke: str = MID) -> str:
     )
 
 
-def svg_document(width: int, height: int, body: list[str], description: str) -> str:
-    """Assemble one SVG document with a machine-readable description."""
+def svg_document(
+    width: int, height: int, body: list[str], description: str, title: str = ""
+) -> str:
+    """Assemble one SVG document with accessible title and description."""
 
     if width > MAX_CANVAS_WIDTH:
         raise ValueError(
             f"canvas width {width} exceeds MAX_CANVAS_WIDTH={MAX_CANVAS_WIDTH}; "
             "a wider canvas shrinks every label below its derived print size"
         )
+    if not title:
+        title = description.split(".")[0].strip() if description else "Figure plate"
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" '
-        f'height="{height}" viewBox="0 0 {width} {height}">',
-        f"<desc>{escape_text(description)}</desc>",
+        f'height="{height}" viewBox="0 0 {width} {height}" '
+        f'role="img" aria-labelledby="fig-title fig-desc">',
+        f'<title id="fig-title">{escape_text(title)}</title>',
+        f'<desc id="fig-desc">{escape_text(description)}</desc>',
         f'<rect x="0" y="0" width="{width}" height="{height}" fill="{PAPER}"/>',
         *body,
         "</svg>",
@@ -494,8 +524,8 @@ def projection_plate() -> str:
         body.append(rect(60, y, 560, 84, CARD, FAINT))
         body.append(text(84, y + 34, label, 20, weight="700"))
         body.append(rect(640, y, 330, 84, fill, MID))
-        body.append(text(664, y + 50, value_word, 22, text_fill, weight="700"))
-        snippet = reason if len(reason) <= 62 else reason[:59] + "…"
+        body.append(text(664, y + 50, value_word, 18, text_fill, weight="700"))
+        snippet = reason if len(reason) <= 56 else reason[:53] + "…"
         body.append(rect(990, y, 550, 84, CARD, FAINT))
         body.append(text(1012, y + 50, snippet, 18, MID))
         y += 100
@@ -597,7 +627,270 @@ class PlateSpec:
     epistemic_boundary: str
 
 
+def cover_plate() -> str:
+    """Render a rich cover plate for the Witness Register title page.
+
+    The register has no colour of its own, so this cover uses only the
+    greyscale palette. Four vertical ledger columns — one per instrument
+    line — carry distinct hatch textures and run in parallel without
+    converging. A horizontal register band crosses all four, carrying the
+    title; ledger rules repeat beneath. A circular seal block at the base
+    marks each column, and the witness mark sits apart, above and alone.
+    """
+
+    width, height = 1600, 1100
+
+    def _ledger_rules(start_y, count, spacing, stroke=MID, opacity="0.12"):
+        lines = []
+        for i in range(count):
+            y = start_y + i * spacing
+            lines.append(
+                f'<line x1="80" y1="{y}" x2="1520" y2="{y}" '
+                f'stroke="{stroke}" stroke-width="1" opacity="{opacity}"/>'
+            )
+        return lines
+
+    def _column_hatch(cx, top, bot, kind, count=12):
+        """Four kinds of greyscale hatching in a vertical column."""
+        lines = []
+        col_w = 340
+        x0 = cx - col_w // 2
+        x1 = cx + col_w // 2
+        if kind == 0:  # dense vertical tick-marks
+            for i in range(count):
+                xx = x0 + 40 + i * (col_w - 80) // max(count - 1, 1)
+                lines.append(
+                    f'<line x1="{xx}" y1="{top - 40}" x2="{xx}" y2="{bot + 40}" '
+                    f'stroke="{INK}" stroke-width="{1.2 + (i % 3) * 0.6}" '
+                    f'opacity="{0.06 + (i % 5) * 0.03}"/>'
+                )
+        elif kind == 1:  # diagonal cross-hatch
+            for i in range(count):
+                offset = i * (col_w) // count
+                lines.append(
+                    f'<line x1="{x0 + offset}" y1="{top}" '
+                    f'x2="{x0 + offset + 80}" y2="{bot}" '
+                    f'stroke="{MID}" stroke-width="1.4" opacity="0.08"/>'
+                )
+                lines.append(
+                    f'<line x1="{x1 - offset}" y1="{top}" '
+                    f'x2="{x1 - offset - 80}" y2="{bot}" '
+                    f'stroke="{MID}" stroke-width="1.0" opacity="0.06"/>'
+                )
+        elif kind == 2:  # ledger lines (horizontal rules)
+            for i in range(count):
+                yy = top + 20 + i * (bot - top - 40) // max(count - 1, 1)
+                lines.append(
+                    f'<line x1="{x0 + 30}" y1="{yy}" x2="{x1 - 30}" y2="{yy}" '
+                    f'stroke="{DARK}" stroke-width="0.8" opacity="0.07"/>'
+                )
+        else:  # dotted column
+            for i in range(count):
+                for j in range(3):
+                    xx = x0 + 50 + (i * (col_w - 100)) // max(count - 1, 1)
+                    yy = top + 30 + j * (bot - top - 60) // 2
+                    lines.append(
+                        f'<circle cx="{xx}" cy="{yy}" r="2.5" '
+                        f'fill="{MID}" opacity="0.09"/>'
+                    )
+        return lines
+
+    body: list[str] = []
+    col_centers = [240, 590, 940, 1290]
+    col_top = 180
+    col_bot = 370
+
+    # Four vertical ledger columns with distinct textures
+    for i, cx in enumerate(col_centers):
+        body.extend(_column_hatch(cx, col_top, col_bot, kind=i, count=14))
+        # Column boundary
+        body.append(
+            f'<line x1="{cx - 170}" y1="{col_top - 60}" '
+            f'x2="{cx - 170}" y2="{col_bot + 60}" '
+            f'stroke="{MID}" stroke-width="0.5" opacity="0.25"/>'
+        )
+
+    # Right edge of last column
+    body.append(
+        f'<line x1="{col_centers[-1] + 180}" y1="{col_top - 60}" '
+        f'x2="{col_centers[-1] + 180}" y2="{col_bot + 60}" '
+        f'stroke="{MID}" stroke-width="0.5" opacity="0.25"/>'
+    )
+
+    # Top rule above columns
+    body.append(
+        f'<line x1="{col_centers[0] - 170}" y1="{col_top - 60}" '
+        f'x2="{col_centers[-1] + 180}" y2="{col_top - 60}" '
+        f'stroke="{INK}" stroke-width="1.5" opacity="0.40"/>'
+    )
+
+    # -- Horizontal register band crossing all four columns --
+    band_y1, band_y2 = 420, 500
+    body.append(
+        f'<rect x="80" y="{band_y1}" width="1440" height="{band_y2 - band_y1}" '
+        f'fill="{CARD}" stroke="{MID}" stroke-width="1" opacity="0.65"/>'
+    )
+    # Subtle ledger lines inside the band
+    for i in range(3):
+        y = band_y1 + 10 + i * 25
+        body.append(
+            f'<line x1="100" y1="{y}" x2="1700" y2="{y}" '
+            f'stroke="{FAINT}" stroke-width="0.8"/>'
+        )
+
+    # -- Title block --
+    body.append(text(120, 480, "THE WITNESS REGISTER", 48, INK, weight="700"))
+
+    # -- Subtitle --
+    body.append(text(120, 538, "Co-Registration Without Aggregation", 28, MID))
+
+    # -- Description lines --
+    body.append(
+        text(
+            120,
+            586,
+            "A shared register for line report envelopes that never ranks, merges, or overrides the instruments it holds",
+            20,
+            DARK,
+        )
+    )
+    body.append(
+        text(
+            120,
+            620,
+            "Sixth work beside the line set · append-only co-registration of report envelopes",
+            18,
+            MID,
+        )
+    )
+    body.append(
+        text(
+            120,
+            650,
+            "typed cross-line relations · a bounded posture that never erases the state",
+            18,
+            MID,
+        )
+    )
+
+    # -- Ledger rules below text --
+    body.extend(_ledger_rules(700, 18, 16, MID, "0.10"))
+
+    # -- Four seal circles at the bottom --
+    seal_y = 870
+    seal_labels = ["BLACK", "GOLDEN", "RED", "WHITE"]
+    for i, cx in enumerate(col_centers):
+        # Outer seal ring
+        body.append(
+            f'<circle cx="{cx}" cy="{seal_y}" r="48" fill="none" '
+            f'stroke="{INK}" stroke-width="2.5" opacity="0.55"/>'
+        )
+        # Inner ring
+        body.append(
+            f'<circle cx="{cx}" cy="{seal_y}" r="36" fill="none" '
+            f'stroke="{MID}" stroke-width="1" opacity="0.35"/>'
+        )
+        # Label
+        body.append(text(cx, seal_y - 10, seal_labels[i], 18, INK, weight="700"))
+        body.append(text(cx, seal_y + 14, "LINE", 18, MID))
+        # Small witness dot inside
+        body.append(
+            f'<circle cx="{cx}" cy="{seal_y + 38}" r="4" fill="{DARK}" opacity="0.50"/>'
+        )
+
+    # -- The separated witness mark, above and alone --
+    mark_x, mark_y = 800, 108
+    body.append(
+        f'<circle cx="{mark_x}" cy="{mark_y}" r="22" fill="{CARD}" '
+        f'stroke="{INK}" stroke-width="3"/>'
+    )
+    body.append(text(mark_x, mark_y + 2, "w", 28, INK, weight="700"))
+    # Radiating witness lines
+    for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
+        import math
+
+        rad = math.radians(angle)
+        x1 = mark_x + 28 * math.cos(rad)
+        y1 = mark_y + 28 * math.sin(rad)
+        x2 = mark_x + 38 * math.cos(rad)
+        y2 = mark_y + 38 * math.sin(rad)
+        body.append(
+            f'<line x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" '
+            f'stroke="{MID}" stroke-width="1" opacity="0.30"/>'
+        )
+
+    # -- Right-side version panel -- (right-anchored so it cannot clip at the canvas edge)
+    body.append(text_right(1520, 96, "0.1.0", 20, MID))
+    body.append(text_right(1520, 122, "LIVING REGISTER", 18, FAINT))
+
+    # -- Footer --
+    body.append(
+        f'<line x1="80" y1="1010" x2="1520" y2="1010" '
+        f'stroke="{MID}" stroke-width="0.5" opacity="0.30"/>'
+    )
+    body.append(text(120, 1040, "WITNESS REGISTER — A SIXTH WORK", 18, MID))
+    body.append(
+        text_right(
+            1520, 1040, "co-registration · append-only · typed relations", 18, FAINT
+        )
+    )
+
+    # -- Corner ledger marks --
+    for corner_x in [80, 1520]:
+        for corner_y in [80, 1010]:
+            body.append(
+                f'<line x1="{corner_x}" y1="{corner_y - 12}" '
+                f'x2="{corner_x}" y2="{corner_y}" '
+                f'stroke="{INK}" stroke-width="1" opacity="0.40"/>'
+            )
+            body.append(
+                f'<line x1="{corner_x - 12}" y1="{corner_y}" '
+                f'x2="{corner_x}" y2="{corner_y}" '
+                f'stroke="{INK}" stroke-width="1" opacity="0.40"/>'
+            )
+
+    return svg_document(
+        width,
+        height,
+        body,
+        "Rich cover plate for the Witness Register: four vertical ledger columns "
+        "with distinct greyscale hatch textures run in parallel without converging; "
+        "a horizontal register band carries the title; four seal circles mark the "
+        "instruments below; the witness mark sits above, alone.",
+    )
+
+
 PLATES: tuple[PlateSpec, ...] = (
+    PlateSpec(
+        label="fig:wr-cover",
+        filename="wr_cover.png",
+        build=cover_plate,
+        caption=(
+            "The Witness Register cover plate: four vertical ledger columns "
+            "with distinct greyscale hatch textures run in parallel without "
+            "converging; a horizontal register band carries the title across "
+            "all four; four seal circles mark the instruments below, and the "
+            "witness mark sits above and alone. The cover uses only the "
+            "register's greyscale palette — no colour that would affiliate "
+            "it with any one instrument."
+        ),
+        alt=(
+            "Four vertical ledger columns with distinct grey hatch textures "
+            "on a warm paper field, joined by a horizontal register band "
+            "bearing the title; four seal circles anchor the base; a "
+            "circular witness mark floats above the columns."
+        ),
+        source="witness_register.figures.cover_plate, live version",
+        interpretive_claim=(
+            "The cover is a deterministic composition from the register's "
+            "own palette; it states a posture (parallel, not merged) but "
+            "proves nothing about any line."
+        ),
+        epistemic_boundary=(
+            "The four lines are a schematic metaphor, not a measurement "
+            "of any instrument's trend, quality, or behaviour."
+        ),
+    ),
     PlateSpec(
         label="fig:wr-chain",
         filename="wr_chain.png",
@@ -763,6 +1056,7 @@ __all__ = [
     "build_figures",
     "battery_plate",
     "chain_plate",
+    "cover_plate",
     "projection_plate",
     "escape_text",
     "svg_document",

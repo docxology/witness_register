@@ -4,6 +4,8 @@ paper:
   version: "0.1.0"
   date: "2026-07-29"
   description: "A sixth work beside the line set: append-only co-registration of report envelopes, typed cross-line relations, and a bounded posture that never erases the state."
+  cover:
+    image: "output/figures/wr_cover.png"
 
 authors:
   - name: "Daniel Ari Friedman"
@@ -12,6 +14,7 @@ authors:
     affiliation: "Active Inference Institute"
 
 publication:
+  doi: "10.5281/zenodo.21754246"
   github_repository: "docxology/witness_register"
   repository_url: "https://github.com/docxology/witness_register"
 
@@ -26,4 +29,4 @@ render:
 metadata:
   license: "CC-BY-4.0 (prose); MIT (code)"
   status: "living document — versioned and revisable"
-  geometry: "left=0.42in,right=0.42in,top=0.55in,bottom=0.55in"
+  geometry: "left=0.33in,right=0.33in,top=0.55in,bottom=0.55in"

@@ -1,0 +1,58 @@
+# Implementation facts used to ground formalism numbers in the manuscript.
+# These entries support reproducibility of the code description only; they do
+# not establish that any proposition is universally valid.
+#
+# Every `kind: number` row is re-derived from its `source` by
+# tests/test_formalism_bindings.py; a row with no executable source may not be
+# added without also adding its derivation there.
+claims:
+  - id: envelope_field_count
+    kind: number
+    value: 10
+    source: src/witness_register/envelopes.py EnvelopeRecord
+    source_tier: claim_ledger
+  - id: witness_state_field_count
+    kind: number
+    value: 8
+    source: src/witness_register/state.py WitnessState
+    source_tier: claim_ledger
+  - id: formal_definition_count
+    kind: number
+    value: 3
+    source: manuscript/02a_formalism.md .definition blocks
+    source_tier: claim_ledger
+  - id: formal_proposition_count
+    kind: number
+    value: 6
+    source: manuscript/02a_formalism.md + manuscript/02d_formalism.md .proposition blocks
+    source_tier: claim_ledger
+  - id: projection_codomain_count
+    kind: number
+    value: 3
+    source: src/witness_register/projection.py Projection.value in {-1, 0, +1}
+    source_tier: claim_ledger
+  - id: relation_type_count
+    kind: number
+    value: 8
+    source: src/witness_register/relations.py RelationType
+    source_tier: claim_ledger
+  - id: return_contract_field_count
+    kind: number
+    value: 12
+    source: src/witness_register/returns.py ReturnContractRecord
+    source_tier: claim_ledger
+  - id: hold_reason_categories_count
+    kind: number
+    value: 5
+    source: src/witness_register/projection.py witness_hold_reasons kind set size
+    source_tier: claim_ledger
+  - id: hold_reason_categories_enumerated
+    kind: enumeration
+    value:
+      - protected_absence
+      - return_due
+      - unresolved_relation
+      - unclassified_held
+      - no_envelope
+    source: src/witness_register/projection.py witness_hold_reasons
+    source_tier: claim_ledger
