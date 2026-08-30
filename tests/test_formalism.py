@@ -153,7 +153,7 @@ def test_worked_example_numbers_in_prose_match_the_measured_run() -> None:
     # The measured facts themselves are re-derived in tests/test_worked_example.py;
     # here the prose is pinned to the same outcomes so the two cannot drift apart
     # silently while both stay green.
-    from tests.test_worked_example import _worked_chain
+    from test_worked_example import _worked_chain
 
     from witness_register import project, relation_fidelity, return_recoverability
 

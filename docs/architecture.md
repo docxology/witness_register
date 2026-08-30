@@ -1,6 +1,6 @@
 # Architecture
 
-One package, eleven small modules, no runtime dependencies. Every module
+One package, twelve small modules, no runtime dependencies. Every module
 carries its non-claims in its docstring; the package docstring
 (`src/witness_register/__init__.py`) states the register-wide ones.
 
@@ -19,6 +19,7 @@ carries its non-claims in its docstring; the package docstring
 | `invariants.py` | `check_state`/`check_chain`/`check_projection` + `defect_battery` (12 planted defects, all must be detected) | passes vacuously — the battery proves rejection |
 | `battery.py` | `run_battery` — the review's 3×3 canonical witness cases, with injected-wrong variants | returns green without every required behavior holding |
 | `serialization.py` | canonical JSON, SHA-256, `witness-register.<thing>/1.0` schema strings | security semantics |
+| `figures.py` | deterministic figure plates drawn from live register calls; byte-identical rebuilds | invents any value the code could have produced |
 
 ## Data flow
 

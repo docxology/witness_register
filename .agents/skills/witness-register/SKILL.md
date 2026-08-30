@@ -18,7 +18,7 @@ least one reason.
 ## Quick start (from the project root)
 
 ```bash
-uv run pytest -q                                                  # 194 tests
+uv run pytest -q                                                  # 206 tests
 uv run python scripts/build_figures.py                            # deterministic figures (writes output/figures/)
 ```
 
@@ -152,7 +152,7 @@ for case_id in ["seal-tamper-detection", "projection-precedence", "intake-valida
   `human_decision_ref` for promotion. A whitespace-only reference is rejected.
 - **Figure determinism is byte-level.** Two builds produce identical SVGs, PNGs,
   and registry. `figure_registry.json` records the SHA-256 of every artifact;
-  `tests/test_figures.py` re-derives and compares.
+  `tests/test_register_figures.py` re-derives and compares.
 
 ## Claim boundaries
 
