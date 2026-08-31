@@ -111,7 +111,7 @@ defect, not only the first. Measured after the pass: 157 passed (148 before),
 `invariants.py`), `ruff check` and `ruff format --check` both clean. First
 render through the external engine completed the same day: 0 undefined
 references, validation passing (five bare-URL warnings fixed in
-`manuscript/99_references.md`).
+`docs/manuscript/99_references.md`).
 
 ### 2026-07-29 second window — real envelopes, and the core stated formally
 
@@ -128,7 +128,7 @@ references, validation passing (five bare-URL warnings fixed in
   same-subject co-registration would require — and measures: chain clean,
   return recoverability 1.0, relation fidelity 1.0, posture held at 0 with
   both records named in the reasons. The held posture is the demonstration.
-- **`manuscript/02a_formalism.md`** states the envelope record, the witness
+- **`docs/manuscript/02a_formalism.md`** states the envelope record, the witness
   state and chain, the append-only fail-closed propositions, the projection
   and zone, and the non-compensatory propositions as renderer-numbered
   fenced blocks, each bound to the running package by
@@ -156,7 +156,7 @@ references, validation passing (five bare-URL warnings fixed in
   registry with per-artifact SHA-256 and interpretive-claim /
   epistemic-boundary fields, captions bound verbatim to the manuscript
   embeds by test (drift planted and caught).
-- **Scholarship** (`manuscript/02b_scholarship.md`, `references.bib`):
+- **Scholarship** (`docs/manuscript/02b_scholarship.md`, `references.bib`):
   linked timestamping (Haber & Stornetta 1991), hash authentication
   (Merkle, CRYPTO '89 proceedings 1990), transparency logs and the
   observer-consistency problem (RFC 6962, RFC 9162), non-compensatory

@@ -23,7 +23,7 @@ Rules and gates for any agent (or human) working in this repository.
 7. **No mocks.** `tests/test_no_mocks.py` enforces the lexical ban; tests use
    real records and real temp files.
 8. **Every count and version has one source.** `version.py` is bound by test
-   to `pyproject.toml`, `manuscript/config.yaml`, and `CHANGELOG.md`.
+   to `pyproject.toml`, `docs/manuscript/config.yaml`, and `CHANGELOG.md`.
 
 ## Gates (run all, from this repository's root)
 

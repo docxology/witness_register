@@ -6,7 +6,7 @@ Open items, each with the reason it is open. Dates are real.
 
 - **Scholarship: SHIPPED (2026-07-29, third window)** — six traditions
   cited with every bibliographic record verified against Crossref, the RFC
-  Editor, or the W3C before use (see `manuscript/02b_scholarship.md`).
+  Editor, or the W3C before use (see `docs/manuscript/02b_scholarship.md`).
   Still open: a deeper reading pass could add the audit-culture and
   documentality literatures the sibling works carry; nothing is cited from
   memory, so those wait for a real reading session.
@@ -57,7 +57,7 @@ Open items, each with the reason it is open. Dates are real.
   CHANGELOG second window. The narrower "adapter recipes" item is subsumed:
   the provenance README records the exact per-line command that produced
   each export.
-- **Manuscript formalism window** — `manuscript/02a_formalism.md` bound by
+- **Manuscript formalism window** — `docs/manuscript/02a_formalism.md` bound by
   `tests/test_formalism.py`, drifts planted and caught, re-rendered green.
 
 
@@ -65,7 +65,7 @@ Open items, each with the reason it is open. Dates are real.
   `docxology/template` engine completed 2026-07-29: a valid PDF with zero
   undefined references, full validation pass. The engine needed nothing this
   repository lacked; the only findings were five bare-URL markdown warnings
-  in `manuscript/99_references.md`, fixed the same day. PDF staged to
+  in `docs/manuscript/99_references.md`, fixed the same day. PDF staged to
   `~/Downloads/witness_register_combined_0.1.0_2026-07-29.pdf`.
 - **Adversarial hardening pass** — see CHANGELOG "2026-07-29 hardening":
   four defects found and fixed (whitespace verification counted as met;

@@ -4,11 +4,11 @@ The four line works and their set reader, referenced by name and repository
 URL in the set's convention (by published convention, never by import or
 relative path):
 
-- Friedman, D. A. *Red Line*. [github.com/docxology/red_line](https://github.com/docxology/red_line)
-- Friedman, D. A. *Black Line*. [github.com/docxology/black_line](https://github.com/docxology/black_line)
-- Friedman, D. A. *Golden Line*. [github.com/docxology/golden_line](https://github.com/docxology/golden_line)
-- Friedman, D. A. *White Line*. [github.com/docxology/white_line](https://github.com/docxology/white_line)
-- Friedman, D. A. *Line Set*. [github.com/docxology/line_set](https://github.com/docxology/line_set)
+- Friedman, D. A. *Red Line*. [Red Line, the cognitive-security registry of self-assessments](https://github.com/docxology/red_line)
+- Friedman, D. A. *Black Line*. [Black Line, the practice registry of realized craft](https://github.com/docxology/black_line)
+- Friedman, D. A. *Golden Line*. [Golden Line, the aspiration and horizon registry](https://github.com/docxology/golden_line)
+- Friedman, D. A. *White Line*. [White Line, the absence and omission ledger](https://github.com/docxology/white_line)
+- Friedman, D. A. *Line Set*. [Line Set, the cross-line set reader](https://github.com/docxology/line_set)
 
 The scholarly references cited in the design and scholarship sections are
 carried in `references.bib`, each verified against Crossref, the RFC Editor,

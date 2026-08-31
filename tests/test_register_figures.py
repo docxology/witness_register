@@ -36,7 +36,7 @@ TEXT_BLOCK_INCHES = 8.5 - 2 * 0.33
 
 
 def _config_side_margins() -> tuple[float, float]:
-    config = (PROJECT_ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    config = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     match = re.search(r'geometry: "left=([\d.]+)in,right=([\d.]+)in', config)
     assert match is not None, "manuscript config declares no side margins"
     return float(match.group(1)), float(match.group(2))
@@ -201,7 +201,7 @@ def test_every_plate_is_embedded_with_its_registered_caption() -> None:
 
     manuscript = ""
     for name in ("01_problem.md", "02_design.md", "02a_formalism.md"):
-        manuscript += (PROJECT_ROOT / "manuscript" / name).read_text("utf-8")
+        manuscript += (PROJECT_ROOT / "docs" / "manuscript" / name).read_text("utf-8")
     flat = " ".join(manuscript.split())
     for plate in PLATES:
         assert f"#{plate.label}" in flat, plate.label

@@ -12,3 +12,26 @@ stored here by value. The register reads these envelopes through
 `intake_envelope()` and never imports any line package.
 
 See `envelopes/README.md` for the generation commands and provenance record.
+
+## Claim ledger
+
+`claim_ledger.yaml` is the machine-readable support contract for manuscript
+claims, consumed by both the project test suite and the pipeline evidence
+registry (`infrastructure.validation.evidence_registry_collectors`):
+
+- `kind: number` rows ground every numeric token quoted in prose. Each row is
+  re-derived from running code by `tests/test_formalism_bindings.py`; a row
+  with no executable derivation may not be added without also adding its
+  derivation there.
+- `kind: citation` rows register every formalism cross-reference label
+  (`def:...`, `prop:...`) declared on `.definition` / `.proposition` blocks in
+  `docs/manuscript/02a_formalism.md` and `docs/manuscript/02d_formalism.md`. The binding
+  tests require the registered set to equal the declared set — a
+  declared-but-unregistered label fails stage 04, and a
+  registered-but-undeclared label is dead evidence. Both directions carry
+  negative controls: a planted undeclared label is rejected.
+- `source_path` values must resolve inside the repository (the evidence
+  registry checks this fail-closed).
+
+When a manuscript section is added or a formalism block is renamed, update
+this ledger and the binding tests in the same change.

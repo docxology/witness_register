@@ -73,7 +73,7 @@ rescopes it, and a whitespace-only verification is refused at construction
 rather than counted as met.
 :::
 
-![The projection zone measured: each row is one constructed state and the value project() actually returned in this build, with a human decision reference offered at projection time so the rows also show what a decision argument does not lift — it never resolves a block and never lifts a protected absence. A non-compensatory block forces -1 alone and under fifty AGREES relations alike; an empty register is -1, not permission; every hold row is 0 with its reason; +1 appears only where an envelope exists and nothing recorded forbids the use.](../output/figures/wr_zone.png){#fig:wr-zone width=100%}
+![The projection zone measured: each row is one constructed state and the value project() actually returned in this build, with a human decision reference offered at projection time so the rows also show what a decision argument does not lift — it never resolves a block and never lifts a protected absence. A non-compensatory block forces -1 alone and under fifty AGREES relations alike; an empty register is -1, not permission; every hold row is 0 with its reason; +1 appears only where an envelope exists and nothing recorded forbids the use.](../../output/figures/wr_zone.png){#fig:wr-zone width=100%}
 
 
 ::: {.proposition #prop:no-auto-categories title="No auto-categories, no manufactured decisions"}
@@ -120,4 +120,4 @@ Three favorable readings and one open question is a held posture, not a
 crown; `tests/test_same_subject.py` measures every sentence of this
 paragraph.
 
-![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behaviour was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../output/figures/wr_battery.png){#fig:wr-battery width=100%}
+![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behaviour was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../../output/figures/wr_battery.png){#fig:wr-battery width=100%}

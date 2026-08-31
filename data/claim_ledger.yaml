@@ -19,12 +19,12 @@ claims:
   - id: formal_definition_count
     kind: number
     value: 3
-    source: manuscript/02a_formalism.md .definition blocks
+    source: docs/manuscript/02a_formalism.md .definition blocks
     source_tier: claim_ledger
   - id: formal_proposition_count
     kind: number
     value: 6
-    source: manuscript/02a_formalism.md + manuscript/02d_formalism.md .proposition blocks
+    source: docs/manuscript/02a_formalism.md + docs/manuscript/02d_formalism.md .proposition blocks
     source_tier: claim_ledger
   - id: projection_codomain_count
     kind: number
@@ -56,3 +56,97 @@ claims:
       - no_envelope
     source: src/witness_register/projection.py witness_hold_reasons
     source_tier: claim_ledger
+
+  # ------------------------------------------------------------------
+  # Formalism cross-reference support. The pipeline evidence registry
+  # requires every `[@def:...]` / `[@prop:...]` token in the manuscript to
+  # resolve to a registered citation fact. The nine rows below name the
+  # labels actually declared on `.definition` / `.proposition` blocks in
+  # 02a_formalism.md and 02d_formalism.md; tests/test_formalism_bindings.py
+  # re-derives the set from the manuscript itself (gaps and orphans both
+  # fail) and carries a negative control proving an undeclared label is
+  # rejected.
+  - id: citation_def_envelope-record
+    kind: citation
+    value: def:envelope-record
+    source: docs/manuscript/02a_formalism.md .definition #def:envelope-record
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_def_witness-state
+    kind: citation
+    value: def:witness-state
+    source: docs/manuscript/02a_formalism.md .definition #def:witness-state
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_def_projection
+    kind: citation
+    value: def:projection
+    source: docs/manuscript/02a_formalism.md .definition #def:projection
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_append-only
+    kind: citation
+    value: prop:append-only
+    source: docs/manuscript/02a_formalism.md .proposition #prop:append-only
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_non-compensatory
+    kind: citation
+    value: prop:non-compensatory
+    source: docs/manuscript/02a_formalism.md .proposition #prop:non-compensatory
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_no-auto-categories
+    kind: citation
+    value: prop:no-auto-categories
+    source: docs/manuscript/02a_formalism.md .proposition #prop:no-auto-categories
+    source_path: docs/manuscript/02a_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_chain-verification-completeness
+    kind: citation
+    value: prop:chain-verification-completeness
+    source: docs/manuscript/02d_formalism.md .proposition #prop:chain-verification-completeness
+    source_path: docs/manuscript/02d_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_return-contract-constraint
+    kind: citation
+    value: prop:return-contract-constraint
+    source: docs/manuscript/02d_formalism.md .proposition #prop:return-contract-constraint
+    source_path: docs/manuscript/02d_formalism.md
+    source_tier: claim_ledger
+  - id: citation_prop_projection-determinism
+    kind: citation
+    value: prop:projection-determinism
+    source: docs/manuscript/02d_formalism.md .proposition #prop:projection-determinism
+    source_path: docs/manuscript/02d_formalism.md
+    source_tier: claim_ledger
+  # ------------------------------------------------------------------
+  # Numeric facts quoted in prose. Each row is re-derived from running code
+  # by tests/test_formalism_bindings.py.
+  - id: sha256_hex_char_count
+    kind: number
+    value: 64
+    source: src/witness_register/serialization.py sha256_hex hexdigest length
+    source_tier: claim_ledger
+  - id: sha256_bit_width
+    kind: number
+    value: 256
+    source: src/witness_register/serialization.py sha256_hex hashlib.sha256
+    source_tier: claim_ledger
+  - id: projection_block_value
+    kind: number
+    value: -1
+    source: src/witness_register/projection.py project() block return
+    source_tier: claim_ledger
+  - id: worked_return_recoverability
+    kind: number
+    value: 1.0
+    source: tests/test_worked_example.py::test_the_worked_chain_is_sound_and_recoverable
+    source_path: tests/test_worked_example.py
+    source_tier: test
+  - id: worked_relation_fidelity
+    kind: number
+    value: 1.0
+    source: tests/test_worked_example.py::test_the_worked_projection_is_held_with_named_reasons
+    source_path: tests/test_worked_example.py
+    source_tier: test

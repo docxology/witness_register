@@ -20,7 +20,7 @@ from witness_register import __version__
 ROOT = Path(__file__).resolve().parents[1]
 CITATION = ROOT / "CITATION.cff"
 ZENODO = ROOT / ".zenodo.json"
-CONFIG = ROOT / "manuscript" / "config.yaml"
+CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 LICENSE = ROOT / "LICENSE"
 
 SELF = "witness_register"
@@ -30,7 +30,14 @@ SIBLINGS = ("red_line", "black_line", "golden_line", "white_line", "line_set")
 #: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
 #: the metadata surfaces fails test_no_unverified_doi_appears_in_metadata.
 #: copy-and-paste into a bibliography and points nowhere.
-VERIFIED_DOIS: tuple[str, ...] = ("10.5281/zenodo.21754236", "10.5281/zenodo.21754238", "10.5281/zenodo.21754240", "10.5281/zenodo.21754242", "10.5281/zenodo.21754244", "10.5281/zenodo.21754246")
+VERIFIED_DOIS: tuple[str, ...] = (
+    "10.5281/zenodo.21754236",
+    "10.5281/zenodo.21754238",
+    "10.5281/zenodo.21754240",
+    "10.5281/zenodo.21754242",
+    "10.5281/zenodo.21754244",
+    "10.5281/zenodo.21754246",
+)
 
 #: A DOI as the registries publish them.
 DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Za-z0-9]+")
@@ -47,7 +54,7 @@ def _config_paper_version() -> str:
             match = re.match(r'\s+version:\s*"([^"]+)"\s*$', line)
             if match:
                 return match.group(1)
-    raise AssertionError("paper.version not found in manuscript/config.yaml")
+    raise AssertionError("paper.version not found in docs/manuscript/config.yaml")
 
 
 def _cff_field(name: str) -> str:
@@ -95,7 +102,7 @@ def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
 def test_no_unverified_doi_appears_in_metadata() -> None:
     """A DOI-shaped string must be one a person asserted is real.
 
-    Third-party DOIs in ``manuscript/references.bib`` are out of scope here:
+    Third-party DOIs in ``docs/manuscript/references.bib`` are out of scope here:
     they identify other people's work and are verified against Crossref where
     each repository's reference tests require it. This gate governs the
     identity this work claims for itself.

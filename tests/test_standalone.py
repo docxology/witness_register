@@ -206,8 +206,8 @@ def test_the_gitignore_does_not_swallow_the_source_of_truth() -> None:
     tracked = [
         "src/witness_register/state.py",
         "tests/test_standalone.py",
-        "manuscript/config.yaml",
-        "manuscript/02_design.md",
+        "docs/manuscript/config.yaml",
+        "docs/manuscript/02_design.md",
         "pyproject.toml",
         "uv.lock",
         "README.md",

@@ -102,7 +102,7 @@ permission. Every projection carries `state_ref` and `reasons`, and
   holdings, state chain, projection, metrics, invariants, the 3×3 battery,
   serialization. Map in [docs/architecture.md](docs/architecture.md).
 - `tests/` — real-record tests, no mocks; positive controls throughout.
-- `manuscript/` — the short manuscript sources.
+- `docs/manuscript/` — the short manuscript sources.
 - [docs/correspondence.md](docs/correspondence.md) — why this work exists:
   the 2026-07-29 design review, proposal by proposal.
 - [STANDALONE.md](STANDALONE.md) — what a separated clone can and cannot do.

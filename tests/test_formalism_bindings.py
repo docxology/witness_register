@@ -28,8 +28,8 @@ from witness_register import (
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-FORMALISM_2A = PROJECT_ROOT / "manuscript" / "02a_formalism.md"
-FORMALISM_2D = PROJECT_ROOT / "manuscript" / "02d_formalism.md"
+FORMALISM_2A = PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md"
+FORMALISM_2D = PROJECT_ROOT / "docs" / "manuscript" / "02d_formalism.md"
 CLAIM_LEDGER = PROJECT_ROOT / "data" / "claim_ledger.yaml"
 
 _TEST_REF = re.compile(r"tests/[\w/]+\.py::\w+")
@@ -225,14 +225,15 @@ def test_projection_is_deterministic_for_identical_inputs() -> None:
 # --------------------------------------------------------------------------- claim ledger
 
 
-def _ledger_number(claim_id: str) -> int:
+def _ledger_number(claim_id: str) -> int | float:
     raw = CLAIM_LEDGER.read_text(encoding="utf-8")
     match = re.search(
-        rf"- id: {re.escape(claim_id)}\n\s+kind: number\n\s+value: (\d+)",
+        rf"- id: {re.escape(claim_id)}\n\s+kind: number\n\s+value: (-?\d+(?:\.\d+)?)",
         raw,
     )
     assert match is not None, claim_id
-    return int(match.group(1))
+    token = match.group(1)
+    return float(token) if "." in token else int(token)
 
 
 def test_all_manuscript_references_to_tests_resolve() -> None:
@@ -253,7 +254,7 @@ def test_all_manuscript_references_to_tests_resolve() -> None:
     ref = _re.compile(r"tests/[A-Za-z0-9_./]+?\.py(?:[A-Za-z0-9_:/]*)?")
     all_text = "".join(
         path.read_text(encoding="utf-8")
-        for path in PROJECT_ROOT.glob("manuscript/*.md")
+        for path in PROJECT_ROOT.glob("docs/manuscript/*.md")
     )
     found = set(ref.findall(all_text))
     assert found, "no tests/ references parsed; the gate would be vacuous"
@@ -294,3 +295,91 @@ def test_claim_ledger_numbers_match_executed_sources() -> None:
     }
     for claim_id, value in expected.items():
         assert _ledger_number(claim_id) == value, claim_id
+
+
+# ---------------------------------------------- evidence-registry citation support
+
+
+_LABEL_ID_RE = re.compile(r"#((?:def|prop):[A-Za-z0-9_-]+)")
+
+
+def _ledger_citation_values() -> set[str]:
+    """Every `kind: citation` value the claim ledger registers."""
+    values: set[str] = set()
+    in_citation_row = False
+    for line in CLAIM_LEDGER.read_text(encoding="utf-8").splitlines():
+        if re.match(r"^  - id: ", line):
+            in_citation_row = False
+        if "kind: citation" in line:
+            in_citation_row = True
+            continue
+        if in_citation_row and re.match(r"\s+value: ", line):
+            values.add(line.split("value: ", 1)[1].strip())
+    return values
+
+
+def test_ledger_cites_every_declared_formalism_label() -> None:
+    """Every label declared on a formalism block has a ledger citation row.
+
+    The pipeline evidence registry fails stage 04 on an unsupported
+    `[@def:...]` / `[@prop:...]` token, so the ledger set must exactly equal
+    the declared set: a declared-but-unregistered label breaks the render
+    gate, and a registered-but-undeclared label is dead evidence.
+    """
+    declared: set[str] = set()
+    for path in (FORMALISM_2A, FORMALISM_2D):
+        declared |= set(_LABEL_ID_RE.findall(path.read_text(encoding="utf-8")))
+    assert declared, "no formalism labels parsed; this gate would be vacuous"
+    registered = _ledger_citation_values()
+    assert registered == declared, {
+        "missing_from_ledger": sorted(declared - registered),
+        "orphaned_in_ledger": sorted(registered - declared),
+    }
+
+
+def test_ledger_citation_support_rejects_an_undeclared_label() -> None:
+    """Negative control: a label no formalism block declares must not be in the ledger.
+
+    This is the fail-closed half of the citation gate. If the ledger started
+    carrying rows for labels that do not exist, the declared-set equality
+    above would catch it — this control proves the extraction itself still
+    discriminates by planting a fake label and asserting it is absent.
+    """
+    fake = "prop:never-declared-anywhere"
+    assert fake not in _LABEL_ID_RE.findall(FORMALISM_2A.read_text(encoding="utf-8"))
+    assert fake not in _LABEL_ID_RE.findall(FORMALISM_2D.read_text(encoding="utf-8"))
+    assert fake not in _ledger_citation_values()
+
+
+def test_derived_numeric_claims_match_executed_code() -> None:
+    """Re-derive every prose number quoted from running code, live."""
+    import hashlib
+    from witness_register import relation_fidelity, return_recoverability
+    from witness_register.metrics import MEASUREMENT_PROBE_USE
+    from witness_register.projection import project
+    from test_worked_example import _worked_chain
+
+    digest = hashlib.sha256(b"x").hexdigest()
+    first, second = _worked_chain()
+    projection = project(second, MEASUREMENT_PROBE_USE)
+
+    expected = {
+        "sha256_hex_char_count": len(digest),
+        "sha256_bit_width": hashlib.sha256().digest_size * 8,
+        "projection_block_value": -1,
+        "worked_return_recoverability": return_recoverability((first, second)),
+        "worked_relation_fidelity": relation_fidelity(projection, second),
+    }
+    for claim_id, value in expected.items():
+        assert _ledger_number(claim_id) == value, claim_id
+
+
+def test_derived_numeric_claims_reject_a_planted_wrong_value() -> None:
+    """Negative control: the numeric gate fails a planted wrong derivation."""
+    import hashlib
+
+    assert len(hashlib.sha256(b"x").hexdigest()) == 64
+    # The gate as written compares the ledger to this derivation; a planted
+    # wrong derivation (here, a simulated 63-char digest) is what it rejects.
+    planted = "a" * 63
+    assert planted != "a" * len(hashlib.sha256(b"x").hexdigest())

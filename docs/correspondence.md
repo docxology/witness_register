@@ -93,7 +93,7 @@ API in its own repository with a provenance README, and
 `tests/test_worked_example.py` intakes all four unmodified, records honest
 relations (incomparability plus an open same-subject return contract), and
 measures the held posture with relation fidelity and return recoverability
-both 1.0. A formalism section (`manuscript/02a_formalism.md`) now states the
+both 1.0. A formalism section (`docs/manuscript/02a_formalism.md`) now states the
 envelope record, the state and chain, the projection and zone, and the
 non-compensatory propositions, each bound to the running package by
 `tests/test_formalism.py`. Figures remain unbuilt and are recorded in TODO

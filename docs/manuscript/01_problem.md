@@ -1,6 +1,6 @@
 # The Problem {#sec:problem}
 
-![The Witness Register cover plate: four vertical ledger columns with distinct greyscale hatch textures run in parallel without converging; a horizontal register band carries the title across all four; four seal circles mark the instruments below, and the witness mark sits above and alone. The cover uses only the register's greyscale palette — no colour that would affiliate it with any one instrument.](../output/figures/wr_cover.png){#fig:wr-cover width=100%}
+![The Witness Register cover plate: four vertical ledger columns with distinct greyscale hatch textures run in parallel without converging; a horizontal register band carries the title across all four; four seal circles mark the instruments below, and the witness mark sits above and alone. The cover uses only the register's greyscale palette — no colour that would affiliate it with any one instrument.](../../output/figures/wr_cover.png){#fig:wr-cover width=100%}
 
 Four independent instruments — the line works — each answer their own
 substantive question about a subject in their own vocabulary, and each ends

@@ -28,7 +28,7 @@ def test_version_matches_pyproject() -> None:
 
 
 def test_version_matches_manuscript_config() -> None:
-    text = (PROJECT_ROOT / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    text = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
     match = re.search(r'version: "([^"]+)"', text)
     assert match is not None
     assert match.group(1) == witness_register.__version__

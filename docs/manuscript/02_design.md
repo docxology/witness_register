@@ -52,7 +52,7 @@ review's 3×3 canonical witness cases ship as an executable battery whose
 checks are themselves proven able to reject
 (described in [the examples section](#sec:examples)).
 
-![The worked two-state chain, built live from the four stored real envelopes at figure-build time: the genesis seal, the update's prior_ref pointing at it, verify_chain's verdict on the pair, and — run in the same build — the exact refusal update_state raises when one stored value is mutated after sealing. Chain integrity is internal consistency only; the tip is unbound without an anchor the chain does not control.](../output/figures/wr_chain.png){#fig:wr-chain width=100%}
+![The worked two-state chain, built live from the four stored real envelopes at figure-build time: the genesis seal, the update's prior_ref pointing at it, verify_chain's verdict on the pair, and — run in the same build — the exact refusal update_state raises when one stored value is mutated after sealing. Chain integrity is internal consistency only; the tip is unbound without an anchor the chain does not control.](../../output/figures/wr_chain.png){#fig:wr-chain width=100%}
 
 ## The posture that cannot travel alone
 

@@ -32,7 +32,7 @@ def build_figures_before_tests() -> None:
 
     Required for
     test_standalone.py::test_every_relative_markdown_link_points_at_a_file_that_exists,
-    which checks that output/figures/*.png embeds in manuscript/ resolve. The
+    which checks that output/figures/*.png embeds in docs/manuscript/ resolve. The
     output/ directory is gitignored; a fresh clone must build before testing.
     """
 
