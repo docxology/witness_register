@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.0 — 2026-09-01 (agent hygiene pass)
+
+- **Test-suite figure build made interpreter-independent.** The session-scoped
+  `build_figures_before_tests` fixture ran `scripts/build_figures.py` with
+  bare `sys.executable`, so any pytest invocation under an interpreter without
+  the project installed (e.g. a homebrew python collecting the suite) emitted
+  `ModuleNotFoundError: No module named 'witness_register'` from the child and
+  warned on every run. The fixture now passes a `PYTHONPATH` mirroring the
+  `pyproject.toml` `pythonpath = [".", "src"]` entries, so the pre-test figure
+  build succeeds under any interpreter. Suite now runs warning-free: 206
+  passed, 98.10% branch coverage, `ruff check` and `ruff format --check` clean.
+- Three test files reformatted to the pinned `ruff format` style
+  (`test_api.py`, `test_formalism.py`, `test_register_figures.py`); no
+  behavioural change.
+
 ## 0.1.0 — 2026-07-29 (autonomous assessment pass, 2026-08-01)
 
 A review pass over both intelligence and visualizations, all fixes verified:

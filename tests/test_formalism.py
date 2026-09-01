@@ -17,7 +17,9 @@ import pytest
 
 from witness_register import EnvelopeRecord, WitnessState
 
-FORMALISM = Path(__file__).resolve().parents[1] / "docs" / "manuscript" / "02a_formalism.md"
+FORMALISM = (
+    Path(__file__).resolve().parents[1] / "docs" / "manuscript" / "02a_formalism.md"
+)
 
 _COUNT_WORDS = {8: "eight", 9: "nine", 10: "ten", 11: "eleven"}
 

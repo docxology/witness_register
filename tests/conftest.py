@@ -7,6 +7,7 @@ is built through the register's own public API.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import warnings
@@ -40,11 +41,17 @@ def build_figures_before_tests() -> None:
     build_script = root / "scripts" / "build_figures.py"
     if not build_script.exists():
         return
+    # sys.executable here may be an interpreter without the project installed
+    # (e.g. pytest run under a non-venv python); mirror the pyproject
+    # pythonpath=[".", "src"] entries so the import works for any interpreter.
+    pythonpath = os.pathsep.join([str(root), str(root / "src")])
+    env = {**os.environ, "PYTHONPATH": pythonpath}
     result = subprocess.run(
         [sys.executable, str(build_script)],
         cwd=root,
         capture_output=True,
         text=True,
+        env=env,
     )
     if result.returncode != 0:
         warnings.warn(

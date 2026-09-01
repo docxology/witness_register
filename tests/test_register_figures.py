@@ -36,7 +36,9 @@ TEXT_BLOCK_INCHES = 8.5 - 2 * 0.33
 
 
 def _config_side_margins() -> tuple[float, float]:
-    config = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(encoding="utf-8")
+    config = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(
+        encoding="utf-8"
+    )
     match = re.search(r'geometry: "left=([\d.]+)in,right=([\d.]+)in', config)
     assert match is not None, "manuscript config declares no side margins"
     return float(match.group(1)), float(match.group(2))
