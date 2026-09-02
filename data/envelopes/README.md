@@ -76,3 +76,23 @@ so the envelope's stored digest for this record is stale with respect to the
 anonymized prose.
 
 See [AGENTS.md](AGENTS.md) for the working contract.
+
+## Second admission — silver, violet, blue, green (2026-09-01)
+
+Four further lines joined the set (declared in line_set `registry.py`,
+working positions 5–8). Each shipped its own prepared envelopes under the
+published schema; they are stored here by value exactly as exported:
+
+| File | Exporting repo (version) | Provenance | native_status shape |
+| --- | --- | --- | --- |
+| `silver_line_worked.json` | silver_line 0.1.0 | the line's own worked case (tests/test_evaluator.py test_full_evidence_reads_kept); `report_ref` = `verdict_digest` over that verdict, regenerated 2026-09-01 | one status word |
+| `violet_line_worked.json` | violet_line 0.1.0 | exported by violet_line's own envelope/registry API over the community-interview worked case | ordered per-record state pairs |
+| `blue_line_worked.json` | blue_line 0.1.0 | `read_file(worked commitments, as_of="2026-08-01")` → `build_envelope(...)`; `report_ref` = `reading_digest` | one status word |
+| `green_line_worked.json` | green_line 0.1.0 | exported by green_line's envelope generator over the proof-review apprenticeship worked read | ordered marker/counter-signal pairs |
+
+Three of the four new lines' same-subject exports name **witness_register
+0.1.0 itself** (succession, stewardship, and growth readings over this
+repository), joining the classical lines' completed same-subject return;
+violet_line's same-subject export names violet_line's own consent ledger,
+which is its worked subject and is stored here verbatim without being
+conflated with the register's subject record.

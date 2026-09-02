@@ -35,12 +35,16 @@ FILES = (
     "black_line_worked.json",
     "golden_line_worked.json",
     "white_line_worked.json",
+    "silver_line_worked.json",
+    "violet_line_worked.json",
+    "blue_line_worked.json",
+    "green_line_worked.json",
 )
 
 
 def _payloads() -> list[dict]:
     payloads = [json.loads((DATA / name).read_text(encoding="utf-8")) for name in FILES]
-    assert len(payloads) == 4, "the worked example needs all four exports"
+    assert len(payloads) == len(FILES), "the worked example needs every declared export"
     return payloads
 
 
@@ -62,6 +66,10 @@ def test_all_four_real_exports_pass_intake_unmodified() -> None:
         "black_line",
         "golden_line",
         "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
     ]
     for record in records:
         assert record.schema_version == "line.report-envelope/1.0"
@@ -69,13 +77,17 @@ def test_all_four_real_exports_pass_intake_unmodified() -> None:
 
 
 def test_native_status_shapes_differ_and_are_stored_verbatim() -> None:
-    """Two lines export a word, two export a structure; both are opaque here."""
+    """Six export a word, two export a structure; both are opaque here."""
 
     by_line = {record.line_id: record for record in _accepted_records()}
     assert isinstance(by_line["red_line"].native_status, str)
     assert isinstance(by_line["black_line"].native_status, str)
     assert isinstance(by_line["golden_line"].native_status, list)
     assert isinstance(by_line["white_line"].native_status, list)
+    assert isinstance(by_line["silver_line"].native_status, str)
+    assert isinstance(by_line["violet_line"].native_status, str)
+    assert isinstance(by_line["blue_line"].native_status, str)
+    assert isinstance(by_line["green_line"].native_status, str)
     for name, payload in zip(FILES, _payloads()):
         record, _ = intake_envelope(payload)
         assert record is not None
