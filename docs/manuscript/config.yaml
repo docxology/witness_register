@@ -5,7 +5,7 @@ paper:
   date: "2026-07-29"
   description: "A sixth work beside the line set: append-only co-registration of report envelopes, typed cross-line relations, and a bounded posture that never erases the state."
   cover:
-    image: "output/figures/wr_cover.png"
+    image: "../../output/figures/wr_cover.png"
 
 authors:
   - name: "Daniel Ari Friedman"
