@@ -1,0 +1,114 @@
+{
+  "claim_boundary": "Grounds the manuscript's formalism cross-references and package constants in the evidence registry. Every `kind: citation` row re-derives from a formalism block label declared in docs/manuscript/, and every `kind: number` row re-derives from the running package, via tests/test_formalism_claim_ledger.py. These rows support reproducibility of the code description only; they do not establish that any proposition is universally valid.",
+  "schema_version": "1.0",
+  "claims": [
+    {
+      "claim_id": "def_envelope_record",
+      "kind": "citation",
+      "value": "def:envelope-record",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_witness_state",
+      "kind": "citation",
+      "value": "def:witness-state",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_append_only",
+      "kind": "citation",
+      "value": "prop:append-only",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "def_projection",
+      "kind": "citation",
+      "value": "def:projection",
+      "source": "docs/manuscript/02a_formalism.md: definition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_non_compensatory",
+      "kind": "citation",
+      "value": "prop:non-compensatory",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_no_auto_categories",
+      "kind": "citation",
+      "value": "prop:no-auto-categories",
+      "source": "docs/manuscript/02a_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02a_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_chain_verification_completeness",
+      "kind": "citation",
+      "value": "prop:chain-verification-completeness",
+      "source": "docs/manuscript/02d_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02d_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_return_contract_constraint",
+      "kind": "citation",
+      "value": "prop:return-contract-constraint",
+      "source": "docs/manuscript/02d_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02d_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "prop_projection_determinism",
+      "kind": "citation",
+      "value": "prop:projection-determinism",
+      "source": "docs/manuscript/02d_formalism.md: proposition block declared with this label",
+      "source_path": "docs/manuscript/02d_formalism.md",
+      "source_tier": "manuscript_formalism_block",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "sha256_hex_char_count",
+      "kind": "number",
+      "value": 64,
+      "source": "witness_register.serialization.sha256_hex: hex digest length",
+      "source_path": "src/witness_register/serialization.py",
+      "source_tier": "package_constant",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "sha256_bit_width",
+      "kind": "number",
+      "value": 256,
+      "source": "witness_register.serialization.sha256_hex: hashlib.sha256 digest width (4 bits per hex character)",
+      "source_path": "src/witness_register/serialization.py",
+      "source_tier": "package_constant",
+      "freshness": "active"
+    },
+    {
+      "claim_id": "projection_block_value",
+      "kind": "number",
+      "value": -1,
+      "source": "witness_register.projection.project: an empty genesis state projects to -1 — nothing to witness is not permission",
+      "source_path": "src/witness_register/projection.py",
+      "source_tier": "package_constant",
+      "freshness": "active"
+    }
+  ]
+}
