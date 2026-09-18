@@ -26,6 +26,10 @@ render:
     docx: false
     epub: false
 
+rendering:
+  figure_height_fraction: 0.92
+  front_matter_figure_height_fraction: 0.92
+
 metadata:
   license: "CC-BY-4.0 (prose); MIT (code)"
   status: "living document — versioned and revisable"
