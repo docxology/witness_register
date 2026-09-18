@@ -1,8 +1,8 @@
 paper:
   title: "The Witness Register: Co-Registration Without Aggregation"
   subtitle: "A shared register for line report envelopes that never ranks, merges, or overrides the instruments it holds"
-  version: "0.1.0"
-  date: "2026-07-29"
+  version: "0.1.1"
+  date: "2026-09-18"
   description: "A sixth work beside the line set: append-only co-registration of report envelopes, typed cross-line relations, and a bounded posture that never erases the state."
   cover:
     image: "../../output/figures/wr_cover.png"
@@ -14,7 +14,7 @@ authors:
     affiliation: "Active Inference Institute"
 
 publication:
-  doi: "10.5281/zenodo.21754246"
+  doi: "10.5281/zenodo.22833511"
   github_repository: "docxology/witness_register"
   repository_url: "https://github.com/docxology/witness_register"
 
