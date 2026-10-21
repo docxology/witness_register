@@ -11,7 +11,8 @@ chain is verifiable against the register's evidential record: no event
 can enter a chain without a corresponding register entry, and
 `verify_chain` checks every state's digest ([@prop:append-only]),
 linkage (`prior_ref`), and record preservation for envelopes,
-relations, unclassified holdings, and return contracts. A state that
+relations, unclassified holdings, return contracts and decision events. It also
+checks stable register subject identity, real dates and actual event basis states. A state that
 dropped, reordered, or altered any prior record fails verification with
 a message naming the violation; verification never repairs.
 :::
@@ -20,13 +21,13 @@ a message naming the violation; verification never repairs.
 When the same subject appears in multiple chains, the return-contract
 projection constrains the relationship between those chains. For a
 subject $S$ appearing in chains $A$ and $B$, the projection ([@def:projection])
-applies the same rules: any `RETURN_DUE` relation with no recorded
-human decision forbids $+1$ until the return condition is met. A
+applies the same rules: any `RETURN_DUE` relation forbids $+1$ until the return condition is met or
+an exact-contract, exact-use decision event explicitly rescopes it. A
 contract recorded in one chain does not automatically bind another, but
 within a single state the projection respects every open return
 recorded there, and meeting a contract requires a verified return
 record ([@prop:non-compensatory]) — a partial return with a non-empty
-remainder does not close the obligation. Return contracts are records
+remainder does not close the obligation until its linked remainder contract is verified. Return contracts are records
 of obligation, not promises of approval: the honest outcome of a return
 may be that the material stays held.
 :::

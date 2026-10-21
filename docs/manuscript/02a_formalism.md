@@ -24,7 +24,7 @@ digest over text that is not JSON would seal a non-interchangeable value.
 A witness state is the frozen record
 $X = (\mathrm{subject\_id},\ \mathrm{review\_moment},\ \mathrm{envelopes},\
 \mathrm{relations},\ \mathrm{unclassified},\ \mathrm{returns},\
-\mathrm{prior\_ref},\ \mathrm{state\_digest})$ with exactly those eight
+\mathrm{prior\_ref},\ \mathrm{state\_digest},\ \mathrm{decisions},\ \mathrm{history\_refs})$ with exactly those ten
 fields, sealed by $\mathrm{state\_digest} = \mathrm{SHA\text{-}256}$ over
 the canonical JSON of every other field including record order. States form
 a chain: a genesis state carries an empty $\mathrm{prior\_ref}$; every
@@ -50,7 +50,7 @@ $u$ (blank $u$ raises: no posture without a declared use), the projection is
 $P(X, u) \in \{-1, 0, +1\}$, always carrying the digest of the exact state
 that earned it and at least one reason. The zone is computed from relation
 records only, in fixed precedence: any non-compensatory block with no
-recorded human decision forces $-1$; an empty state is $-1$, because
+applicable explicit resolution forces $-1$; an empty state is $-1$, because
 nothing to witness is not permission; any hold — a protected absence, an
 outstanding return, an unresolved tension, dependency, incomparability, or
 unreviewed observation, or an unreviewed unclassified holding — caps the
@@ -58,7 +58,7 @@ value at $0$; and $+1$ is reachable only when at least one envelope record (see
 [@def:envelope-record]) exists and nothing recorded forbids the use.
 Non-compensatory means the same thing here that [@prop:non-compensatory]
 states: a single block forces $-1$ under any volume of agreement, and no
-decision reference lifts it.
+classification or unscoped decision reference lifts it.
 :::
 
 ::: {.proposition #prop:non-compensatory title="Non-compensatory means non-compensatory"}
@@ -68,8 +68,8 @@ unresolved block forces $-1$ under any number of agreement relations; a
 protected absence caps the posture at $0$ past every decision reference,
 including the one offered at projection time; and a return contract with no
 verified return — or a verified return with a named remainder — holds the
-posture until the return condition is met or a human decision explicitly
-rescopes it, and a whitespace-only verification is refused at construction
+posture until the return condition is met or an exact-contract, exact-use
+decision event explicitly rescopes it, and a whitespace-only verification is refused at construction
 rather than counted as met.
 :::
 
@@ -121,3 +121,18 @@ crown; `tests/test_same_subject.py` measures every sentence of this
 paragraph.
 
 ![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behaviour was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../../output/figures/wr_battery.png){#fig:wr-battery width=100%}
+
+## Authority and return lifecycle
+
+Classification activates the chosen relation's constraint; it does not
+resolve it. Resolution and rescope are separate append-only decision claims
+bound to a prior reviewed state, exact target digest and exact declared use.
+Conflicting clear/reopen events remain visible and hold without choosing a
+winner by order. Protected absence has no generic clearance event.
+A completion follows a known open obligation and preserves every immutable
+term. A linked remainder obligation closes only after its own verification.
+`tests/test_lifecycle.py` executes these transitions and conflicting claims.
+
+The state schema is versioned separately from the unchanged envelope intake
+schema. Historical authority strings confer no automatic resolution during
+migration; old serialized bytes and seals retain their historical identity.

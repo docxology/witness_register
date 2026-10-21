@@ -27,6 +27,13 @@ def test_version_matches_pyproject() -> None:
     assert match.group(1) == witness_register.__version__
 
 
+def test_version_matches_locked_package() -> None:
+    lock = (PROJECT_ROOT / "uv.lock").read_text()
+    match = re.search(r'name = "witness-register"\nversion = "([^"]+)"', lock)
+    assert match is not None
+    assert match.group(1) == witness_register.__version__
+
+
 def test_version_matches_manuscript_config() -> None:
     text = (PROJECT_ROOT / "docs" / "manuscript" / "config.yaml").read_text(
         encoding="utf-8"

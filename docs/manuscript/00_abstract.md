@@ -1,7 +1,7 @@
 # Abstract
 
-The Witness Register is a shared co-registration layer for the four-line set,
-built as a sixth work standing beside the instruments rather than among them.
+The Witness Register is a shared co-registration layer for the line set,
+built as a shared register standing beside the instruments rather than among them.
 Each line already exports one common report envelope under the published schema
 string `line.report-envelope/1.0` — a digest pointer to its complete native
 report, its identity, subject, review date, registry provenance, native status
@@ -32,3 +32,9 @@ not a utility, and not permission from any boundary owner. Three first-pass
 measures — relation fidelity, return recoverability, premature crowning rate —
 evaluate the register's own bookkeeping, never the truth of any report. The
 register witnesses; it does not judge.
+
+Classification is separate from resolution: exact-target, exact-use decision
+events append without changing prior records. Immutable obligation identity
+binds returns, including linked remainders. Structural validation precedes
+every posture, and replay checks remain distinct from digest binding. The
+declared use is an auditable declaration, not a free-text applicability filter.

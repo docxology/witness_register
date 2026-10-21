@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import pytest
 from conftest import make_contract, make_holding, make_relation
+from test_lifecycle import decision
 
 from witness_register import (
     Projection,
+    DecisionKind,
+    raw_state,
     RelationType,
     genesis_state,
     project,
@@ -62,7 +65,11 @@ def test_a_human_resolved_block_no_longer_forces_minus_one(envelope) -> None:
         human_decision_ref="decision:resolved-2026-07-29",
     )
     state = genesis_state("subject-1", "2026-07-29", (envelope,), (resolved,))
-    assert project(state, USE).value == 1
+    assert project(state, USE).value == -1
+    later = update_state(
+        state, "2026-07-30", decisions=(decision(state, resolved, use=USE),)
+    )
+    assert project(later, USE).value == 1
 
 
 def test_a_projection_time_ref_never_resolves_a_block(envelope) -> None:
@@ -122,7 +129,7 @@ def test_a_partial_return_keeps_the_cap(envelope) -> None:
     assert project(second, USE).value == 0
 
 
-def test_a_projection_time_ref_rescopes_only_the_return_cap(envelope) -> None:
+def test_only_a_scoped_event_rescopes_the_return_cap(envelope) -> None:
     contract = make_contract("con-due")
     due = make_relation(
         envelope,
@@ -133,12 +140,18 @@ def test_a_projection_time_ref_rescopes_only_the_return_cap(envelope) -> None:
     state = genesis_state(
         "subject-1", "2026-07-29", (envelope,), (due,), (), (contract,)
     )
-    rescoped = project(state, USE, human_decision_ref="decision:rescope-1")
+    assert project(state, USE, human_decision_ref="decision:rescope-1").value == 0
+    later = update_state(
+        state,
+        "2026-07-30",
+        decisions=(decision(state, contract, DecisionKind.RESCOPE, use=USE),),
+    )
+    rescoped = project(later, USE)
     assert rescoped.value == 1
-    assert any("decision:rescope-1" in reason for reason in rescoped.reasons)
+    assert any("decision:D1" in reason for reason in rescoped.reasons)
 
 
-def test_a_relation_level_ref_also_rescopes_a_due_return(envelope) -> None:
+def test_a_relation_level_ref_cannot_rescope_a_due_return(envelope) -> None:
     contract = make_contract("con-due")
     due = make_relation(
         envelope,
@@ -150,7 +163,7 @@ def test_a_relation_level_ref_also_rescopes_a_due_return(envelope) -> None:
     state = genesis_state(
         "subject-1", "2026-07-29", (envelope,), (due,), (), (contract,)
     )
-    assert project(state, USE).value == 1
+    assert project(state, USE).value == 0
 
 
 @pytest.mark.parametrize(
@@ -176,7 +189,11 @@ def test_unresolved_relations_hold_at_zero_and_a_recorded_decision_lifts(
         human_decision_ref="decision:reviewed",
     )
     lifted = genesis_state("subject-1", "2026-07-29", (envelope,), (decided,))
-    assert project(lifted, USE).value == 1
+    assert project(lifted, USE).value == 0
+    later = update_state(
+        lifted, "2026-07-30", decisions=(decision(lifted, decided, use=USE),)
+    )
+    assert project(later, USE).value == 1
 
 
 def test_an_unpromoted_holding_caps_at_zero(envelope) -> None:
@@ -260,5 +277,6 @@ def test_a_due_return_with_a_dangling_contract_ref_fails_closed(envelope) -> Non
         relation_id="due",
         return_contract_ref="no-such-contract",
     )
-    state = genesis_state("subject-1", "2026-07-29", (envelope,), (due,))
-    assert project(state, USE).value == 0
+    state = raw_state("subject-1", "2026-07-29", (envelope,), (due,))
+    with pytest.raises(ValueError, match="structure"):
+        project(state, USE)

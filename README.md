@@ -2,13 +2,13 @@
 
 **The Shared Witness Register: co-registration without aggregation.**
 
-The register sits BESIDE the line set — the four line works and their set
-reader — as a sixth work. It is not a line: it has no colour, no substantive
+The register sits BESIDE the line set: independent instruments and their set
+reader. It is not a line: it has no colour, no substantive
 question of its own, and no verdict.
 
 ## What it is never (read this first)
 
-**No score, no override, no rewriting of the four instruments.** The register
+**No score, no override, no rewriting of the instruments.** The register
 never ranks, averages, merges, or scores the lines it co-registers, and it
 never reinterprets a line's native vocabulary. Each line remains the sole
 authority over its own report. The register's whole ambition is precedence
@@ -92,7 +92,7 @@ One dict per line report, field names by published convention:
 non-compensatory block forces `-1`; a protected absence forbids `+1`
 unconditionally — protection is not missing evidence to be mined; an unmet
 return forbids `+1` until the return condition is met or a referenced human
-decision rescopes; an empty register is `-1` — nothing to witness is not
+decision event names the exact contract and exact declared use; an empty register is `-1` — nothing to witness is not
 permission. Every projection carries `state_ref` and `reasons`, and
 `witness_hold_reasons` enumerates, structured, why a state holds at `0`.
 
@@ -115,6 +115,10 @@ Referenced by name and URL only — never by import, never by relative path:
 [black_line](https://github.com/docxology/black_line),
 [golden_line](https://github.com/docxology/golden_line),
 [white_line](https://github.com/docxology/white_line),
+[silver_line](https://github.com/docxology/silver_line),
+[violet_line](https://github.com/docxology/violet_line),
+[blue_line](https://github.com/docxology/blue_line),
+[green_line](https://github.com/docxology/green_line),
 [line_set](https://github.com/docxology/line_set).
 
 ## License
@@ -136,3 +140,17 @@ envelopes without aggregation:
 - [Blue Line](https://github.com/docxology/blue_line) — the stewardship instrument for maintained commitments
 - [Green Line](https://github.com/docxology/green_line) — the capacity-under-development instrument
 - [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
+
+## Authority and migration
+
+Promotion records classification only. Append `DecisionEvent` for a resolution
+or return rescope, with its exact target digest, evidence, declared next use
+and prior basis state. Protected absence stays restrictive. Conflicting
+clear/reopen claims remain visible and hold. Historic `human_decision_ref`
+strings, including the compatibility projection argument, clear nothing.
+
+See [development](docs/development.md) and the
+[review and migration ledger](docs/review-20261020.md). Projection requires
+structural validation; typed failures are bookkeeping errors, not subject
+verdicts. Use wording is an auditable declaration; the code does not infer
+which constraints apply from free text.

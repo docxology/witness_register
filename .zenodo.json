@@ -1,6 +1,6 @@
 {
   "title": "The Witness Register: Co-Registration Without Aggregation",
-  "description": "<p>A shared register that co-registers independent instruments' report envelopes without aggregating them. It stores each report's envelope verbatim, records cross-instrument relations as separate describing records, keeps history append-only and sealed, and \u2014 only when asked, for one declared next use \u2014 emits a bounded posture that always points back at the state that earned it. It never parses, compares, ranks, averages, or merges any instrument's native status.</p><p><strong>Subtitle:</strong> A shared register for line report envelopes that never ranks, merges, or overrides the instruments it holds</p><p>Code is MIT licensed; prose and figures are CC BY 4.0. See LICENSE in the repository.</p>",
+  "description": "A shared register that co-registers independent instruments' report envelopes without aggregating them. It stores native status as an opaque detached JSON snapshot, records authored relations and scoped authority events separately, preserves append-only history, and emits a bounded posture with its full state reference and reasons. It never ranks, merges or overrides instruments. Code is MIT licensed; prose and figures are CC BY 4.0.",
   "upload_type": "publication",
   "publication_type": "workingpaper",
   "creators": [
@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "co-registration",
     "append-only log",
@@ -77,7 +77,27 @@
       "identifier": "10.5281/zenodo.21754244",
       "relation": "cites",
       "scheme": "doi"
+    },
+    {
+      "identifier": "https://github.com/docxology/silver_line",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/violet_line",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/blue_line",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/green_line",
+      "relation": "references",
+      "scheme": "url"
     }
   ],
-  "notes": "One of six related works (the line set and its witness register). The five sibling DOIs are listed in related_identifiers with relation 'cites'; this work's own DOI is recorded in CITATION.cff identifiers and the record link."
+  "notes": "The register stands beside the instruments and their reader. Prior archived DOI: 10.5281/zenodo.22833511 (version 0.1.1). No DOI has been reserved or minted for this version; reserve-first publication is the owner's follow-up."
 }

@@ -1,6 +1,6 @@
 # Method: How the register is built and operated {#sec:method}
 
-The register is small — a few hundred lines of Python — and the design
+The register is a standard-library Python package, and the design
 section states what it does. This section states how it is built, how it is
 operated, and how it is verified. The formalism ([@sec:formalism]) restates
 the same machinery as objects and rules; this section describes the
@@ -62,7 +62,7 @@ On request, for one declared next use, the register projects `-1 | 0 | +1`.
 A blank use raises — no posture is issued without a declared use. The zone is
 computed from relation records only, in fixed precedence ([@def:projection]):
 
-1. Any non-compensatory block with no recorded human decision forces `-1`.
+1. Any non-compensatory block without an applicable explicit resolution forces `-1`.
 2. An empty state is `-1`, because nothing to witness is not permission.
 3. Any hold — a protected absence, an outstanding return, an unresolved
    tension, dependency, incomparability, or unreviewed observation, or an
@@ -91,3 +91,25 @@ and premature crowning rate — evaluate the register's own bookkeeping, never
 the truth of any report. They are computed from the live chain and are
 reported alongside the battery results; they carry no assertion about safety,
 correctness, or completeness.
+
+## Validation, interchange and review dates
+
+Projection first validates local structure and the seal. Invalid bookkeeping
+raises `InvalidStateError` with typed issues and emits no posture; `raw_state`
+keeps refused imports available for inspection. Chain verification checks the
+actual prior state of each new decision and obligation when context is present.
+Native envelope subject spellings may differ: registration declares their
+correspondence. The register-level subject stays stable across a chain.
+
+Intake detaches native-status JSON from caller-owned containers. Arrays are
+lists, object keys are strings, numbers are finite and strings have valid
+Unicode. Tuples, non-string keys, surrogates and cycles are refused, never
+coerced. Metadata reference lists also accept Python tuples as an explicitly
+declared API convenience, canonicalized as JSON arrays. Bounded intake records
+missing and malformed fields together in schema order; limits are defined in
+`json_data.py` and exercised in `tests/test_interchange_hardening.py`.
+Direct mutation of an accepted record remains a seal violation.
+
+Review and anchor dates must be real calendar dates. Backdated reviews are
+allowed: append sequence, recorded review date and operator-declared external
+anchor date are separate facts, not an inferred chronology.

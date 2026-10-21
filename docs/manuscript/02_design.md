@@ -60,7 +60,7 @@ On request, for one declared next use, the register projects `-1 | 0 | +1`.
 The invariants are non-compensatory and enforced in code, driven only by
 relation records: an unresolved block forces `-1`; a protected absence
 forbids `+1` unconditionally; an unmet return forbids `+1` until the return
-condition is met or a referenced human decision rescopes; an empty register
+condition is met or an exact-contract, exact-use decision event rescopes it; an empty register
 is `-1`, because nothing to witness is not permission. The symbols are
 interface values, not the ontology: every projection carries the digest of
 the state that earned it and the reasons it holds, and a held `0` is a
@@ -68,3 +68,16 @@ structured enumeration, never a vague middle
 (formalized in [the formal core](#sec:formalism)). Three first-pass measures —
 relation fidelity, return recoverability, premature crowning rate — evaluate
 the register's own bookkeeping, never the truth of any report.
+
+Promotion records `classification_decision_ref` and activates the selected
+relation; classification does not imply resolution. Resolution and rescope
+are append-only `DecisionEvent` records, with exact target digest, decision
+kind, evidence reference, declared next use and prior basis state. Conflicting
+claims remain visible and hold. The use declaration does not infer semantic
+applicability from prose: constraints apply globally unless an explicit event
+names that exact use. Protected absence has no generic clearance event.
+
+Sealing binds content; structural validation makes it eligible for projection.
+Typed structural refusal emits no substantive posture. Return pairs preserve
+every obligation term, require an open predecessor and link partial-return
+remainders explicitly; only verification of that subset can close it.

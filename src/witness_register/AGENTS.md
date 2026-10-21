@@ -1,6 +1,6 @@
 # `witness_register` package
 
-A sixth work beside the line set: append-only co-registration of report envelopes,
+A shared register beside the line set: append-only co-registration of report envelopes,
 typed cross-line relations, and a bounded posture that never erases the state.
 
 ## Modules

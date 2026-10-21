@@ -1,6 +1,6 @@
 # Architecture
 
-One package, twelve small modules, no runtime dependencies. Every module
+One package with small modules and no runtime dependencies. Every module
 carries its non-claims in its docstring; the package docstring
 (`src/witness_register/__init__.py`) states the register-wide ones.
 
@@ -16,9 +16,9 @@ carries its non-claims in its docstring; the package docstring
 | `state.py` | `WitnessState`, `genesis_state`, `update_state` (fail-closed append-only), `verify_chain`, `seal_tip`, `promote_unclassified` | mutates history; promotes without a human decision ref |
 | `projection.py` | `Projection`, `project`, `witness_hold_reasons`, `HoldReason` — the bounded `-1/0/+1` posture | reads `native_status`; emits a value without state_ref and reasons |
 | `metrics.py` | `relation_fidelity`, `return_recoverability`, `premature_crowning_rate` | measures the truth of any report |
-| `invariants.py` | `check_state`/`check_chain`/`check_projection` + `defect_battery` (12 planted defects, all must be detected) | passes vacuously — the battery proves rejection |
+| `invariants.py` | `check_state`/`check_chain`/`check_projection_binding`/`check_projection` + `defect_battery` (12 planted defects, all must be detected) | passes vacuously — the battery proves rejection |
 | `battery.py` | `run_battery` — the review's 3×3 canonical witness cases, with injected-wrong variants | returns green without every required behavior holding |
-| `serialization.py` | canonical JSON, SHA-256, `witness-register.<thing>/1.0` schema strings | security semantics |
+| `serialization.py` | canonical JSON, SHA-256, versioned `witness-register.<thing>` schema strings | security semantics |
 | `figures.py` | deterministic figure plates drawn from live register calls; byte-identical rebuilds | invents any value the code could have produced |
 
 ## Data flow
@@ -67,3 +67,39 @@ line's finding should constrain the posture, a human (or the line's own
 tooling, upstream) registers that constraint as a relation. This is an
 adaptation of the review's proposal, recorded in
 [correspondence](correspondence.md).
+
+## Authority, validation and replay
+
+`decisions.py` owns typed append-only acknowledgment, resolution, rescope and
+reopening claims. Classification is separate, with `classification_decision_ref`
+on promotions. A nonblank historical `human_decision_ref` never discharges a
+constraint. Every event binds an exact canonical relation/contract digest,
+exact declared use, evidence reference and actual prior basis state.
+Contradictory clear/reopen claims hold visibly without order arbitration.
+Protected absence has no generic resolution.
+
+`validation.py` owns dependency-neutral structural checks and typed issues.
+Validated constructors and public projection both require it. `raw_state`
+is a seal-only inspection path; it cannot receive a posture without validation.
+`project_chain` also validates genesis and actual append context. A seal,
+local structure, full-chain verification and external freshness are separate
+claims. `history_refs` retains declared ancestry; full-chain replay binds it.
+
+`returns.py` retains the open/completed pair model with every immutable term
+bound and a required open predecessor. A partial completion can have one new
+obligation linked by its exact canonical digest. `remainder_contract` preserves
+standing, protection and trigger and names exactly the remaining subset.
+Verified remainder closure closes that subset of the parent; changing terms
+requires a new obligation and an explicit targeted rescope.
+
+`json_data.py` validates bounded strict JSON without interpreting vocabulary;
+intake deep-copies accepted status containers. Canonical serialization rejects
+coercions and invalid Unicode. Migration and schema versions are specified in
+[the review ledger](review-20261020.md). Backdated review dates are allowed;
+append order, review date and external anchoring date remain distinct.
+
+`check_projection_binding` and `state_binding_fidelity` are narrow seal checks.
+`check_projection` replays all stored inputs. `chain_coverage` exposes preserved
+links and denominator, genesis coverage, full-chain validity and an optional
+operator anchor reference separately. Compatibility scalar names remain narrow
+and never combine into a quality or truth score.

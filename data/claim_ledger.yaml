@@ -13,7 +13,7 @@ claims:
     source_tier: claim_ledger
   - id: witness_state_field_count
     kind: number
-    value: 8
+    value: 10
     source: src/witness_register/state.py WitnessState
     source_tier: claim_ledger
   - id: formal_definition_count
@@ -38,17 +38,18 @@ claims:
     source_tier: claim_ledger
   - id: return_contract_field_count
     kind: number
-    value: 12
+    value: 13
     source: src/witness_register/returns.py ReturnContractRecord
     source_tier: claim_ledger
   - id: hold_reason_categories_count
     kind: number
-    value: 5
+    value: 6
     source: src/witness_register/projection.py witness_hold_reasons kind set size
     source_tier: claim_ledger
   - id: hold_reason_categories_enumerated
     kind: enumeration
     value:
+      - decision_conflict
       - protected_absence
       - return_due
       - unresolved_relation

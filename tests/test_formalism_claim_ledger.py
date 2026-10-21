@@ -9,6 +9,7 @@ in ``docs/manuscript/``, and every ``kind: number`` row is re-derived from the
 running package — so a block added, renamed, or removed, or a constant that
 moved, without regenerating the ledger fails the suite.
 """
+
 import json
 import re
 from pathlib import Path
@@ -62,6 +63,7 @@ def _referenced_labels() -> set[str]:
 
 def _ledger() -> dict:
     return json.loads(LEDGER.read_text(encoding="utf-8"))
+
 
 def _ledger_citations() -> set[str]:
     return {row["value"] for row in _ledger()["claims"] if row["kind"] == "citation"}

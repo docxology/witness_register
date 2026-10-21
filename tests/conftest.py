@@ -10,7 +10,6 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
-import warnings
 from pathlib import Path
 
 import pytest
@@ -54,9 +53,8 @@ def build_figures_before_tests() -> None:
         env=env,
     )
     if result.returncode != 0:
-        warnings.warn(
-            f"build_figures.py exited {result.returncode}: {result.stderr[:200]}",
-            stacklevel=1,
+        pytest.fail(
+            f"build_figures.py exited {result.returncode}: {result.stdout}\n{result.stderr}"
         )
 
 

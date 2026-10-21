@@ -69,6 +69,14 @@ def test_every_plate_svg_is_deterministic_across_two_calls() -> None:
         assert build() == build(), build.__name__
 
 
+def test_cover_version_is_live_and_register_is_not_a_sixth_instrument() -> None:
+    from witness_register import __version__
+
+    svg = cover_plate()
+    assert __version__ in svg
+    assert "SIXTH WORK" not in svg
+
+
 def test_no_text_overflows_the_canvas_extent() -> None:
     """No plate may draw a label that runs past its own canvas edge.
 

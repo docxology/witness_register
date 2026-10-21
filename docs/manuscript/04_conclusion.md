@@ -1,6 +1,6 @@
 # Conclusion {#sec:conclusion}
 
-The Witness Register was built to answer one question: can four independent
+The Witness Register was built to answer one question: can independent
 instruments co-exist in a shared record without any of them losing authority
 over its own vocabulary? The answer is yes, but only because the register
 refuses to do almost everything a reader might expect of a shared record. It

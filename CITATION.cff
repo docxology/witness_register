@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use or refer to this work, please cite it as below."
 type: software
 title: "The Witness Register: Co-Registration Without Aggregation"
-version: "0.1.1"
-date-released: "2026-09-18"
+version: "0.2.0"
+date-released: "2026-10-21"
 authors:
   - family-names: "Friedman"
     given-names: "Daniel Ari"
@@ -15,6 +15,7 @@ url: "https://github.com/docxology/witness_register"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.22833511"
+    description: "Prior archived version 0.1.1; the new version DOI is pending reserve-first publication."
   - type: url
     value: "https://github.com/docxology/witness_register"
 license:
@@ -82,3 +83,30 @@ references:
     repository-code: "https://github.com/docxology/line_set"
     notes: "the reader that declares the set and checks vocabulary separation"
     doi: "10.5281/zenodo.22833507"
+  - type: software
+    title: "silver_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    repository-code: "https://github.com/docxology/silver_line"
+
+  - type: software
+    title: "violet_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    repository-code: "https://github.com/docxology/violet_line"
+
+  - type: software
+    title: "blue_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    repository-code: "https://github.com/docxology/blue_line"
+
+  - type: software
+    title: "green_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    repository-code: "https://github.com/docxology/green_line"

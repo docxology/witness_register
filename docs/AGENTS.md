@@ -4,7 +4,7 @@ Documentation is part of the Witness Register contract. Keep API behavior and
 numeric manuscript claims bound to executable tests; state whether a claim is
 computational, structural, methodological, or outside the instrument's scope.
 
-The register is a sixth work beside the line set: it co-registers report
+The register is a shared register beside the line set: it co-registers report
 envelopes without aggregation, ranking, or override. It has no colour, no
 substantive question of its own, and no verdict — only the typed relations it
 records.

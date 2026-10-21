@@ -80,7 +80,7 @@ segment.
 **Relation inflation.** A submitter can record an agreement, dependency, or
 incomparability relation that overstates consensus — a single `AGREES`
 record entered by one party with no genuine counterparty review. The
-register's projection weights every relation equally; it cannot assess
+register's projection applies categorical non-compensatory precedence; it cannot assess
 whether a relation was genuinely co-authored or whether the cited reference
 backing it is accurate. The non-compensatory rule ([@prop:non-compensatory])
 narrows the damage: a single block still forces $-1$, and no volume of
@@ -88,18 +88,15 @@ agreement lifts it. But agreement inflation can manufacture a misleadingly
 supportive posture when no block exists — a risk the register cannot close
 without semantic and institutional authority it does not have.
 
-**Projection gaming via declared next use.** A caller can choose a
-narrowly scoped $u$ that avoids known holds — declaring a use that evades
-the unresolved tension, the outstanding return, or the unreviewed holding
-that would otherwise cap the posture. The projection evaluates exactly the
-use submitted; it does not explore adjacent uses or detect that a broader
-or adjacent use would be blocked ([@def:projection]). The register's honest
-response is to report the posture for the declared use with its `state_ref`
-and reasons intact, so a reviewer comparing the declared use to the state's
-content can ask whether the scope was chosen to game the result. The
-projection is deterministic for identical inputs
-([@prop:projection-determinism]), but determinism says nothing about whether
-the declared use honestly names what is being proposed.
+**Dishonest declared next use.** The use is an auditable declaration attached
+to a global recorded-constraint posture. The implementation does not infer
+semantic applicability from free text: changing wording alone does not avoid
+a hold. Explicit decision events can clear only their exact target and exact
+declared use; unmatched constraints remain operative. Dishonest declarations
+can mislead human readers. The projection retains its state reference and
+reasons so reviewers can compare the declaration, decisions and full state
+([@def:projection]). Determinism ([@prop:projection-determinism]) says nothing
+about whether the declared use honestly names what is proposed.
 
 These are instances of a well-documented dynamic, not defects unique to
 this design. A witness register that certified truth would make these
@@ -118,3 +115,21 @@ register state itself exposes. The instrument narrows what gaming can
 counterfeit; it cannot remove the need for the human judgment those
 questions require, and it never converts any posture into a safety
 certification, an accreditation, or a permission.
+
+**Sealing and validation differ.** A correct digest can seal malformed
+bookkeeping. Public projection requires structural validation and raises typed
+issues rather than converting defects into a subject verdict. Raw records
+remain inspectable. Local validation of declared ancestry does not replace
+full-chain verification of actual append context. Classification evidence is
+never resolution evidence by default. Decision and return verification strings
+are authored claims this package cannot authenticate.
+
+**Metrics have limited reach.** `state_binding_fidelity` and
+`check_projection_binding` check digest linkage only. `check_projection`
+also replays stored inputs and rejects fabricated values or reasons. The
+compatibility name `relation_fidelity` retains the narrow binding meaning.
+`chain_coverage` separates preserved links and denominator from genesis
+coverage, full-chain validity and an operator-supplied external anchor
+reference. A non-genesis segment is labeled and cannot use the full-chain
+compatibility scalar. These outputs never combine into a truth, permission
+or register quality score.

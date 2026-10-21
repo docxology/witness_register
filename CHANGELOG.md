@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0 — 2026-10-21
+
+- Separate classification from exact-target, exact-use append-only resolution
+  and rescope events; preserve conflicting authority claims as holds.
+- Bind every immutable return term to its open predecessor; link partial
+  returns to explicit remainder obligations with deterministic closure.
+- Require structural validation before projection; retain inspectable raw
+  states and typed issues distinct from subject posture. Add chain-tip projection.
+- Detach strict-JSON intake and diagnose mixed missing/malformed fields;
+  enforce exact digests, real dates and stable register subject identity.
+- Separate digest binding from semantic replay; report chain-segment,
+  genesis and external-anchor coverage with denominators.
+- Publish schema migration rules, synchronized manuscript and claim boundaries,
+  adversarial controls and reconciled publication metadata. Release-tree
+  measurements, fixture provenance and artifact hashes belong to the release packet.
+
 ## 0.1.0 — 2026-09-01 (agent hygiene pass)
 
 - **Test-suite figure build made interpreter-independent.** The session-scoped

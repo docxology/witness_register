@@ -31,6 +31,7 @@ Rules and gates for any agent (or human) working in this repository.
 uv run python scripts/build_figures.py            # first: deterministic plates + registry (needs rsvg-convert)
 uv run pytest tests/ --cov=src --cov-branch -q   # suite + branch coverage, fail_under=90
 uv run ruff check src tests scripts               # lint (E4,E7,E9,F pinned in pyproject)
+uv run mypy src/witness_register --check-untyped-defs
 uv run ruff format --check src tests scripts      # formatting
 ```
 

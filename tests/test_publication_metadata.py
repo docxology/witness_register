@@ -24,7 +24,17 @@ CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 LICENSE = ROOT / "LICENSE"
 
 SELF = "witness_register"
-SIBLINGS = ("red_line", "black_line", "golden_line", "white_line", "line_set")
+SIBLINGS = (
+    "red_line",
+    "black_line",
+    "golden_line",
+    "white_line",
+    "silver_line",
+    "violet_line",
+    "blue_line",
+    "green_line",
+    "line_set",
+)
 
 #: The six real DOIs of the line-set works (this work + five siblings),
 #: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
@@ -37,6 +47,10 @@ VERIFIED_DOIS: tuple[str, ...] = (
     "10.5281/zenodo.21754242",
     "10.5281/zenodo.21754244",
     "10.5281/zenodo.21754246",
+    "10.5281/zenodo.22833511",
+    "10.5281/zenodo.22833503",
+    "10.5281/zenodo.22833506",
+    "10.5281/zenodo.22833507",
 )
 
 #: A DOI as the registries publish them.
@@ -74,6 +88,14 @@ def test_the_four_version_statements_agree() -> None:
     assert _config_paper_version() == __version__
 
 
+def test_current_render_does_not_claim_the_prior_archive_doi() -> None:
+    config = CONFIG.read_text()
+    current = re.search(r'^  doi: "([^"]*)"$', config, re.MULTILINE)
+    prior = re.search(r'^  prior_version_doi: "([^"]+)"$', config, re.MULTILINE)
+    assert current is not None and prior is not None
+    assert current.group(1) != prior.group(1)
+
+
 def test_the_citation_names_this_repository_exactly() -> None:
     expected = f"https://github.com/docxology/{SELF}"
     assert _cff_field("repository-code") == expected
@@ -96,7 +118,11 @@ def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
         url = f"https://github.com/docxology/{sibling}"
         assert f'repository-code: "{url}"' in citation, sibling
         assert url in identifiers, sibling
-    assert len(SIBLINGS) == 5, "the set is six works; each names the other five"
+    worked = {
+        json.loads(p.read_text())["line_id"]
+        for p in (ROOT / "data" / "envelopes").glob("*_worked.json")
+    }
+    assert set(SIBLINGS) == worked | {"line_set"}
 
 
 def test_no_unverified_doi_appears_in_metadata() -> None:

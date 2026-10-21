@@ -1,0 +1,24 @@
+{
+  "boundary": "Canonical interchange vectors, not validity or truth evidence. Version 1 bytes come from an archive of the reviewed commit; version 2 bytes come from the new schema. No silent migration of a prior seal.",
+  "source_v1": "09358d44fe7cde0d3e1814f702a444a05310ea69",
+  "v1": {
+    "state": {
+      "canonical": "{\"envelopes\":[],\"prior_ref\":\"\",\"record_schema\":\"witness-register.state/1.0\",\"relations\":[],\"returns\":[],\"review_moment\":\"2026-10-21\",\"subject_id\":\"vector\",\"unclassified\":[]}",
+      "digest": "98bc0ea0640230233484ccf6d9957c35615c420df153e75a9e2b19a702c19ec2"
+    },
+    "envelope": {
+      "canonical": "{\"line_id\":\"vector\",\"native_status\":{\"opaque\":[null,true,3,1.25,\"λ\"]},\"record_schema\":\"witness-register.envelope-record/1.0\",\"registry_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"registry_version\":\"vector\",\"report_ref\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"review_date\":\"2026-10-21\",\"schema_version\":\"line.report-envelope/1.0\",\"scope_and_nonclaims\":[\"interchange only\"],\"source_snapshot_refs\":[\"vector:snapshot\"],\"subject_id\":\"vector\"}",
+      "digest": "1b43e99ddf05ad7f42f6a38769afe6a48a84c308a3b12cd35ff8a4aa9df6de4d"
+    }
+  },
+  "v2": {
+    "state": {
+      "canonical": "{\"decisions\":[],\"envelopes\":[],\"history_refs\":[],\"prior_ref\":\"\",\"record_schema\":\"witness-register.state/2.0\",\"relations\":[],\"returns\":[],\"review_moment\":\"2026-10-21\",\"subject_id\":\"vector\",\"unclassified\":[]}",
+      "digest": "65300d6c9492d3031ee7e7d2afe3a96d2fce033050ebe496bee17f347491f45f"
+    },
+    "envelope": {
+      "canonical": "{\"line_id\":\"vector\",\"native_status\":{\"opaque\":[null,true,3,1.25,\"λ\"]},\"record_schema\":\"witness-register.envelope-record/1.0\",\"registry_digest\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"registry_version\":\"vector\",\"report_ref\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"review_date\":\"2026-10-21\",\"schema_version\":\"line.report-envelope/1.0\",\"scope_and_nonclaims\":[\"interchange only\"],\"source_snapshot_refs\":[\"vector:snapshot\"],\"subject_id\":\"vector\"}",
+      "digest": "1b43e99ddf05ad7f42f6a38769afe6a48a84c308a3b12cd35ff8a4aa9df6de4d"
+    }
+  }
+}

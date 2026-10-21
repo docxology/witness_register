@@ -2,17 +2,21 @@
 
 This repository is the whole of the Shared Witness Register. It carries its
 own Python package, tests, documentation, and manuscript sources. It is a
-sixth work standing BESIDE the line set, and — by design more than any
+shared register standing BESIDE the line set, and — by design more than any
 sibling — it is complete on its own: its entire architecture is that the
 lines' reports arrive by value, never by import.
 
 ## What a separated copy is
 
-The five sibling works —
+The sibling works —
 [red_line](https://github.com/docxology/red_line),
 [black_line](https://github.com/docxology/black_line),
 [golden_line](https://github.com/docxology/golden_line),
-[white_line](https://github.com/docxology/white_line), and the set reader
+[white_line](https://github.com/docxology/white_line),
+[silver_line](https://github.com/docxology/silver_line),
+[violet_line](https://github.com/docxology/violet_line),
+[blue_line](https://github.com/docxology/blue_line),
+[green_line](https://github.com/docxology/green_line), and the set reader
 [line_set](https://github.com/docxology/line_set) — live in their own
 repositories. A separated copy of this one is a clone held on its own, with
 no sibling checkout beside it and no monorepo around it. This document

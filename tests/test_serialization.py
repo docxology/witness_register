@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from conftest import accept, make_contract, make_holding, make_payload, make_relation
 
@@ -57,7 +58,7 @@ def test_every_schema_string_is_namespaced_per_shape() -> None:
     assert len(schemas) == 6
     for schema in schemas:
         assert schema.startswith("witness-register.")
-        assert schema.endswith("/1.0")
+        assert schema.rsplit("/", 1)[1] in {"1.0", "2.0"}
 
 
 def test_record_digests_are_deterministic_and_distinct(envelope) -> None:
@@ -128,3 +129,30 @@ def test_native_status_survives_canonicalization_verbatim() -> None:
         ["r1", "NAMED"],
         ["r2", "WITHHELD"],
     ]
+
+
+def test_cross_version_vectors_preserve_bytes_and_do_not_silently_migrate() -> None:
+    vectors = json.loads(
+        (
+            Path(__file__).resolve().parents[1] / "data" / "canonical_vectors.json"
+        ).read_text()
+    )
+    for version in ("v1", "v2"):
+        for record in vectors[version].values():
+            assert (
+                canonical_json(json.loads(record["canonical"])) == record["canonical"]
+            )
+            assert sha256_hex(record["canonical"]) == record["digest"]
+    assert vectors["v1"]["state"]["digest"] != vectors["v2"]["state"]["digest"]
+    assert vectors["v1"]["envelope"] == vectors["v2"]["envelope"]
+    assert (
+        payload_digest(
+            canonical_state_payload("vector", "2026-10-21", (), (), (), (), "")
+        )
+        == vectors["v2"]["state"]["digest"]
+    )
+    record = accept(json.loads(vectors["v1"]["envelope"]["canonical"]))
+    assert (
+        canonical_json(canonical_envelope(record))
+        == vectors["v2"]["envelope"]["canonical"]
+    )

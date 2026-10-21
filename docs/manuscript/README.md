@@ -12,7 +12,7 @@ follow their parent whole-number file.
 
 - `config.yaml` — paper metadata, authors, publication, and page geometry
 - `00_abstract.md` — abstract
-- `01_problem.md` — the problem: four instruments, no shared register
+- `01_problem.md` — the problem: independent instruments, no shared register
 - `02_design.md` — the design: chain, projection, and battery
 - `02a_formalism.md` — formal definitions and propositions
 - `02b_scholarship.md` — scholarship and intellectual lineage

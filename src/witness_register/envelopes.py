@@ -23,7 +23,10 @@ Non-claims of this module:
 
 from __future__ import annotations
 
-import json
+from copy import deepcopy
+
+from .json_data import json_domain_issues
+from .json_data import MAX_JSON_NODES
 import re
 from dataclasses import dataclass
 from datetime import date
@@ -36,10 +39,10 @@ from typing import Any
 ENVELOPE_SCHEMA = "line.report-envelope/1.0"
 
 #: A SHA-256 digest as the lines publish it: 64 lowercase hex characters.
-HEX_DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
+HEX_DIGEST_RE = re.compile(r"^[0-9a-f]{64}\Z")
 
 #: Exact calendar-date shape; ``date.fromisoformat`` alone accepts more.
-ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\Z")
 
 #: Every field a ``line.report-envelope/1.0`` payload must carry.
 REQUIRED_FIELDS: tuple[str, ...] = (
@@ -119,6 +122,13 @@ def _string_tuple(
             )
         )
         return ()
+    if len(value) > MAX_JSON_NODES:
+        issues.append(
+            IntakeIssue(
+                IssueCode.MALFORMED_FIELD, f"{field}: JSON node limit exceeded", field
+            )
+        )
+        return ()
     items: list[str] = []
     for position, item in enumerate(value):
         if not isinstance(item, str) or not item.strip():
@@ -134,10 +144,10 @@ def _string_tuple(
     return tuple(items)
 
 
-def _valid_review_date(value: str) -> bool:
+def valid_calendar_date(value: str) -> bool:
     """Exact ``YYYY-MM-DD`` and a real calendar date."""
 
-    if not ISO_DATE_RE.match(value):
+    if not isinstance(value, str) or not ISO_DATE_RE.fullmatch(value):
         return False
     try:
         date.fromisoformat(value)
@@ -167,123 +177,99 @@ def intake_envelope(
                 "",
             ),
         )
-
     for field in REQUIRED_FIELDS:
         if field not in payload:
             issues.append(
                 IntakeIssue(IssueCode.MISSING_FIELD, f"{field} is required", field)
             )
-    if issues:
-        return None, tuple(issues)
-
-    schema_version = payload["schema_version"]
-    if schema_version != ENVELOPE_SCHEMA:
-        issues.append(
-            IntakeIssue(
-                IssueCode.WRONG_SCHEMA,
-                f"schema_version must be {ENVELOPE_SCHEMA!r}, got {schema_version!r}",
-                "schema_version",
-            )
-        )
-
-    line_id = payload["line_id"]
-    if not isinstance(line_id, str) or not line_id.strip():
-        issues.append(
-            IntakeIssue(
-                IssueCode.MALFORMED_FIELD,
-                "line_id must be a non-blank string",
-                "line_id",
-            )
-        )
-
-    subject_id = payload["subject_id"]
-    if not isinstance(subject_id, str):
-        issues.append(
-            IntakeIssue(
-                IssueCode.MALFORMED_FIELD,
-                "subject_id must be a string",
-                "subject_id",
-            )
-        )
-
-    review_date = payload["review_date"]
-    if not isinstance(review_date, str) or not _valid_review_date(review_date):
-        issues.append(
-            IntakeIssue(
-                IssueCode.MALFORMED_FIELD,
-                "review_date must be an ISO YYYY-MM-DD calendar date",
-                "review_date",
-            )
-        )
-
-    registry_version = payload["registry_version"]
-    if not isinstance(registry_version, str):
-        issues.append(
-            IntakeIssue(
-                IssueCode.MALFORMED_FIELD,
-                "registry_version must be a string",
-                "registry_version",
-            )
-        )
-
-    for field in ("registry_digest", "report_ref"):
+            continue
         value = payload[field]
-        if not isinstance(value, str) or not HEX_DIGEST_RE.match(value):
-            issues.append(
-                IntakeIssue(
-                    IssueCode.MALFORMED_FIELD,
-                    f"{field} must be 64 lowercase hex characters",
-                    field,
+        if field == "schema_version":
+            if value != ENVELOPE_SCHEMA:
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.WRONG_SCHEMA,
+                        f"schema_version must be {ENVELOPE_SCHEMA!r}",
+                        field,
+                    )
                 )
-            )
-
-    native_status = payload["native_status"]
-    try:
-        json.dumps(native_status, ensure_ascii=False, sort_keys=True, allow_nan=False)
-    except (TypeError, ValueError):
-        issues.append(
-            IntakeIssue(
-                IssueCode.MALFORMED_FIELD,
-                "native_status must be strict-JSON-compatible data (no NaN "
-                "or Infinity); the register stores it verbatim and never "
-                "interprets it",
-                "native_status",
-            )
-        )
-
-    source_snapshot_refs = _string_tuple(
-        payload["source_snapshot_refs"], "source_snapshot_refs", issues
-    )
-    scope_and_nonclaims = _string_tuple(
-        payload["scope_and_nonclaims"], "scope_and_nonclaims", issues
-    )
-    if (
-        isinstance(payload["scope_and_nonclaims"], (list, tuple))
-        and not payload["scope_and_nonclaims"]
-    ):
-        issues.append(
-            IntakeIssue(
-                IssueCode.EMPTY_NONCLAIMS,
-                "scope_and_nonclaims must carry at least one non-claim; an "
-                "envelope without its instrument's boundary can quietly "
-                "outgrow what the instrument was allowed to say",
-                "scope_and_nonclaims",
-            )
-        )
-
+        elif field == "line_id":
+            if not isinstance(value, str) or not value.strip():
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.MALFORMED_FIELD,
+                        "line_id must be a non-blank string",
+                        field,
+                    )
+                )
+        elif field in ("subject_id", "registry_version"):
+            if not isinstance(value, str):
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.MALFORMED_FIELD, f"{field} must be a string", field
+                    )
+                )
+        elif field == "review_date":
+            if not valid_calendar_date(value):
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.MALFORMED_FIELD,
+                        "review_date must be an ISO YYYY-MM-DD calendar date",
+                        field,
+                    )
+                )
+        elif field in ("registry_digest", "report_ref"):
+            if not isinstance(value, str) or not HEX_DIGEST_RE.fullmatch(value):
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.MALFORMED_FIELD,
+                        f"{field} must be 64 lowercase hex characters",
+                        field,
+                    )
+                )
+        elif field == "native_status":
+            for message in json_domain_issues(value):
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.MALFORMED_FIELD,
+                        message
+                        + "; native_status is stored verbatim, never coerced or interpreted",
+                        field,
+                    )
+                )
+        else:
+            _string_tuple(value, field, issues)
+            if (
+                field == "scope_and_nonclaims"
+                and isinstance(value, (list, tuple))
+                and not value
+            ):
+                issues.append(
+                    IntakeIssue(
+                        IssueCode.EMPTY_NONCLAIMS,
+                        "scope_and_nonclaims must carry at least one non-claim",
+                        field,
+                    )
+                )
+        if isinstance(value, str) and field != "native_status":
+            for message in json_domain_issues(value):
+                issues.append(IntakeIssue(IssueCode.MALFORMED_FIELD, message, field))
+        elif field in ("source_snapshot_refs", "scope_and_nonclaims") and isinstance(
+            value, (list, tuple)
+        ):
+            for message in json_domain_issues(list(value)):
+                issues.append(IntakeIssue(IssueCode.MALFORMED_FIELD, message, field))
     if issues:
         return None, tuple(issues)
-
-    record = EnvelopeRecord(
-        schema_version=schema_version,
-        line_id=line_id,
-        subject_id=subject_id,
-        review_date=review_date,
-        registry_version=registry_version,
+    return EnvelopeRecord(
+        schema_version=payload["schema_version"],
+        line_id=payload["line_id"],
+        subject_id=payload["subject_id"],
+        review_date=payload["review_date"],
+        registry_version=payload["registry_version"],
         registry_digest=payload["registry_digest"],
-        native_status=native_status,
+        native_status=deepcopy(payload["native_status"]),
         report_ref=payload["report_ref"],
-        source_snapshot_refs=source_snapshot_refs,
-        scope_and_nonclaims=scope_and_nonclaims,
-    )
-    return record, ()
+        source_snapshot_refs=tuple(payload["source_snapshot_refs"]),
+        scope_and_nonclaims=tuple(payload["scope_and_nonclaims"]),
+    ), ()

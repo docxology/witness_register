@@ -38,10 +38,13 @@ import os
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from collections.abc import Callable
 
 from .battery import CASE_IDS, BatteryError, run_battery
 from .envelopes import intake_envelope
 from .projection import project
+from .decisions import DecisionEvent, DecisionKind, TargetKind
+from .serialization import return_contract_digest
 from .relations import RelationRecord, RelationType
 from .returns import ReturnContractRecord
 from .state import genesis_state, update_state, verify_chain
@@ -357,16 +360,21 @@ def _projection_rows():
     envelope = records[0]
     ref = envelope.report_ref
 
-    def relation(rid: str, rtype: RelationType, **over) -> RelationRecord:
-        fields = {
-            "relation_id": rid,
-            "subject_id": "zone",
-            "source_report_refs": (ref,),
-            "relation_type": rtype,
-            "bounded_description": "constructed for the projection table",
-        }
-        fields.update(over)
-        return RelationRecord(**fields)
+    def relation(
+        rid: str,
+        rtype: RelationType,
+        human_decision_ref: str = "",
+        return_contract_ref: str = "",
+    ) -> RelationRecord:
+        return RelationRecord(
+            rid,
+            "zone",
+            (ref,),
+            rtype,
+            "constructed for the projection table",
+            human_decision_ref=human_decision_ref,
+            return_contract_ref=return_contract_ref,
+        )
 
     contract = ReturnContractRecord(
         contract_id="zone-contract",
@@ -378,6 +386,35 @@ def _projection_rows():
         protected="p",
         trigger="t",
         acceptance_condition="a",
+    )
+    rescope_basis = genesis_state(
+        "zone",
+        "2026-07-29",
+        (envelope,),
+        (
+            relation(
+                "due-scoped",
+                RelationType.RETURN_DUE,
+                return_contract_ref=contract.contract_id,
+            ),
+        ),
+        returns=(contract,),
+    )
+    scoped_return = update_state(
+        rescope_basis,
+        "2026-07-29",
+        decisions=(
+            DecisionEvent(
+                "zone-rescope",
+                DecisionKind.RESCOPE,
+                TargetKind.CONTRACT,
+                return_contract_digest(contract),
+                "decision:zone-scope",
+                "evidence:zone-scope",
+                "the constructed next use this table was asked about",
+                rescope_basis.state_digest,
+            ),
+        ),
     )
     agrees = tuple(
         relation(f"agree-{index}", RelationType.AGREES, human_decision_ref=f"d{index}")
@@ -445,21 +482,9 @@ def _projection_rows():
             "",
         ),
         (
-            "the same RETURN_DUE, rescope decision offered",
-            genesis_state(
-                "zone",
-                "2026-07-29",
-                envelopes=(envelope,),
-                relations=(
-                    relation(
-                        "due-2",
-                        RelationType.RETURN_DUE,
-                        return_contract_ref="zone-contract",
-                    ),
-                ),
-                returns=(contract,),
-            ),
-            "decision-arg-offered",
+            "RETURN_DUE, exact target/use rescope appended",
+            scoped_return,
+            "",
         ),
         (
             "DIRECTIONAL_TENSION, no decision recorded",
@@ -619,7 +644,7 @@ class PlateSpec:
 
     label: str
     filename: str
-    build: object
+    build: Callable[[], str]
     caption: str
     alt: str
     source: str
@@ -820,7 +845,7 @@ def cover_plate() -> str:
         )
 
     # -- Right-side version panel -- (right-anchored so it cannot clip at the canvas edge)
-    body.append(text_right(1520, 96, "0.1.0", 20, MID))
+    body.append(text_right(1520, 96, __version__, 20, MID))
     body.append(text_right(1520, 122, "LIVING REGISTER", 18, FAINT))
 
     # -- Footer --
@@ -828,7 +853,7 @@ def cover_plate() -> str:
         f'<line x1="80" y1="1010" x2="1520" y2="1010" '
         f'stroke="{MID}" stroke-width="0.5" opacity="0.30"/>'
     )
-    body.append(text(120, 1040, "WITNESS REGISTER — A SIXTH WORK", 18, MID))
+    body.append(text(120, 1040, "WITNESS REGISTER — CO-REGISTRATION", 18, MID))
     body.append(
         text_right(
             1520, 1040, "co-registration · append-only · typed relations", 18, FAINT

@@ -6,6 +6,7 @@ from conftest import make_contract, make_holding, make_relation
 
 from witness_register import (
     Projection,
+    raw_state,
     RelationRecord,
     RelationType,
     check_chain,
@@ -66,7 +67,7 @@ def test_check_chain_names_the_offending_state(envelope) -> None:
     contract = make_contract("con-1")
     done = record_return(contract, "verified", "")
     also_done = record_return(contract, "verified twice, somehow", "")
-    state = genesis_state(
+    state = raw_state(
         "subject-1", "2026-07-29", (envelope,), (), (), (contract, done, also_done)
     )
     violations = check_chain((state,))
@@ -89,7 +90,7 @@ def test_distinct_ids_rejects_a_rewriting_completion(envelope) -> None:
         why_held="a different rationale entirely",
         verification_result="came back",
     )
-    state = genesis_state(
+    state = raw_state(
         "subject-1", "2026-07-29", (envelope,), (), (), (contract, rewriting)
     )
     violations = check_distinct_ids(state)
@@ -147,7 +148,7 @@ def test_refs_resolve_rejects_dangling_support_and_resistance(
         bounded_description="support points somewhere absent",
         support_refs=(second_envelope.report_ref,),
     )
-    state = genesis_state("subject-1", "2026-07-29", (envelope,), (dangling,))
+    state = raw_state("subject-1", "2026-07-29", (envelope,), (dangling,))
     violations = check_refs_resolve(state)
     assert any("support_refs" in item for item in violations)
 

@@ -26,11 +26,18 @@ from __future__ import annotations
 from dataclasses import dataclass
 from collections.abc import Iterable, Sequence
 
-from .envelopes import EnvelopeRecord, ISO_DATE_RE
+from .envelopes import EnvelopeRecord, valid_calendar_date
+from .decisions import DecisionEvent, TargetKind
+from .validation import require_valid_state, validate_state
 from .held import UnclassifiedHeld
 from .relations import RelationRecord, RelationType
 from .returns import ReturnContractRecord
-from .serialization import canonical_state_payload, payload_digest
+from .serialization import (
+    canonical_state_payload,
+    payload_digest,
+    relation_digest,
+    return_contract_digest,
+)
 
 
 @dataclass(frozen=True)
@@ -43,6 +50,9 @@ class WitnessState:
     order. Construct states through :func:`genesis_state` and
     :func:`update_state`; a hand-built state with a wrong digest is exactly
     what :func:`verify_chain` and the invariant battery exist to reject.
+    ``decisions`` retains authority events; ``history_refs`` declares all
+    predecessor digests. Only full-chain verification binds that declaration
+    to actual states. Neither local structure nor a sound chain proves freshness.
     """
 
     subject_id: str
@@ -53,6 +63,8 @@ class WitnessState:
     returns: tuple[ReturnContractRecord, ...]
     prior_ref: str
     state_digest: str
+    decisions: tuple[DecisionEvent, ...] = ()
+    history_refs: tuple[str, ...] = ()
 
 
 def state_content_digest(
@@ -63,6 +75,8 @@ def state_content_digest(
     unclassified: tuple[UnclassifiedHeld, ...],
     returns: tuple[ReturnContractRecord, ...],
     prior_ref: str,
+    decisions: tuple[DecisionEvent, ...] = (),
+    history_refs: tuple[str, ...] = (),
 ) -> str:
     """The seal a state with exactly this content must carry."""
 
@@ -75,6 +89,8 @@ def state_content_digest(
             unclassified,
             returns,
             prior_ref,
+            decisions,
+            history_refs,
         )
     )
 
@@ -87,11 +103,11 @@ def _sealed(
     unclassified: tuple[UnclassifiedHeld, ...],
     returns: tuple[ReturnContractRecord, ...],
     prior_ref: str,
+    decisions: tuple[DecisionEvent, ...] = (),
+    history_refs: tuple[str, ...] = (),
 ) -> WitnessState:
     """Build a state and seal it over its own canonical content."""
 
-    if not ISO_DATE_RE.match(review_moment):
-        raise ValueError("review_moment must be an ISO YYYY-MM-DD date")
     digest = state_content_digest(
         subject_id,
         review_moment,
@@ -100,6 +116,8 @@ def _sealed(
         unclassified,
         returns,
         prior_ref,
+        decisions,
+        history_refs,
     )
     return WitnessState(
         subject_id=subject_id,
@@ -110,18 +128,24 @@ def _sealed(
         returns=returns,
         prior_ref=prior_ref,
         state_digest=digest,
+        decisions=decisions,
+        history_refs=history_refs,
     )
 
 
-def genesis_state(
+def raw_state(
     subject_id: str,
     review_moment: str,
     envelopes: Iterable[EnvelopeRecord] = (),
     relations: Iterable[RelationRecord] = (),
     unclassified: Iterable[UnclassifiedHeld] = (),
     returns: Iterable[ReturnContractRecord] = (),
+    decisions: Iterable[DecisionEvent] = (),
 ) -> WitnessState:
-    """The first state of a chain: empty ``prior_ref``, sealed content.
+    """Unvalidated seal-only inspection constructor with empty ``prior_ref``.
+
+    This may seal invalid bookkeeping for inspection or planted-defect tests.
+    Public projection independently validates it; a seal grants no authority.
 
     Stated non-check: an envelope's ``subject_id`` is NOT required to equal
     the state's. Each line names its subject in its own vocabulary, and two
@@ -142,7 +166,28 @@ def genesis_state(
         tuple(unclassified),
         tuple(returns),
         prior_ref="",
+        decisions=tuple(decisions),
     )
+
+
+def genesis_state(
+    subject_id: str,
+    review_moment: str,
+    envelopes: Iterable[EnvelopeRecord] = (),
+    relations: Iterable[RelationRecord] = (),
+    unclassified: Iterable[UnclassifiedHeld] = (),
+    returns: Iterable[ReturnContractRecord] = (),
+) -> WitnessState:
+    """Validated genesis; native subjects are NOT required to equal the register subject.
+
+    Registration declares correspondence, not semantic equivalence. Use
+    raw_state only to inspect refused imports or construct defect controls.
+    """
+    state = raw_state(
+        subject_id, review_moment, envelopes, relations, unclassified, returns
+    )
+    require_valid_state(state)
+    return state
 
 
 def update_state(
@@ -152,6 +197,7 @@ def update_state(
     relations: Iterable[RelationRecord] = (),
     unclassified: Iterable[UnclassifiedHeld] = (),
     returns: Iterable[ReturnContractRecord] = (),
+    decisions: Iterable[DecisionEvent] = (),
 ) -> WitnessState:
     """Append records to a chain, refusing to build on tampered history.
 
@@ -171,21 +217,56 @@ def update_state(
         prior.unclassified,
         prior.returns,
         prior.prior_ref,
+        prior.decisions,
+        prior.history_refs,
     )
     if rederived != prior.state_digest:
         raise ValueError(
             "prior state content no longer matches its seal: a record was "
             "mutated after sealing; refusing to extend rewritten history"
         )
-    return _sealed(
+    require_valid_state(prior)
+    added_decisions = tuple(decisions)
+    added_returns = tuple(returns)
+    relation_targets = {relation_digest(r) for r in prior.relations}
+    contract_targets = {
+        return_contract_digest(r) for r in prior.returns if not r.verification_result
+    }
+    for event in added_decisions:
+        targets = (
+            relation_targets
+            if event.target_kind is TargetKind.RELATION
+            else contract_targets
+        )
+        if (
+            event.basis_state_ref != prior.state_digest
+            or event.target_ref not in targets
+        ):
+            raise ValueError(
+                "decision must target a record in its exact prior basis state"
+            )
+    for contract in added_returns:
+        if (
+            not contract.verification_result
+            and contract.prior_state_ref
+            and contract.prior_state_ref != prior.state_digest
+        ):
+            raise ValueError(
+                "new obligation prior_state_ref must name the actual prior state"
+            )
+    state = _sealed(
         prior.subject_id,
         review_moment,
         prior.envelopes + tuple(envelopes),
         prior.relations + tuple(relations),
         prior.unclassified + tuple(unclassified),
-        prior.returns + tuple(returns),
+        prior.returns + added_returns,
         prior_ref=prior.state_digest,
+        decisions=prior.decisions + added_decisions,
+        history_refs=prior.history_refs + (prior.state_digest,),
     )
+    require_valid_state(state)
+    return state
 
 
 def verify_chain(states: Sequence[WitnessState]) -> tuple[str, ...]:
@@ -200,28 +281,50 @@ def verify_chain(states: Sequence[WitnessState]) -> tuple[str, ...]:
 
     violations: list[str] = []
     for position, state in enumerate(states):
-        rederived = state_content_digest(
-            state.subject_id,
-            state.review_moment,
-            state.envelopes,
-            state.relations,
-            state.unclassified,
-            state.returns,
-            state.prior_ref,
+        violations.extend(
+            f"state {position}: {issue.message}" for issue in validate_state(state)
         )
-        if rederived != state.state_digest:
-            violations.append(f"state {position}: content does not match its seal")
         if position == 0:
+            if state.history_refs or state.decisions:
+                violations.append("state 0: genesis cannot carry ancestry or decisions")
             if state.prior_ref != "":
                 violations.append("state 0: genesis must carry an empty prior_ref")
             continue
         previous = states[position - 1]
+        if state.subject_id != previous.subject_id:
+            violations.append(f"state {position}: register subject identity changed")
+        if state.history_refs != previous.history_refs + (previous.state_digest,):
+            violations.append(
+                f"state {position}: history_refs do not preserve actual ancestry"
+            )
+        prior_targets = {relation_digest(r) for r in previous.relations} | {
+            return_contract_digest(r)
+            for r in previous.returns
+            if not r.verification_result
+        }
+        for event in state.decisions[len(previous.decisions) :]:
+            if (
+                event.basis_state_ref != previous.state_digest
+                or event.target_ref not in prior_targets
+            ):
+                violations.append(
+                    f"state {position}: decision basis/target was not in the prior state"
+                )
+        for contract in state.returns[len(previous.returns) :]:
+            if (
+                not contract.verification_result
+                and contract.prior_state_ref
+                and contract.prior_state_ref != previous.state_digest
+            ):
+                violations.append(
+                    f"state {position}: obligation prior_state_ref is not the actual prior state"
+                )
         if state.prior_ref != previous.state_digest:
             violations.append(
                 f"state {position}: prior_ref does not name state "
                 f"{position - 1}'s digest"
             )
-        for kind in ("envelopes", "relations", "unclassified", "returns"):
+        for kind in ("envelopes", "relations", "unclassified", "returns", "decisions"):
             before: tuple = getattr(previous, kind)
             after: tuple = getattr(state, kind)
             if after[: len(before)] != before:
@@ -252,6 +355,8 @@ def seal_tip(state: WitnessState) -> str:
         state.unclassified,
         state.returns,
         state.prior_ref,
+        state.decisions,
+        state.history_refs,
     )
     if rederived != state.state_digest:
         raise ValueError(
@@ -284,7 +389,7 @@ def anchor_statement(chain: Sequence[WitnessState], anchored_on: str) -> dict:
 
     if not chain:
         raise ValueError("an empty chain has no tip to anchor")
-    if not ISO_DATE_RE.match(anchored_on):
+    if not valid_calendar_date(anchored_on):
         raise ValueError("anchored_on must be an ISO YYYY-MM-DD date")
     violations = verify_chain(chain)
     if violations:
@@ -315,6 +420,7 @@ def promote_unclassified(
     relation_type: RelationType,
     bounded_description: str,
     human_decision_ref: str,
+    return_contract_ref: str = "",
 ) -> RelationRecord:
     """Promote a held observation into the relation vocabulary — by a human.
 
@@ -322,7 +428,9 @@ def promote_unclassified(
     non-empty ``human_decision_ref`` naming the decision that chose the
     category, and the returned relation carries
     ``promoted_from_ref = held.held_id`` so it links back to the original
-    holding. The held record itself is untouched: append the new relation to
+    holding. ``classification_decision_ref`` records only the category choice,
+    never resolution. A promoted return also needs ``return_contract_ref``
+    naming an open obligation. The held record itself is untouched: append the new relation to
     a later state and the holding stays in history exactly as it was —
     preserved, never rewritten.
     """
@@ -338,6 +446,7 @@ def promote_unclassified(
         source_report_refs=tuple(source_report_refs),
         relation_type=relation_type,
         bounded_description=bounded_description,
-        human_decision_ref=human_decision_ref,
+        classification_decision_ref=human_decision_ref,
+        return_contract_ref=return_contract_ref,
         promoted_from_ref=held.held_id,
     )

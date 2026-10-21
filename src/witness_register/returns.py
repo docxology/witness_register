@@ -20,6 +20,7 @@ as one obligation and its answer.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from .envelopes import HEX_DIGEST_RE
 
 
 @dataclass(frozen=True)
@@ -47,8 +48,15 @@ class ReturnContractRecord:
     verification_result: str = ""
     open_remainder: str = ""
     prior_state_ref: str = ""
+    parent_return_ref: str = ""
 
     def __post_init__(self) -> None:
+        for name in ("prior_state_ref", "parent_return_ref"):
+            value = getattr(self, name)
+            if value and not HEX_DIGEST_RE.fullmatch(value):
+                raise ValueError(
+                    f"{name} must be empty or exactly 64 lowercase hex characters"
+                )
         if not self.contract_id.strip():
             raise ValueError("contract_id must be non-blank")
         if not self.why_held.strip():
@@ -115,3 +123,53 @@ def record_return(
         verification_result=verification_result,
         open_remainder=open_remainder,
     )
+
+
+def remainder_contract(
+    partial: ReturnContractRecord, contract_id: str, prior_state_ref: str = ""
+) -> ReturnContractRecord:
+    """Declare exactly a partial return's open subset as a new obligation.
+
+    This links obligations, never judges evidence. Standing, protection and
+    trigger survive; the parent closes only after this remainder is verified.
+    """
+
+    from .serialization import return_contract_digest
+
+    if not partial.verification_result or not partial.open_remainder:
+        raise ValueError("a remainder obligation requires a verified partial return")
+    if contract_id == partial.contract_id:
+        raise ValueError("a remainder obligation requires a new contract_id")
+    return replace(
+        partial,
+        contract_id=contract_id,
+        why_held=partial.open_remainder,
+        acceptance_condition=partial.open_remainder,
+        verification_result="",
+        open_remainder="",
+        prior_state_ref=prior_state_ref,
+        parent_return_ref=return_contract_digest(partial),
+    )
+
+
+def contract_met(records: tuple[ReturnContractRecord, ...], contract_id: str) -> bool:
+    """Replay verified subsets after structural validation, without evidence adjudication."""
+
+    from .serialization import return_contract_digest
+
+    complete = {r.contract_id for r in records if r.is_met}
+    children = {
+        r.parent_return_ref: r.contract_id
+        for r in records
+        if not r.verification_result and r.parent_return_ref
+    }
+    pending = [r for r in records if r.verification_result and r.open_remainder]
+    while pending:
+        newly_met = [
+            r for r in pending if children.get(return_contract_digest(r)) in complete
+        ]
+        if not newly_met:
+            break
+        complete.update(r.contract_id for r in newly_met)
+        pending = [r for r in pending if r not in newly_met]
+    return contract_id in complete

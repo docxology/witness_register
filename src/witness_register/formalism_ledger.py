@@ -101,7 +101,8 @@ def number_rows() -> list[dict[str, object]]:
 def build_ledger() -> str:
     """Derive every claim, write the ledger, and return the summary line."""
 
-    claims: list[dict[str, object]] = citation_rows() + number_rows()
+    claims: list[dict[str, object]] = [dict(row) for row in citation_rows()]
+    claims.extend(number_rows())
     doc = {
         "claim_boundary": (
             "Grounds the manuscript's formalism cross-references and package "

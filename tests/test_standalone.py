@@ -40,7 +40,17 @@ SKIP_DIRECTORIES = frozenset(
 
 #: The five sibling works, referenced only by name and GitHub URL, never by
 #: relative path and never by import.
-SIBLING_WORKS = ("red_line", "black_line", "golden_line", "white_line", "line_set")
+SIBLING_WORKS = (
+    "red_line",
+    "black_line",
+    "golden_line",
+    "white_line",
+    "silver_line",
+    "violet_line",
+    "blue_line",
+    "green_line",
+    "line_set",
+)
 
 #: ``[text](target)`` with an optional ``"title"``. Bare autolinks in angle
 #: brackets are URLs by construction and carry no relative path to resolve.

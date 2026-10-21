@@ -71,6 +71,9 @@ class RelationRecord:
     empty means NOT_RECORDED. ``promoted_from_ref``, when non-empty, names
     the ``held_id`` of the unclassified record this relation was promoted
     from — the promotion links forward; the held record is never rewritten.
+    ``classification_decision_ref`` records only the category choice.
+    Historic ``human_decision_ref`` remains verbatim provenance but has no
+    discharge authority; resolution requires a separate scoped DecisionEvent.
     """
 
     relation_id: str
@@ -84,6 +87,7 @@ class RelationRecord:
     return_contract_ref: str = ""
     human_decision_ref: str = NOT_RECORDED
     promoted_from_ref: str = ""
+    classification_decision_ref: str = ""
 
     def __post_init__(self) -> None:
         if not self.relation_id.strip():
@@ -94,7 +98,7 @@ class RelationRecord:
                 "nothing is not a record"
             )
         for ref in self.source_report_refs:
-            if not HEX_DIGEST_RE.match(ref):
+            if not HEX_DIGEST_RE.fullmatch(ref):
                 raise ValueError(
                     f"source_report_refs entry {ref!r} is not a 64-char "
                     "lowercase hex envelope report_ref"
@@ -113,3 +117,8 @@ class RelationRecord:
                 "human_decision_ref must be empty (NOT_RECORDED) or non-blank; "
                 "whitespace-only is not a recorded decision"
             )
+        if (
+            self.classification_decision_ref
+            and not self.classification_decision_ref.strip()
+        ):
+            raise ValueError("classification_decision_ref must be empty or non-blank")

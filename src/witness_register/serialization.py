@@ -7,7 +7,7 @@ or safety semantics, and — like everything in this package — they say nothin
 about the truth of any line's report.
 
 Schema identifiers are namespaced per payload shape under
-``witness-register.<thing>/1.0`` so a stored JSON document names exactly
+``witness-register.<thing>/<version>`` so a stored JSON document names exactly
 which shape it is. The one exception is the envelope INTAKE shape, which is
 the lines' own published ``line.report-envelope/1.0`` and is declared in
 :mod:`witness_register.envelopes`.
@@ -17,19 +17,25 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from .envelopes import EnvelopeRecord
 from .held import UnclassifiedHeld
 from .relations import RelationRecord
 from .returns import ReturnContractRecord
+from .decisions import DecisionEvent
+from .json_data import json_domain_issues
+
+if TYPE_CHECKING:
+    from .projection import Projection
 
 ENVELOPE_RECORD_SCHEMA = "witness-register.envelope-record/1.0"
-RELATION_SCHEMA = "witness-register.relation/1.0"
-RETURN_CONTRACT_SCHEMA = "witness-register.return-contract/1.0"
+RELATION_SCHEMA = "witness-register.relation/2.0"
+RETURN_CONTRACT_SCHEMA = "witness-register.return-contract/2.0"
 UNCLASSIFIED_SCHEMA = "witness-register.unclassified/1.0"
-STATE_SCHEMA = "witness-register.state/1.0"
-PROJECTION_SCHEMA = "witness-register.projection/1.0"
+STATE_SCHEMA = "witness-register.state/2.0"
+PROJECTION_SCHEMA = "witness-register.projection/2.0"
+DECISION_SCHEMA = "witness-register.decision/1.0"
 
 
 def canonical_json(payload: Any) -> str:
@@ -45,6 +51,9 @@ def canonical_json(payload: Any) -> str:
     would launder a non-interchangeable value into a sealed state.
     """
 
+    issues = json_domain_issues(payload, max_nodes=1000000)
+    if issues:
+        raise ValueError("; ".join(issues))
     return json.dumps(
         payload,
         ensure_ascii=False,
@@ -100,6 +109,7 @@ def canonical_relation(record: RelationRecord) -> dict:
         "return_contract_ref": record.return_contract_ref,
         "human_decision_ref": record.human_decision_ref,
         "promoted_from_ref": record.promoted_from_ref,
+        "classification_decision_ref": record.classification_decision_ref,
     }
 
 
@@ -120,6 +130,7 @@ def canonical_return_contract(record: ReturnContractRecord) -> dict:
         "verification_result": record.verification_result,
         "open_remainder": record.open_remainder,
         "prior_state_ref": record.prior_state_ref,
+        "parent_return_ref": record.parent_return_ref,
     }
 
 
@@ -169,6 +180,8 @@ def canonical_state_payload(
     unclassified: tuple[UnclassifiedHeld, ...],
     returns: tuple[ReturnContractRecord, ...],
     prior_ref: str,
+    decisions: tuple[DecisionEvent, ...] = (),
+    history_refs: tuple[str, ...] = (),
 ) -> dict:
     """The complete canonical content of one witness state, pre-seal.
 
@@ -186,4 +199,35 @@ def canonical_state_payload(
         "unclassified": [canonical_unclassified(item) for item in unclassified],
         "returns": [canonical_return_contract(item) for item in returns],
         "prior_ref": prior_ref,
+        "decisions": [canonical_decision(item) for item in decisions],
+        "history_refs": list(history_refs),
+    }
+
+
+def canonical_decision(event: DecisionEvent) -> dict:
+    """Portable authority claim with all replay inputs, never verified truth."""
+
+    return {
+        "record_schema": DECISION_SCHEMA,
+        "decision_id": event.decision_id,
+        "kind": event.kind.value,
+        "target_kind": event.target_kind.value,
+        "target_ref": event.target_ref,
+        "human_decision_ref": event.human_decision_ref,
+        "evidence_ref": event.evidence_ref,
+        "declared_next_use": event.declared_next_use,
+        "basis_state_ref": event.basis_state_ref,
+    }
+
+
+def canonical_projection(projection: Projection) -> dict:
+    """Serialize all projection replay inputs; this never validates the result."""
+
+    return {
+        "record_schema": PROJECTION_SCHEMA,
+        "value": projection.value,
+        "declared_next_use": projection.declared_next_use,
+        "state_ref": projection.state_ref,
+        "reasons": list(projection.reasons),
+        "human_decision_ref": projection.human_decision_ref,
     }

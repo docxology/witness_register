@@ -271,6 +271,18 @@ def test_all_manuscript_references_to_tests_resolve() -> None:
             )
 
 
+def test_no_escaped_raw_latex_fence_is_printed_as_manuscript_text() -> None:
+    broken = "\\`" * 3 + "{=latex}"
+    for path in PROJECT_ROOT.glob("docs/manuscript/*.md"):
+        assert broken not in path.read_text(), path.name
+
+
+def test_documented_scope_semantics_match_the_wording_invariance_control() -> None:
+    text = " ".join((PROJECT_ROOT / "docs/manuscript/03_limits.md").read_text().split())
+    assert "does not infer semantic applicability from free text" in text
+    assert "categorical non-compensatory precedence" in text
+
+
 def test_claim_ledger_numbers_match_executed_sources() -> None:
     """The evidence ledger cannot lag behind the executable facts."""
     import inspect

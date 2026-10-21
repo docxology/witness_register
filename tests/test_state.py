@@ -165,7 +165,7 @@ def test_promotion_links_back_and_preserves_history(envelope) -> None:
     )
     second = update_state(first, "2026-07-29", relations=(promoted,))
     assert promoted.promoted_from_ref == holding.held_id
-    assert promoted.human_decision_ref == "decision:daniel-2026-07-29"
+    assert promoted.classification_decision_ref == "decision:daniel-2026-07-29"
     assert second.unclassified == (holding,)
     assert verify_chain((first, second)) == ()
 
