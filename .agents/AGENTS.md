@@ -1,8 +1,9 @@
 # `.agents/` — technical reference
 
 Agent skill descriptors for this project. This directory carries no executable
-code and no import surface: the package never reads it, `pytest` never collects
-it, and no gate inspects it.
+code and no import surface: the package never reads it. The operator-skill
+tests execute its Python examples and bind selected lifecycle and authority
+guidance to the current API.
 
 ## Layout
 
@@ -28,8 +29,9 @@ it, and no gate inspects it.
 
 ## Verifying a descriptor
 
-There is no automated gate over this directory, so check it by hand against the
-code it describes:
+`tests/test_operator_skill.py` executes the descriptor's Python examples and
+checks its lifecycle and authority guidance. Check other descriptor claims
+by hand against the code they describe:
 
 ```bash
 uv run python -c "import witness_register; print(sorted(witness_register.__all__))"
