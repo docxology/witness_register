@@ -36,7 +36,7 @@ SIBLINGS = (
     "line_set",
 )
 
-#: The six real DOIs of the line-set works (this work + five siblings),
+#: Verified existing archive identifiers for this work and the line family,
 #: asserted real and reserved via Zenodo. Adding any other DOI-shaped string to
 #: the metadata surfaces fails test_no_unverified_doi_appears_in_metadata.
 #: copy-and-paste into a bibliography and points nowhere.
@@ -96,6 +96,14 @@ def test_current_render_does_not_claim_the_prior_archive_doi() -> None:
     assert current.group(1) != prior.group(1)
 
 
+def test_current_citation_keeps_the_prior_doi_in_its_versioned_reference():
+    current, references = CITATION.read_text().split("references:\n", 1)
+    assert DOI_PATTERN.findall(current) == []
+    prior = references.split("  - type:", 2)[1]
+    assert 'version: "0.1.1"' in prior
+    assert 'doi: "10.5281/zenodo.22833511"' in prior
+
+
 def test_the_citation_names_this_repository_exactly() -> None:
     expected = f"https://github.com/docxology/{SELF}"
     assert _cff_field("repository-code") == expected
@@ -109,7 +117,7 @@ def test_the_citation_names_this_repository_exactly() -> None:
 
 
 def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
-    """All five siblings, each exactly once, at the canonical URL."""
+    """Every declared family reference uses its canonical repository URL."""
 
     citation = CITATION.read_text(encoding="utf-8")
     zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))

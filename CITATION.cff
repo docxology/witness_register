@@ -13,9 +13,6 @@ authors:
 repository-code: "https://github.com/docxology/witness_register"
 url: "https://github.com/docxology/witness_register"
 identifiers:
-  - type: doi
-    value: "10.5281/zenodo.22833511"
-    description: "Prior archived version 0.1.1; the new version DOI is pending reserve-first publication."
   - type: url
     value: "https://github.com/docxology/witness_register"
 license:
@@ -38,6 +35,16 @@ abstract: >-
   back at the state that earned it. It never parses, compares, ranks,
   averages, or merges any instrument's native status.
 references:
+  - type: software
+    title: "The Witness Register: Co-Registration Without Aggregation"
+    version: "0.1.1"
+    doi: "10.5281/zenodo.22833511"
+    url: "https://zenodo.org/records/22833511"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    notes: "Prior archived version; this DOI does not identify the current source release."
   - type: software
     title: "red_line"
     authors:

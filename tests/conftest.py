@@ -8,6 +8,7 @@ is built through the register's own public API.
 from __future__ import annotations
 
 import os
+from dataclasses import replace
 import subprocess
 import sys
 from pathlib import Path
@@ -24,6 +25,21 @@ from witness_register import (
     intake_envelope,
     sha256_hex,
 )
+
+
+def supporting_context(
+    envelope: EnvelopeRecord, count: int
+) -> tuple[tuple[EnvelopeRecord, ...], tuple[RelationRecord, ...]]:
+    """Controlled record inflation, without native-status comparison or weighting."""
+    extra = tuple(
+        replace(envelope, report_ref=sha256_hex(f"acceptance-supporter-{n}"))
+        for n in range(count)
+    )
+    agreements = tuple(
+        make_relation(item, relation_id=f"inflation-agreement-{n}")
+        for n, item in enumerate(extra)
+    )
+    return (envelope,) + extra, agreements
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -1,0 +1,19 @@
+{
+  "line_id": "violet_line",
+  "native_status": "UNACCOUNTED",
+  "registry_digest": "6494a6bcafbdfa2a85ce293e03a58419505a2238223ee7bb5438cfcc81c9926b",
+  "registry_version": "0.2.0",
+  "report_ref": "9585a66cd269f12fdcaed5de87fc9c0727bc7be2762ef9aad4e537f4ab531721",
+  "review_date": "2026-10-20",
+  "schema_version": "line.report-envelope/1.0",
+  "scope_and_nonclaims": [
+    "describes consent-ledger coverage of affected parties at a stated review date",
+    "absence of consent is recorded, never inferred; UNRECORDED is a ledger state, not an accusation",
+    "not consent, permission, or authorisation: ACCOUNTED never authorizes an action or a release",
+    "not a proxy for anyone's consent and not a permission-scraping mechanism",
+    "does not verify that a recorded state was given honestly or freely",
+    "does not rank, merge, or evaluate the other line instruments"
+  ],
+  "source_snapshot_refs": [],
+  "subject_id": "violet-synthetic-study"
+}

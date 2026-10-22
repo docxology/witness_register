@@ -7,7 +7,14 @@ from dataclasses import replace
 
 import pytest
 
-from conftest import accept, make_contract, make_holding, make_payload, make_relation
+from conftest import (
+    accept,
+    make_contract,
+    make_holding,
+    make_payload,
+    make_relation,
+    supporting_context,
+)
 from witness_register import (
     Projection,
     raw_state,
@@ -81,11 +88,13 @@ IMMUTABLE_CHANGES = {
 
 
 @pytest.mark.parametrize("field,value", IMMUTABLE_CHANGES.items())
-def test_wr02_completion_cannot_rewrite_any_term(envelope, field, value):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_wr02_completion_cannot_rewrite_any_term(envelope, field, value, support_count):
     contract = make_contract()
     completion = replace(record_return(contract, "received", ""), **{field: value})
+    envelopes, support = supporting_context(envelope, support_count)
     state = raw_state(
-        "subject-1", "2026-10-21", (envelope,), returns=(contract, completion)
+        "subject-1", "2026-10-21", envelopes, support, returns=(contract, completion)
     )
     assert check_state(state), field
 
@@ -103,7 +112,8 @@ def test_wr02_orphan_completion_is_invalid(envelope):
     assert check_state(state)
 
 
-def test_wr03_projection_refuses_an_orphan_promotion(envelope):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_wr03_projection_refuses_an_orphan_promotion(envelope, support_count):
     holding = make_holding()
     promotion = promote_unclassified(
         holding,
@@ -114,7 +124,10 @@ def test_wr03_projection_refuses_an_orphan_promotion(envelope):
         "orphan source",
         "decision:classify",
     )
-    state = raw_state("subject-1", "2026-10-21", (envelope,), (promotion,), (holding,))
+    envelopes, support = supporting_context(envelope, support_count)
+    state = raw_state(
+        "subject-1", "2026-10-21", envelopes, (promotion,) + support, (holding,)
+    )
     assert check_state(state)
     with pytest.raises(ValueError, match="structur|resolve"):
         project(state, USE)
@@ -191,10 +204,12 @@ def test_wr07_subject_change_cannot_hide_behind_a_correct_seal(envelope):
 
 
 @pytest.mark.parametrize("day", ["2026-02-30", "2026-10-21\n", "2025-02-29"])
-def test_wr07_state_and_anchor_require_real_dates(day):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_wr07_state_and_anchor_require_real_dates(day, envelope, support_count):
+    envelopes, support = supporting_context(envelope, support_count)
     with pytest.raises(ValueError, match="date"):
-        genesis_state("subject-1", day)
-    first = genesis_state("subject-1", "2026-10-21")
+        genesis_state("subject-1", day, envelopes, support)
+    first = genesis_state("subject-1", "2026-10-21", envelopes, support)
     with pytest.raises(ValueError, match="date"):
         anchor_statement((first,), day)
 

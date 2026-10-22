@@ -15,6 +15,7 @@ from collections.abc import Iterable, Sequence
 from .projection import Projection, project
 from .state import WitnessState, verify_chain
 from .validation import check_seal
+from .serialization import record_prefix_preserved
 from .invariants import check_projection_binding, check_chain
 from dataclasses import dataclass
 
@@ -66,8 +67,7 @@ def chain_coverage(
     kept = 0
     for previous, state in zip(chain, chain[1:]):
         preserved = all(
-            getattr(state, kind)[: len(getattr(previous, kind))]
-            == getattr(previous, kind)
+            record_prefix_preserved(kind, getattr(previous, kind), getattr(state, kind))
             for kind in (
                 "envelopes",
                 "relations",
@@ -80,6 +80,8 @@ def chain_coverage(
             not check_seal(previous)
             and not check_seal(state)
             and state.prior_ref == previous.state_digest
+            and type(state.subject_id) is str
+            and type(previous.subject_id) is str
             and state.subject_id == previous.subject_id
             and state.history_refs == previous.history_refs + (previous.state_digest,)
             and preserved

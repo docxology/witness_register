@@ -8,7 +8,10 @@ MAX_JSON_CHARACTERS = 1000000
 
 
 def json_domain_issues(
-    value: object, max_nodes: int = MAX_JSON_NODES
+    value: object,
+    max_nodes: int = MAX_JSON_NODES,
+    max_depth: int = MAX_JSON_DEPTH,
+    max_characters: int = MAX_JSON_CHARACTERS,
 ) -> tuple[str, ...]:
     """Validate JSON types, Unicode and finite numbers without coercion or recursion.
 
@@ -28,7 +31,7 @@ def json_domain_issues(
         if visited > max_nodes:
             errors.append("JSON node limit exceeded")
             break
-        if depth > MAX_JSON_DEPTH:
+        if depth > max_depth:
             errors.append(f"{path}: JSON depth limit exceeded")
             continue
         if type(item) is str:
@@ -67,7 +70,7 @@ def json_domain_issues(
                     pending.append((key, f"{path}.key", depth + 1, ancestry))
         else:
             errors.append(f"{path}: {type(item).__name__} is outside the JSON domain")
-        if characters > MAX_JSON_CHARACTERS:
+        if characters > max_characters:
             errors.append("JSON character limit exceeded")
             break
     return tuple(errors)

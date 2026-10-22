@@ -79,6 +79,9 @@ Contradictory clear/reopen claims hold visibly without order arbitration.
 Protected absence has no generic resolution.
 
 `validation.py` owns dependency-neutral structural checks and typed issues.
+The register subject has a strict string domain and stays exactly unchanged
+across a chain. Malformed canonical relation/contract targets produce named
+issues; their digest failures do not prevent independent checks from running.
 Validated constructors and public projection both require it. `raw_state`
 is a seal-only inspection path; it cannot receive a posture without validation.
 `project_chain` also validates genesis and actual append context. A seal,
@@ -86,17 +89,27 @@ local structure, full-chain verification and external freshness are separate
 claims. `history_refs` retains declared ancestry; full-chain replay binds it.
 
 `returns.py` retains the open/completed pair model with every immutable term
-bound and a required open predecessor. A partial completion can have one new
+bound and a required open predecessor. Return term shapes are checked against
+their declared strings and immutable tuple of alternatives, so Python numeric
+equality cannot disguise changed terms. A partial completion can have one new
 obligation linked by its exact canonical digest. `remainder_contract` preserves
 standing, protection and trigger and names exactly the remaining subset.
 Verified remainder closure closes that subset of the parent; changing terms
 requires a new obligation and an explicit targeted rescope.
+Reopening or conflicting claims against a remainder prevent its closure
+from propagating to an ancestor for that exact use. A conflicted block
+retains `-1` until an uncontested scoped resolution exists.
 
 `json_data.py` validates bounded strict JSON without interpreting vocabulary;
 intake deep-copies accepted status containers. Canonical serialization rejects
 coercions and invalid Unicode. Migration and schema versions are specified in
 [the review ledger](review-20261020.md). Backdated review dates are allowed;
 append order, review date and external anchoring date remain distinct.
+Intake reserves depth for canonical state wrappers and checks the complete
+envelope's character budget, retaining wrapper headroom. Aggregate state
+budgets can still refuse a larger registration. Canonical record bytes,
+rather than Python equality, define unchanged history: JSON booleans,
+integers, floating values and signed zero retain their serialized identity.
 
 `check_projection_binding` and `state_binding_fidelity` are narrow seal checks.
 `check_projection` replays all stored inputs. `chain_coverage` exposes preserved

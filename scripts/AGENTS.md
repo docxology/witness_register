@@ -7,6 +7,7 @@ Every file in `scripts/` is a thin CLI over `src/`. Business logic belongs in
 
 - `build_figures.py` — calls `witness_register.figures.build_figures()` and prints the output paths
 - `gen_formalism_ledger.py` — regenerates `data/formalism_claim_ledger.json` via `witness_register.formalism_ledger.build_ledger()`
+- `build_release_cohort.py` — replays explicitly authored incomparability and return records over manifest-bound released envelopes; never reads native verdicts
 
 ## Canonical commands
 

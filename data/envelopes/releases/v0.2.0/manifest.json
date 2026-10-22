@@ -1,0 +1,98 @@
+{
+  "cohort_id": "witness-register-release-0.2.0-worked-exports",
+  "reviewed_on": "2026-10-21",
+  "declared_next_use": "treat the released worked cohort as one subject record",
+  "wait_ready_at": "2026-10-21T20:57:21.000Z",
+  "original_wait_deadline": "2026-10-22T02:57:21.000Z",
+  "wait_deadline": "2026-10-22T03:57:00.000Z",
+  "wait_extension_authority": "Dispatcher instruction received 2026-10-22: one-time final extension to 03:57 UTC; then origin/main fallback if unreleased.",
+  "siblings": [
+    {
+      "repository": "docxology/silver_line",
+      "tag": "v0.2.0",
+      "tag_object": "81b0130261a9c36e13f04ca37decc39a24772e4d",
+      "commit": "3ff05b23a6a59c0f68b7a11e4cd70696f321fe0d",
+      "snapshot_kind": "annotated-release",
+      "source_path": "data/envelopes/silver_line_worked.json",
+      "file": "silver_line_worked.json",
+      "sha256": "01e5f981056d5e44b11989a18717d7a41338840320fa64de6c038fb656ba0f14"
+    },
+    {
+      "repository": "docxology/violet_line",
+      "tag": "v0.2.0",
+      "tag_object": "5e309299cffd1639824e88b5fe262f9a1705148d",
+      "commit": "4bb20dbdc1c2df6cd505faee0b9729979d3892bd",
+      "snapshot_kind": "annotated-release",
+      "source_path": "data/envelopes/violet_line_worked.json",
+      "file": "violet_line_worked.json",
+      "sha256": "1b71f865bc7fd20a8caed1a932f29da1b55cbf20592c9d4dc1023cbb7752a067"
+    },
+    {
+      "repository": "docxology/blue_line",
+      "tag": "v0.2.0",
+      "tag_object": "a7483d541ce7463a16704a6148fa1f760ada4442",
+      "commit": "15ef8043833fd790e0d52a8fa47289905e4d867f",
+      "snapshot_kind": "annotated-release",
+      "source_path": "data/envelopes/blue_line_worked.json",
+      "file": "blue_line_worked.json",
+      "sha256": "5f107e09b1638242a7ddab8d28fbe15a02f953aa59bad0d71a6c19ee1a683f9c"
+    },
+    {
+      "repository": "docxology/green_line",
+      "tag": "v0.2.0",
+      "tag_object": "e4cc72470f4ce369ad4b1d22bcbf93165671a1ad",
+      "commit": "e05007f9858bb55194b0d867aed7bed7d51777e2",
+      "snapshot_kind": "annotated-release",
+      "source_path": "data/envelopes/green_line_worked.json",
+      "file": "green_line_worked.json",
+      "sha256": "b342ea83e5a2f4c01c4eed093b31f8fd97fa05477bf9dfaaf41df67b7318ad22"
+    },
+    {
+      "repository": "docxology/white_line",
+      "tag": "v0.8.0",
+      "tag_object": "f241f2d3ec1f5b3677ba84814996b3ca7a653d8f",
+      "commit": "869aaab63c37aa118f469497cb513cf29697acda",
+      "snapshot_kind": "annotated-release",
+      "source_path": null,
+      "export_recipe": "from white_line import worked_report, report_envelope, canonical_envelope; print(canonical_envelope(report_envelope(worked_report(), subject_id='white-line-worked-example', source_snapshot_refs=('release:v0.8.0:src/white_line/worked_examples.py',))))",
+      "file": "white_line_worked.json",
+      "sha256": "929a8ee087223425ae1aa6d1ab297bdc4bbbbd550ea740e2c7d24ab27db43348"
+    },
+    {
+      "repository": "docxology/black_line",
+      "tag": "v0.5.0",
+      "tag_object": "ff7c3096d8d0bcfe8776b91186f4f0f5ef3f9598",
+      "commit": "79056aacf0f86b4287322dd5dced9d301882cb03",
+      "snapshot_kind": "annotated-release",
+      "source_path": null,
+      "export_recipe": "from black_line import evaluate_work, assessment_envelope, canonical_envelope; from black_line.figures.scenarios import SURFACES_ATTEMPT, SURFACES_AS_OF, SURFACES_WINDOW; print(canonical_envelope(assessment_envelope(evaluate_work(SURFACES_ATTEMPT, as_of=SURFACES_AS_OF, max_evidence_age_days=SURFACES_WINDOW), subject_id='black-line-worked-surfaces', source_snapshot_refs=('release:v0.5.0:src/black_line/figures/scenarios.py',))))",
+      "file": "black_line_worked.json",
+      "sha256": "e2250015845dadd325511731c8f53c91a4a847a45c988dcbc41544f526263672"
+    },
+    {
+      "repository": "docxology/golden_line",
+      "tag": "v0.5.0",
+      "tag_object": "102ad239f08d5c0d18ddbe962d086dd516f81669",
+      "commit": "23095f7f9759a3027e5ceb8380310d54c87cd977",
+      "snapshot_kind": "annotated-release",
+      "source_path": null,
+      "export_recipe": "from golden_line import GOLDEN_ASPIRATIONS, HorizonEntry, progress_report, report_envelope, canonical_envelope; a=GOLDEN_ASPIRATIONS[0]; r=GOLDEN_ASPIRATIONS[2]; entries=['not an entry at all', HorizonEntry('no-such-aspiration', frozenset()), HorizonEntry(a.id, frozenset(a.markers)), HorizonEntry(a.id, frozenset()), HorizonEntry(r.id, counter_signals=frozenset(r.counter_signals))]; print(canonical_envelope(report_envelope(progress_report(entries, as_of='2026-07-29'), subject_id='golden-line-worked-intake-case', source_snapshot_refs=('release:v0.5.0:tests/test_report_envelope.py:_worked_entries',))))",
+      "file": "golden_line_worked.json",
+      "sha256": "c83a7b812cce95cb3c96cf39a03339216aae9a3507ded3fb373a5502bc243dc5"
+    },
+    {
+      "repository": "docxology/red_line",
+      "tag": null,
+      "tag_object": null,
+      "declared_version": "0.3.0",
+      "commit": "375e8ae9b7a111bcdb66f0ba33872c078083983c",
+      "snapshot_kind": "dispatcher-authorized-origin-main",
+      "source_path": null,
+      "export_recipe": "from red_line import review_engagement, finding_envelope, canonical_envelope; from red_line.analysis import canonical_battery; from red_line.analysis.outcome_coverage import BATTERY_AS_OF; case=canonical_battery()[-1]; print(canonical_envelope(finding_envelope(review_engagement(case.action, reviewed_on=BATTERY_AS_OF), subject_id='red-line-worked-non-compliant', source_snapshot_refs=('origin-main:375e8ae9b7a111bcdb66f0ba33872c078083983c:src/red_line/analysis/outcome_coverage.py:canonical_battery:non-compliant',))))",
+      "file": "red_line_worked.json",
+      "sha256": "89adf2ffbc5526180f1b10e542962e4dc863d972c25336a07a456e570bade3ca"
+    }
+  ],
+  "wait_terminated_at": "2026-10-22T03:59:36.558011+00:00",
+  "wait_termination_authority": "Dispatcher explicitly ended the wait after red_line stopped without releasing and instructed origin/main 375e8ae v0.3.0 fallback; its engine retry timed out and further action rests with Daniel."
+}

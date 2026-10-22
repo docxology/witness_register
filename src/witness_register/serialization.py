@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import json
 from typing import Any, TYPE_CHECKING
+from collections.abc import Callable
 
 from .envelopes import EnvelopeRecord
 from .held import UnclassifiedHeld
@@ -67,6 +68,25 @@ def sha256_hex(text: str) -> str:
     """SHA-256 of UTF-8 text as 64 lowercase hex characters."""
 
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def record_prefix_preserved(kind: str, before: tuple, after: tuple) -> bool:
+    """Compare canonical record bytes, preserving opaque JSON type distinctions."""
+    serializers: dict[str, Callable[[Any], dict]] = {
+        "envelopes": canonical_envelope,
+        "relations": canonical_relation,
+        "unclassified": canonical_unclassified,
+        "returns": canonical_return_contract,
+        "decisions": canonical_decision,
+    }
+    serialize = serializers[kind]
+    try:
+        return len(after) >= len(before) and all(
+            canonical_json(serialize(old)) == canonical_json(serialize(new))
+            for old, new in zip(before, after)
+        )
+    except (ValueError, TypeError, AttributeError):
+        return False
 
 
 def payload_digest(payload: Any) -> str:

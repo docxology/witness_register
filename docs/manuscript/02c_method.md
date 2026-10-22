@@ -77,13 +77,12 @@ is a structured enumeration, never a vague middle.
 ## The executable battery
 
 The review's 3×3 canonical witness cases ship as an executable battery in
-`tests/test_battery.py`. Each case is a constructed state and a
-predicate the projection must satisfy: three positive cases (the register
-should pass), three negative cases (it should hold), and three adversarial
-cases (it should reject). Every case is run against the real projection
-function at test time; the battery also includes a falsification pass that
-plants deliberate errors and confirms the check would have failed, so a
-green grid is evidence the checks can fail, not only that they passed
+`src/witness_register/battery.py`, tested by `tests/test_battery.py`.
+Its STATE, RELATION and RETURN rows exercise missing/co-present/protected
+records, categorical constraints, and return/promotion provenance.
+Every case runs the real register functions. The falsification pass changes
+one observation per case and confirms that the case rejects it, so a
+green grid is evidence that its case-level checks can fail
 ([@fig:wr-battery]).
 
 Three first-pass self-measures — relation fidelity, return recoverability,

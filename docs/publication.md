@@ -10,7 +10,7 @@ versioned repository until Daniel reserves and mints its Zenodo version DOI:
 The last verified archived DOI is
 `10.5281/zenodo.22833511` ([archived record](https://zenodo.org/records/22833511)), identifying
 version 0.1.1. The live Zenodo record API verified its title and version on
-2026-10-21. It remains in `CITATION.cff` (explicitly described as prior) and
+2026-10-21. It remains in `CITATION.cff` as a versioned prior-work reference and
 `publication.prior_version_doi` as a **prior version identifier**.
 The active `publication.doi` is empty so the renderer prints the pending
 status instead of mislabeling the prior DOI as this release's identifier. Current source and
@@ -37,6 +37,10 @@ If a Zenodo hook exists or the check is inconclusive, push the annotated tag
 and skip the Release object. An empty, successfully read hook list permits
 the GitHub Release authorized for this release.
 
+After release, changes to `main` require another version. Do not amend the
+published tag to add a DOI; plan metadata and re-rendering as a new versioned
+change while preserving the prior archive reference.
+
 ## Family and release checks
 
 The register co-registers instruments beside their set reader; it is not
@@ -47,7 +51,8 @@ exports. A private source supplies only an already-published worked envelope.
 
 Run every gate in [AGENTS.md](../AGENTS.md), plus the type check in
 [development](development.md). Regenerate the formalism ledger and inspect
-its bindings. Render through an isolated export of the external engine;
+its bindings. Render through an isolated Git checkout of the external engine,
+using a real release-snapshot project clone with its own `.git`;
 record engine commit, results, artifact hashes and visual inspection in the
 new dated release packet. Preserve prior packets. Independent read-only audit
 precedes tagging; remote branch and tag dereferences must match the commit.

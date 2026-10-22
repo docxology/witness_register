@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from witness_register import CASE_IDS, BatteryError, run_battery
@@ -38,3 +40,17 @@ def test_battery_results_carry_actionable_detail() -> None:
     for item in run_battery():
         assert item.check
         assert item.detail
+
+
+def test_manuscript_names_the_executed_case_grid():
+    root = Path(__file__).resolve().parents[1]
+    examples = (root / "docs/manuscript/03_examples.md").read_text()
+    method = (root / "docs/manuscript/02c_method.md").read_text()
+    paragraph = examples.split("## The 3×3 battery as evidence")[1].split("## ")[0]
+    for case_id in {item.case_id for item in run_battery()}:
+        assert f"`{case_id}`" in paragraph
+    for text in (paragraph, method):
+        assert "STATE" in text and "RELATION" in text and "RETURN" in text
+        assert "three positive cases" not in text
+        assert "every predicate" not in text
+    assert "structural refusal" in paragraph

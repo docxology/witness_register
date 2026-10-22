@@ -25,7 +25,7 @@ applies the same rules: any `RETURN_DUE` relation forbids $+1$ until the return 
 an exact-contract, exact-use decision event explicitly rescopes it. A
 contract recorded in one chain does not automatically bind another, but
 within a single state the projection respects every open return
-recorded there, and meeting a contract requires a verified return
+linked by a recorded `RETURN_DUE` relation, and meeting a contract requires a verified return
 record ([@prop:non-compensatory]) — a partial return with a non-empty
 remainder does not close the obligation until its linked remainder contract is verified. Return contracts are records
 of obligation, not promises of approval: the honest outcome of a return

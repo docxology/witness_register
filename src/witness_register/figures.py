@@ -192,7 +192,7 @@ def _worked_records():
 
 
 def _worked_chain():
-    """The same two-state chain the worked-example test builds, built live."""
+    """The original historical subset, built independently from its stored exports."""
 
     records = _worked_records()
     refs = [record.report_ref for record in records]
@@ -264,7 +264,7 @@ def chain_plate() -> str:
         text(
             60,
             110,
-            "Both states built live from the four stored real envelopes; every digest below is computed in this build.",
+            "Original exported examples; this build computes and verifies every digest below.",
             20,
             MID,
         )
@@ -783,7 +783,7 @@ def cover_plate() -> str:
         text(
             120,
             620,
-            "Sixth work beside the line set · append-only co-registration of report envelopes",
+            "Shared register beside the line set · append-only co-registration of report envelopes",
             18,
             MID,
         )
@@ -921,8 +921,8 @@ PLATES: tuple[PlateSpec, ...] = (
         filename="wr_chain.png",
         build=chain_plate,
         caption=(
-            "The worked two-state chain, built live from the four stored real "
-            "envelopes at figure-build time: the genesis seal, the update's "
+            "The worked two-state chain, built live from the original historical "
+            "envelope subset at figure-build time: the genesis seal, the update's "
             "prior_ref pointing at it, verify_chain's verdict on the pair, and "
             "— run in the same build — the exact refusal update_state raises "
             "when one stored value is mutated after sealing. Chain integrity "

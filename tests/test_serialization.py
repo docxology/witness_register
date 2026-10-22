@@ -156,3 +156,16 @@ def test_cross_version_vectors_preserve_bytes_and_do_not_silently_migrate() -> N
         canonical_json(canonical_envelope(record))
         == vectors["v2"]["envelope"]["canonical"]
     )
+    for kind in ("relation", "return", "populated_state"):
+        assert vectors["v1"][kind]["digest"] != vectors["v2"][kind]["digest"]
+    populated = json.loads(vectors["v2"]["populated_state"]["canonical"])
+    assert populated["relations"] == [
+        json.loads(vectors["v2"]["relation"]["canonical"])
+    ]
+    assert populated["returns"] == [json.loads(vectors["v2"]["return"]["canonical"])]
+    assert (
+        populated["relations"][0]["human_decision_ref"]
+        == "historic-classification-receipt"
+    )
+    assert populated["relations"][0]["classification_decision_ref"] == ""
+    assert populated["decisions"] == []

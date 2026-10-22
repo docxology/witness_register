@@ -45,6 +45,20 @@ def check_distinct_ids(state: WitnessState) -> tuple[str, ...]:
     """Distinct identities, with only an immutable open/completed return pair."""
 
     errors: list[str] = []
+    for record in state.returns:
+        for term in fields(ReturnContractRecord):
+            value = getattr(record, term.name)
+            if term.name == "alternatives_live":
+                if type(value) is not tuple or any(
+                    type(item) is not str for item in value
+                ):
+                    errors.append(
+                        f"contract {record.contract_id}: alternatives_live must be a tuple of strings"
+                    )
+            elif type(value) is not str:
+                errors.append(
+                    f"contract {record.contract_id}: {term.name} must be a string"
+                )
     for kind, field in (
         ("envelopes", "report_ref"),
         ("relations", "relation_id"),
@@ -140,15 +154,28 @@ def check_refs_resolve(state: WitnessState) -> tuple[str, ...]:
     envelopes = {e.report_ref for e in state.envelopes}
     contracts = {r.contract_id for r in state.returns if not r.verification_result}
     held = {h.held_id for h in state.unclassified}
-    relations = {relation_digest(r): r for r in state.relations}
-    obligations = {
-        return_contract_digest(r): r for r in state.returns if not r.verification_result
-    }
-    partials = {
-        return_contract_digest(r): r
-        for r in state.returns
-        if r.verification_result and r.open_remainder
-    }
+    relations = {}
+    for relation in state.relations:
+        try:
+            relations[relation_digest(relation)] = relation
+        except (ValueError, TypeError) as exc:
+            errors.append(
+                f"relation {relation.relation_id}: cannot form a strict JSON target: {exc}"
+            )
+    obligations = {}
+    partials = {}
+    for record in state.returns:
+        try:
+            digest = return_contract_digest(record)
+        except (ValueError, TypeError) as exc:
+            errors.append(
+                f"contract {record.contract_id}: cannot form a strict JSON target: {exc}"
+            )
+            continue
+        if not record.verification_result:
+            obligations[digest] = record
+        elif record.open_remainder:
+            partials[digest] = record
     for relation in state.relations:
         for field in ("source_report_refs", "support_refs", "resistance_refs"):
             for ref in getattr(relation, field):
@@ -268,6 +295,12 @@ def validate_state(state: WitnessState) -> tuple[StructuralIssue, ...]:
     """All local structure issues, deterministic and inspectable on refusal."""
 
     issues: list[StructuralIssue] = []
+    if type(state.subject_id) is not str:
+        issues.append(
+            StructuralIssue(
+                "SUBJECT", state.state_digest, "register subject_id must be a string"
+            )
+        )
     for envelope in state.envelopes:
         _, intake_issues = intake_envelope(canonical_envelope(envelope))
         issues.extend(

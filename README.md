@@ -80,7 +80,7 @@ One dict per line report, field names by published convention:
 | `review_date` | ISO `YYYY-MM-DD` calendar date |
 | `registry_version` | string, the line's own registry version |
 | `registry_digest` | 64-char lowercase hex |
-| `native_status` | any JSON-compatible value — stored verbatim, never interpreted |
+| `native_status` | bounded strict JSON, with state-wrapper headroom — stored verbatim, never interpreted |
 | `report_ref` | 64-char lowercase hex pointer to the complete native report |
 | `source_snapshot_refs` | list of non-blank strings |
 | `scope_and_nonclaims` | non-empty list of non-blank strings |

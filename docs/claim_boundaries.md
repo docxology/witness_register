@@ -17,7 +17,9 @@ assert, and what it must never be read as asserting.
 | **Validated state / sound chain** | Local structure is valid; full-chain verification also binds genesis, stable register subject and actual append context | Anything about the world; anchor independence or freshness |
 | **Classification decision** | A human reference names the category assigned to a held observation | Discharge of the resulting constraint |
 | **Resolution / rescope event** | An authored authority claim names an exact immutable target, exact next use, evidence reference and prior basis state | Verified decision truth, permission, clearance for another use or clearance of protected absence |
-| **Conflicting decisions** | Contradictory claims stay visible and hold | A winner selected by tuple order |
+| **Conflicting decisions** | Contradictory claims stay visible; a block retains `-1`, other holds retain `0` | A winner selected by tuple order; softening an unresolved block |
+| **Reopened remainder** | Its verified closure no longer closes an ancestor for that exact use | Erasing verification history or closing another obligation |
+| **Unchanged history** | Canonical record bytes preserve JSON type and numeric distinctions | Python equality as a substitute for byte preservation |
 | **InvalidStateError** | Bookkeeping has named defects; no posture was issued | A substantive block against the subject |
 | **Projection `+1`** | Nothing RECORDED forbids the declared next use, and at least one envelope exists | Endorsement, safety, quality, permission from any boundary owner |
 | **Projection `0`** | The posture is held; `witness_hold_reasons` enumerates why, structured | A vague middle, an average, or a compromise between the lines |
@@ -26,7 +28,7 @@ assert, and what it must never be read as asserting.
 | **Projection replay check** | Stored inputs reproduce the value and reasons | Correctness of authored records or decisions |
 | **Chain coverage** | Preserved links and denominator, genesis coverage, full-chain validity and operator anchor reference are separate | Combined quality score, anchor independence or freshness |
 | **Metric value** | A property of the REGISTER's bookkeeping | A property of any subject, report, or human decision |
-| **Battery green** | The nine required behaviors held on the real functions this run | That the register is correct beyond the behaviors the cases encode |
+| **Battery green** | The STATE/RELATION/RETURN cases held on the real functions, with a rejecting wrong variant per case | Exhaustive state-space proof or an injected defect in every predicate |
 
 Boundary sentence for the whole work: **the register witnesses; it does not
 judge.** Any sentence sourced from this repository that reads as a judgment

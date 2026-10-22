@@ -152,18 +152,36 @@ def remainder_contract(
     )
 
 
-def contract_met(records: tuple[ReturnContractRecord, ...], contract_id: str) -> bool:
-    """Replay verified subsets after structural validation, without evidence adjudication."""
+def contract_met(
+    records: tuple[ReturnContractRecord, ...],
+    contract_id: str,
+    blocked_contracts: frozenset[str] = frozenset(),
+) -> bool:
+    """Replay verified subsets, propagating scoped reopening through their ancestry.
+
+    Blocked descendants cannot supply a parent's derived closure. Rescoping
+    a child is not verification of its parent's unverified remainder.
+    """
 
     from .serialization import return_contract_digest
 
-    complete = {r.contract_id for r in records if r.is_met}
+    complete = {
+        r.contract_id
+        for r in records
+        if r.is_met and r.contract_id not in blocked_contracts
+    }
     children = {
         r.parent_return_ref: r.contract_id
         for r in records
         if not r.verification_result and r.parent_return_ref
     }
-    pending = [r for r in records if r.verification_result and r.open_remainder]
+    pending = [
+        r
+        for r in records
+        if r.verification_result
+        and r.open_remainder
+        and r.contract_id not in blocked_contracts
+    ]
     while pending:
         newly_met = [
             r for r in pending if children.get(return_contract_digest(r)) in complete

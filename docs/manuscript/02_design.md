@@ -52,7 +52,7 @@ review's 3×3 canonical witness cases ship as an executable battery whose
 checks are themselves proven able to reject
 (described in [the examples section](#sec:examples)).
 
-![The worked two-state chain, built live from the four stored real envelopes at figure-build time: the genesis seal, the update's prior_ref pointing at it, verify_chain's verdict on the pair, and — run in the same build — the exact refusal update_state raises when one stored value is mutated after sealing. Chain integrity is internal consistency only; the tip is unbound without an anchor the chain does not control.](../../output/figures/wr_chain.png){#fig:wr-chain width=100%}
+![The worked two-state chain, built live from the original historical envelope subset at figure-build time: the genesis seal, the update's prior_ref pointing at it, verify_chain's verdict on the pair, and — run in the same build — the exact refusal update_state raises when one stored value is mutated after sealing. Chain integrity is internal consistency only; the tip is unbound without an anchor the chain does not control.](../../output/figures/wr_chain.png){#fig:wr-chain width=100%}
 
 ## The posture that cannot travel alone
 
@@ -81,3 +81,8 @@ Sealing binds content; structural validation makes it eligible for projection.
 Typed structural refusal emits no substantive posture. Return pairs preserve
 every obligation term, require an open predecessor and link partial-return
 remainders explicitly; only verification of that subset can close it.
+Reopening a remainder prevents its closure from propagating to a parent
+for the named use. Conflicting clearance and reopening preserve the
+original categorical constraint, including a block's refusal posture.
+History preservation compares canonical bytes, so opaque JSON booleans
+and numbers cannot be substituted merely because Python equality agrees.

@@ -26,9 +26,12 @@ follow their parent whole-number file.
 
 ## Rendering
 
+From an isolated engine checkout with the release snapshot cloned at
+`projects/active/witness_register`, build this project's figures and run:
+
 ```bash
-cd /path/to/template
-uv run python scripts/pipeline/stage_03_render.py --project working/witness_register
+uv run --no-sync python scripts/pipeline/stage_03_render.py --project active/witness_register
+uv run --no-sync python scripts/pipeline/stage_04_validate.py --project active/witness_register
 ```
 
 See [AGENTS.md](AGENTS.md) for the working contract.

@@ -74,7 +74,7 @@ def test_cover_version_is_live_and_register_is_not_a_sixth_instrument() -> None:
 
     svg = cover_plate()
     assert __version__ in svg
-    assert "SIXTH WORK" not in svg
+    assert "sixth work" not in svg.lower()
 
 
 def test_no_text_overflows_the_canvas_extent() -> None:

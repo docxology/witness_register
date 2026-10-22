@@ -69,7 +69,7 @@ def _unresolved_blocks(state: WitnessState, use: str) -> tuple[RelationRecord, .
         r
         for r in state.relations
         if r.relation_type is RelationType.NON_COMPENSATORY_BLOCK
-        and _relation_status(state, r, use) in ("open", "reopened")
+        and _relation_status(state, r, use) != "cleared"
     )
 
 
@@ -84,6 +84,15 @@ def witness_hold_reasons(
 
     require_valid_state(state)
     holds: list[HoldReason] = []
+    blocked_contracts = frozenset(
+        contract.contract_id
+        for contract in state.returns
+        if not contract.verification_result
+        and decision_status(
+            state.decisions, return_contract_digest(contract), declared_next_use
+        )
+        in ("conflict", "reopened")
+    )
     for relation in state.relations:
         status = _relation_status(state, relation, declared_next_use)
         if status == "conflict":
@@ -120,7 +129,9 @@ def witness_hold_reasons(
                         message="contradictory return rescope/reopen decisions remain visible",
                     )
                 )
-            met = contract_met(state.returns, relation.return_contract_ref)
+            met = contract_met(
+                state.returns, relation.return_contract_ref, blocked_contracts
+            )
             if return_status != "cleared" and (
                 not met or return_status in ("conflict", "reopened")
             ):

@@ -51,9 +51,20 @@ def decision(state, target, kind=DecisionKind.RESOLVE, use=USE, name="D1"):
         RelationType.UNCLASSIFIED_OBSERVATION,
     ],
 )
-def test_existing_constraint_requires_explicit_resolution_chain(envelope, kind):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_existing_constraint_requires_explicit_resolution_chain(
+    envelope, kind, support_count
+):
     relation = make_relation(envelope, kind)
-    first = genesis_state("subject-1", "2026-10-19", (envelope,), (relation,))
+    supporters = tuple(
+        replace(envelope, report_ref=f"{n + 1:064x}") for n in range(support_count)
+    )
+    support = tuple(
+        make_relation(e, relation_id=f"support-{n}") for n, e in enumerate(supporters)
+    )
+    first = genesis_state(
+        "subject-1", "2026-10-19", (envelope,) + supporters, (relation,) + support
+    )
     acknowledged = update_state(
         first,
         "2026-10-20",
@@ -95,8 +106,9 @@ def test_contradictory_resolutions_hold_without_order_arbitration(
         relations=support,
         decisions=events[::-1] if reverse else events,
     )
-    assert project(second, USE).value == 0
+    assert project(second, USE).value == -1
     assert any("decision_conflict" in r for r in project(second, USE).reasons)
+    assert any("non-compensatory block" in r for r in project(second, USE).reasons)
     assert verify_chain((first, second)) == ()
 
 
@@ -109,7 +121,10 @@ def test_contradictory_resolutions_hold_without_order_arbitration(
         "holding",
     ],
 )
-def test_two_returns_only_exact_target_and_use_are_rescoped(envelope, extra):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_two_returns_only_exact_target_and_use_are_rescoped(
+    envelope, extra, support_count
+):
     contracts = (make_contract("C1"), make_contract("C2"))
     due = tuple(
         make_relation(
@@ -120,13 +135,21 @@ def test_two_returns_only_exact_target_and_use_are_rescoped(envelope, extra):
         )
         for c in contracts
     )
-    relations = due + (
-        () if extra in (None, "holding") else (make_relation(envelope, extra),)
+    supporters = tuple(
+        replace(envelope, report_ref=f"{n + 1:064x}") for n in range(support_count)
+    )
+    support = tuple(
+        make_relation(e, relation_id=f"support-{n}") for n, e in enumerate(supporters)
+    )
+    relations = (
+        due
+        + support
+        + (() if extra in (None, "holding") else (make_relation(envelope, extra),))
     )
     first = genesis_state(
         "subject-1",
         "2026-10-20",
-        (envelope,),
+        (envelope,) + supporters,
         relations,
         (make_holding(),) if extra == "holding" else (),
         contracts,
@@ -161,13 +184,26 @@ def test_two_returns_only_exact_target_and_use_are_rescoped(envelope, extra):
     assert check_chain((first, second, third)) == ()
 
 
-def test_partial_then_remainder_verification_closes_only_that_obligation(envelope):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_partial_then_remainder_verification_closes_only_that_obligation(
+    envelope, support_count
+):
     contract = make_contract()
     due = make_relation(
         envelope, RelationType.RETURN_DUE, return_contract_ref=contract.contract_id
     )
+    supporters = tuple(
+        replace(envelope, report_ref=f"{n + 1:064x}") for n in range(support_count)
+    )
+    support = tuple(
+        make_relation(e, relation_id=f"support-{n}") for n, e in enumerate(supporters)
+    )
     first = genesis_state(
-        "subject-1", "2026-10-19", (envelope,), (due,), returns=(contract,)
+        "subject-1",
+        "2026-10-19",
+        (envelope,) + supporters,
+        (due,) + support,
+        returns=(contract,),
     )
     partial = record_return(contract, "part X verified", "part Y observed and dated")
     second = update_state(first, "2026-10-20", returns=(partial,))
@@ -185,6 +221,15 @@ def test_partial_then_remainder_verification_closes_only_that_obligation(envelop
     assert child.trigger == partial.trigger == contract.trigger
     assert check_chain((first, second, third, fourth)) == ()
     assert project(fourth, USE) == project(fourth, USE)
+
+    reopened = update_state(
+        fourth,
+        "2026-10-21",
+        decisions=(decision(fourth, child, DecisionKind.REOPEN),),
+    )
+    assert project(reopened, USE).value == 0
+    assert project(reopened, "another use").value == 1
+    assert verify_chain((first, second, third, fourth, reopened)) == ()
 
 
 def test_remainder_rejects_unknown_parent_changed_terms_and_ambiguous_children(

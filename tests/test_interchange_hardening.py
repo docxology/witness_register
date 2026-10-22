@@ -5,7 +5,13 @@ from dataclasses import replace
 
 import pytest
 
-from conftest import accept, make_payload, make_relation, make_contract
+from conftest import (
+    accept,
+    make_payload,
+    make_relation,
+    make_contract,
+    supporting_context,
+)
 from witness_register import (
     Projection,
     RelationType,
@@ -106,8 +112,10 @@ def test_empty_payload_and_mixed_refusal_order_are_exhaustive():
     ]
 
 
-def test_direct_record_tampering_remains_detectable(envelope):
-    first = genesis_state("subject-1", "2026-10-21", (envelope,))
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_direct_record_tampering_remains_detectable(envelope, support_count):
+    envelopes, support = supporting_context(envelope, support_count)
+    first = genesis_state("subject-1", "2026-10-21", envelopes, support)
     envelope.native_status["detail"].append("direct-record mutation")
     with pytest.raises(InvalidStateError, match="seal"):
         project(first, "u")
@@ -150,12 +158,14 @@ def test_real_leap_day_backdating_and_declared_subject_correspondence(envelope):
     assert anchor["anchored_on"] == "2028-03-01"
 
 
-def test_fabricated_posture_can_bind_while_failing_replay(envelope):
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_fabricated_posture_can_bind_while_failing_replay(envelope, support_count):
+    envelopes, support = supporting_context(envelope, support_count)
     state = genesis_state(
         "subject-1",
         "2026-10-21",
-        (envelope,),
-        (make_relation(envelope, RelationType.NON_COMPENSATORY_BLOCK),),
+        envelopes,
+        (make_relation(envelope, RelationType.NON_COMPENSATORY_BLOCK),) + support,
     )
     invented = Projection(1, "u", state.state_digest, ("invented",))
     assert check_projection_binding(invented, state) == ()
@@ -163,8 +173,12 @@ def test_fabricated_posture_can_bind_while_failing_replay(envelope):
     assert check_projection(invented, state)
 
 
-def test_chain_segment_denominator_and_absent_external_anchor_are_visible(envelope):
-    first = genesis_state("subject-1", "2026-10-19", (envelope,))
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_chain_segment_denominator_and_absent_external_anchor_are_visible(
+    envelope, support_count
+):
+    envelopes, support = supporting_context(envelope, support_count)
+    first = genesis_state("subject-1", "2026-10-19", envelopes, support)
     second = update_state(first, "2026-10-20")
     third = update_state(second, "2026-10-21")
     report = chain_coverage((second, third))
@@ -180,8 +194,12 @@ def test_chain_segment_denominator_and_absent_external_anchor_are_visible(envelo
     assert whole.external_anchor_ref == "operator-claim:log"
 
 
-def test_chain_subject_change_is_refused_even_with_complete_new_schema_seal(envelope):
-    first = genesis_state("s", "2026-10-20", (envelope,))
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_chain_subject_change_is_refused_even_with_complete_new_schema_seal(
+    envelope, support_count
+):
+    envelopes, support = supporting_context(envelope, support_count)
+    first = genesis_state("s", "2026-10-20", envelopes, support)
     second = update_state(first, "2026-10-21")
     moved = replace(
         second,
@@ -274,6 +292,15 @@ def test_structural_failures_cannot_be_compensated_by_envelopes_or_agreements(
         )
         with pytest.raises(InvalidStateError):
             project(invalid, "u")
+    duplicate = make_relation(envelope, relation_id="duplicate")
+    invalid = raw_state(
+        "s",
+        "2026-10-21",
+        (envelope,) + supporters,
+        (duplicate, duplicate) + agreements,
+    )
+    with pytest.raises(InvalidStateError):
+        project(invalid, "u")
 
 
 def test_json_bounds_cover_aggregate_container_nodes():

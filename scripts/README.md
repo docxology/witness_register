@@ -14,3 +14,9 @@ Thin build entry points. No business logic here — import from `witness_registe
   ```
 
 See [AGENTS.md](AGENTS.md) for the working contract.
+## Release cohort replay
+
+`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.2.0`
+checks exported byte custody, intakes by value, and writes deterministic
+`co_registration.json`. The manifest records immutable sibling sources;
+historical envelope collections remain unchanged.

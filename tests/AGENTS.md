@@ -16,7 +16,7 @@ determinism, intake validation, manuscript bindings, and cross-cutting contracts
 - `test_metrics.py` — recoverability, fidelity, and composite metrics
 - `test_formalism.py` — formalism block parsing and label resolution
 - `test_register_figures.py` — every plate is embedded with its registered caption
-- `test_worked_example.py` — the four real stored envelopes, end to end
+- `test_worked_example.py` — the historical stored export collection, end to end
 - `test_same_subject.py` — same-subject co-registration contract
 - `test_publication_metadata.py` — publication metadata across config and package
 - `test_standalone.py` — the package works without sibling repos

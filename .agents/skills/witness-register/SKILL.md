@@ -1,11 +1,11 @@
 ---
 name: witness-register
-description: Operate the Witness Register — build state chains with genesis_state and update_state, project postures (-1|0|+1) with declared next uses, run the 3×3 design-review battery, ingest line report envelopes, and verify the append-only chain contract. The register co-registers without aggregation, ranking, or override. USE WHEN working in projects/working/witness_register, building witness chains, projecting co-registration postures, running the battery with per-case defeat, or verifying the append-only contract.
+description: Operate the Witness Register — build state chains with genesis_state and update_state, project postures (-1|0|+1) with declared next uses, append exact-target lifecycle decisions, run the design-review battery, ingest line report envelopes, and verify the append-only chain contract. The register co-registers without aggregation, ranking, or override. USE WHEN building witness chains, projecting co-registration postures, running the battery with per-case defeat, or verifying the append-only contract.
 ---
 
 # Witness Register local skill
 
-The Witness Register is a sixth work beside the line set: it co-registers line
+The Witness Register stands beside the instruments and their reader: it co-registers line
 report envelopes without aggregation, ranking, or override. Its executable core
 is a state chain — `genesis_state` creates the first state from ingested
 envelopes, `update_state` appends new relations and returns while refusing
@@ -18,21 +18,30 @@ least one reason.
 ## Quick start (from the project root)
 
 ```bash
-uv run pytest -q                                                  # 206 tests
-uv run python scripts/build_figures.py                            # deterministic figures (writes output/figures/)
+uv run python scripts/build_figures.py
+uv run pytest tests/ --cov=src --cov-branch -q
+uv run ruff check src tests scripts
+uv run mypy src/witness_register --check-untyped-defs
+uv run ruff format --check src tests scripts
 ```
 
 Figure generation requires the system `rsvg-convert` executable from librsvg.
-Render the publication bundle with the external `docxology/template` engine —
-cloned or located anywhere on disk, with this checkout linked in as its
-`projects/working/witness_register` — using
-`uv run python scripts/pipeline/stage_03_render.py --project working/witness_register`.
+Render with an isolated detached checkout of `docxology/template` origin/main
+on GitVault. Put a fresh real clone of the source release commit, with its own
+`.git`, at `projects/active/witness_register`; build its figures first. Run
+`uv run --no-sync python scripts/pipeline/stage_03_render.py --project active/witness_register`
+then `uv run --no-sync python scripts/pipeline/stage_04_validate.py --project active/witness_register`.
+Inspect every validation result and the actual PDF/HTML. Follow
+`docs/publication.md` for provenance, metadata, independent audit and release.
 
 ## States and the chain
 
-A witness state has eight fields: `subject_id`, `review_moment`, `envelopes`,
-`relations`, `unclassified`, `returns`, `prior_ref`, and `state_digest`
-(SHA-256 over the canonical JSON of the other seven fields, preserving order).
+A witness state carries `subject_id`, `review_moment`, `envelopes`,
+`relations`, `unclassified`, `returns`, `prior_ref`, `state_digest`,
+`decisions` and `history_refs`. The seal covers every other field, using
+canonical JSON with sorted keys and preserving record sequence order.
+The register subject is a string and stays exactly unchanged across the chain;
+native subject correspondence remains a registrar declaration.
 
 The chain is append-only:
 - A genesis state carries an empty `prior_ref`.
@@ -41,6 +50,9 @@ The chain is append-only:
 - `update_state` re-derives the prior seal from live content before extending.
   A record mutated after sealing raises rather than being carried forward.
 - `verify_chain` checks every link; it never repairs anything.
+- `genesis_state`, `update_state` and `project` reject invalid bookkeeping with
+  typed issues. `raw_state` is seal-only inspection; a seal grants no posture.
+- `project_chain` checks the supplied full genesis chain before projecting.
 
 ## Core API — worked example
 
@@ -52,7 +64,7 @@ from witness_register import (
 from pathlib import Path
 import json
 
-# Intake the four real stored envelopes
+# Intake the original historical four-envelope subset
 envelopes = []
 for name in ("red_line_worked.json", "black_line_worked.json",
              "golden_line_worked.json", "white_line_worked.json"):
@@ -105,7 +117,8 @@ posture = project(second, "the constructed next use")
 
 Projection is computed from relation records only, in fixed precedence:
 
-1. Any non-compensatory block with no recorded human decision forces `-1`.
+1. A non-compensatory block without an uncontested matching `RESOLVE` event
+   forces `-1`; conflicting clear/reopen claims retain that block.
 2. An empty state is `-1` — nothing to witness is not permission.
 3. Any hold — a protected absence, an outstanding return, an unresolved tension,
    dependency, incomparability, or unreviewed observation — caps the value at `0`.
@@ -116,6 +129,19 @@ No volume of agreement buys back a blocked route. A single unresolved block
 forces `-1` under any number of agreement relations. A protected absence caps
 the posture at `0` past every decision reference.
 
+Classification is not clearance. Promotion records `classification_decision_ref`;
+historical `human_decision_ref` and a projection-time receipt supply no resolution
+authority. Append a `DecisionEvent` naming the exact target digest, declared use,
+evidence and actual prior basis state. Acknowledgment is neutral; protected
+absence cannot be generically resolved. An exact-contract `RESCOPE` affects only
+its declared use. Other unmatched obligations remain open.
+
+Completed returns must preserve every immutable term of their open predecessor.
+Partial completion closes only its verified part; `remainder_contract` links an
+explicit child obligation. Reopening that remainder invalidates derived parent
+closure for the matching use. Stored obligations constrain projection through
+authored `RETURN_DUE` relations; the register does not invent a missing relation.
+
 ## The battery
 
 The design review's 3×3 canonical witness cases ship as `run_battery()`. Every
@@ -124,15 +150,23 @@ raises `BatteryError` when its observed behaviour is deliberately falsified. A
 passing grid is evidence the checks can fail, not only that they passed.
 
 ```python
-checks = run_battery()
-# 9 checks across 3 cases; every check passed
+from witness_register import CASE_IDS, BatteryError
 
-for case_id in ["seal-tamper-detection", "projection-precedence", "intake-validation"]:
+checks = run_battery()
+assert all(check.passed for check in checks)
+
+for case_id in CASE_IDS:
     try:
         run_battery(defeat=case_id)
     except BatteryError:
-        pass  # expected — the injected-wrong variant was rejected
+        pass
+    else:
+        raise AssertionError(f"wrong variant was accepted: {case_id}")
 ```
+
+The grid groups STATE (`S1`–`S3`), RELATION (`R4`–`R6`) and RETURN (`T7`–`T9`)
+cases. Each defeat changes one observation per case; it does not plant a defect
+in every predicate. Counts are derived from `checks` and `CASE_IDS`.
 
 ## Gotchas (probed against the real API)
 
@@ -140,16 +174,16 @@ for case_id in ["seal-tamper-detection", "projection-precedence", "intake-valida
   live content. A value mutated anywhere inside a stored envelope — even buried
   inside an opaque `native_status` — causes it to raise. Test with the real
   chain, not with constructed examples.
-- **Seal digests include record order.** Reordering the fields of a state
-  changes its digest. The canonical JSON serializer preserves insertion order.
+- **Seal digests include record sequence order.** Reordering records changes
+  the seal. Dictionary key insertion order does not: canonical JSON sorts keys.
 - **`native_status` is opaque.** The register stores it verbatim and never
   parses, compares, ranks, averages, or merges it. Projection is driven only by
   relation records.
 - **Intake rejects non-JSON.** `NaN` and `Infinity` in a payload are refused
   with a typed issue, because a digest over text that is not JSON would seal a
   non-interchangeable value.
-- **Blank decision refs are refused.** `RelationRecord` requires a non-empty
-  `human_decision_ref` for promotion. A whitespace-only reference is rejected.
+- **Blank decision refs are refused.** `promote_unclassified` requires a non-empty
+  human decision reference and records it as classification provenance.
 - **Figure determinism is byte-level.** Two builds produce identical SVGs, PNGs,
   and registry. `figure_registry.json` records the SHA-256 of every artifact;
   `tests/test_register_figures.py` re-derives and compares.
@@ -168,9 +202,9 @@ imply otherwise.
 
 ## The report envelope (cross-instrument transport)
 
-The register ships four stored envelopes under `data/envelopes/`, one per line,
-each generated by running that line's own public API on 2026-07-29 and stored
-by value. They describe four *different* worked subjects — so the honest
-structure is an incomparability relation and an open return contract.
-`tests/test_worked_example.py` intakes all four unmodified and exercises the
-full machinery.
+Historical collections remain under `data/envelopes/`; the example above uses
+their original subset. Current release exports live under
+`data/envelopes/releases/`, with exact snapshot and byte custody in the manifest.
+`scripts/build_release_cohort.py` generates its authored chain;
+`tests/test_release_cohort.py` replays it. Worked native subjects remain distinct,
+so the release cohort records incomparability and an open correspondence return.

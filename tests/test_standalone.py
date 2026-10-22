@@ -38,7 +38,7 @@ SKIP_DIRECTORIES = frozenset(
     }
 )
 
-#: The five sibling works, referenced only by name and GitHub URL, never by
+#: The instruments and reader, referenced by name and GitHub URL, never by
 #: relative path and never by import.
 SIBLING_WORKS = (
     "red_line",

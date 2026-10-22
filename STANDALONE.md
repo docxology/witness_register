@@ -28,7 +28,7 @@ From a clone of this repository and nothing else:
 
 - Install: `pyproject.toml` declares `dependencies = []`. The package is
   pure standard library on Python 3.10 or later; the `dev` group is
-  `pytest`, `pytest-cov`, and `ruff`. `uv.lock` is tracked, so `uv sync`
+  `pytest`, `pytest-cov`, `ruff`, and `mypy`. `uv.lock` is tracked, so `uv sync`
   reproduces the pinned development environment.
 - Run the full test suite and meet the branch-coverage gate
   (`fail_under = 90`), including the 3×3 witness battery, the 12-defect

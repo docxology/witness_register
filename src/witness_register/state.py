@@ -37,6 +37,7 @@ from .serialization import (
     payload_digest,
     relation_digest,
     return_contract_digest,
+    record_prefix_preserved,
 )
 
 
@@ -291,17 +292,27 @@ def verify_chain(states: Sequence[WitnessState]) -> tuple[str, ...]:
                 violations.append("state 0: genesis must carry an empty prior_ref")
             continue
         previous = states[position - 1]
-        if state.subject_id != previous.subject_id:
+        if (
+            type(state.subject_id) is not str
+            or type(previous.subject_id) is not str
+            or state.subject_id != previous.subject_id
+        ):
             violations.append(f"state {position}: register subject identity changed")
         if state.history_refs != previous.history_refs + (previous.state_digest,):
             violations.append(
                 f"state {position}: history_refs do not preserve actual ancestry"
             )
-        prior_targets = {relation_digest(r) for r in previous.relations} | {
-            return_contract_digest(r)
-            for r in previous.returns
-            if not r.verification_result
-        }
+        try:
+            prior_targets = {relation_digest(r) for r in previous.relations} | {
+                return_contract_digest(r)
+                for r in previous.returns
+                if not r.verification_result
+            }
+        except (ValueError, TypeError) as exc:
+            prior_targets = set()
+            violations.append(
+                f"state {position}: prior targets cannot form strict JSON: {exc}"
+            )
         for event in state.decisions[len(previous.decisions) :]:
             if (
                 event.basis_state_ref != previous.state_digest
@@ -327,7 +338,7 @@ def verify_chain(states: Sequence[WitnessState]) -> tuple[str, ...]:
         for kind in ("envelopes", "relations", "unclassified", "returns", "decisions"):
             before: tuple = getattr(previous, kind)
             after: tuple = getattr(state, kind)
-            if after[: len(before)] != before:
+            if not record_prefix_preserved(kind, before, after):
                 violations.append(
                     f"state {position}: prior {kind} were dropped, "
                     "reordered, or altered"

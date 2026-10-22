@@ -1,11 +1,11 @@
-"""The worked example: four REAL exported envelopes through the real register.
+"""The historical worked export collection through the real register.
 
-The JSON files under ``data/envelopes/`` were generated on 2026-07-29 by
-running each line's own public API in that line's own repository (provenance
-in ``data/envelopes/README.md``) and are stored by value under the published
+The JSON files under ``data/envelopes/`` preserve the original admission and
+later additions (dates and provenance in ``data/envelopes/README.md``).
+They are stored by value under the published
 ``line.report-envelope/1.0`` schema. This module is the first cross-work data
-flow in the set, and it keeps the register's boundaries explicit: the four
-envelopes describe four DIFFERENT worked subjects, so the honest relations
+flow in the set, and it keeps the register's boundaries explicit: the
+envelopes describe DIFFERENT worked subjects, so the honest relations
 between them are incomparability and an open return contract, and the honest
 posture for treating the co-registration as a live subject record is held.
 """
@@ -57,7 +57,7 @@ def _accepted_records():
     return records
 
 
-def test_all_four_real_exports_pass_intake_unmodified() -> None:
+def test_all_stored_worked_exports_pass_intake_unmodified() -> None:
     """Each line's actual exported payload has the published shape."""
 
     records = _accepted_records()
@@ -95,7 +95,7 @@ def test_native_status_shapes_differ_and_are_stored_verbatim() -> None:
 
 
 def _worked_chain():
-    """Genesis with the four envelopes; an update adding the honest records."""
+    """Stored collection with the original return terms retained as historical records."""
 
     records = _accepted_records()
     refs = [record.report_ref for record in records]
@@ -118,7 +118,7 @@ def _worked_chain():
         contract_id="worked-same-subject-return",
         subject_id=first.subject_id,
         why_held=(
-            "the four envelopes describe four different worked cases; a "
+            "the original four envelopes describe different worked cases; a "
             "same-subject co-registration does not exist yet"
         ),
         alternatives_live=(
@@ -158,7 +158,7 @@ def test_the_worked_chain_is_sound_and_recoverable() -> None:
 
 
 def test_the_worked_projection_is_held_with_named_reasons() -> None:
-    """Four real envelopes plus honest relations project to 0, not +1."""
+    """Stored exports and authored unresolved relations produce the held posture."""
 
     _, second = _worked_chain()
     projection = project(second, "treat this co-registration as a live subject record")
@@ -172,7 +172,7 @@ def test_the_worked_projection_is_held_with_named_reasons() -> None:
 def test_a_mechanics_demonstration_use_is_also_answered_not_assumed() -> None:
     """Even the modest declared use gets the same held posture: the relations
     are unresolved for every declared use, which is the non-compensatory
-    design working as stated — the register does not scope reasons to uses."""
+    design working as stated without any authored scoped clearance event."""
 
     _, second = _worked_chain()
     projection = project(

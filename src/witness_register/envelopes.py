@@ -26,7 +26,7 @@ from __future__ import annotations
 from copy import deepcopy
 
 from .json_data import json_domain_issues
-from .json_data import MAX_JSON_NODES
+from .json_data import MAX_JSON_NODES, MAX_JSON_DEPTH, MAX_JSON_CHARACTERS
 import re
 from dataclasses import dataclass
 from datetime import date
@@ -228,7 +228,7 @@ def intake_envelope(
                     )
                 )
         elif field == "native_status":
-            for message in json_domain_issues(value):
+            for message in json_domain_issues(value, max_depth=MAX_JSON_DEPTH - 3):
                 issues.append(
                     IntakeIssue(
                         IssueCode.MALFORMED_FIELD,
@@ -261,7 +261,7 @@ def intake_envelope(
                 issues.append(IntakeIssue(IssueCode.MALFORMED_FIELD, message, field))
     if issues:
         return None, tuple(issues)
-    return EnvelopeRecord(
+    record = EnvelopeRecord(
         schema_version=payload["schema_version"],
         line_id=payload["line_id"],
         subject_id=payload["subject_id"],
@@ -272,4 +272,15 @@ def intake_envelope(
         report_ref=payload["report_ref"],
         source_snapshot_refs=tuple(payload["source_snapshot_refs"]),
         scope_and_nonclaims=tuple(payload["scope_and_nonclaims"]),
-    ), ()
+    )
+    from .serialization import canonical_envelope
+
+    aggregate_issues = json_domain_issues(
+        canonical_envelope(record), max_characters=MAX_JSON_CHARACTERS - 1024
+    )
+    if aggregate_issues:
+        return None, tuple(
+            IntakeIssue(IssueCode.MALFORMED_FIELD, message, "envelope")
+            for message in aggregate_issues
+        )
+    return record, ()

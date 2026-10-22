@@ -12,6 +12,9 @@
   enforce exact digests, real dates and stable register subject identity.
 - Separate digest binding from semantic replay; report chain-segment,
   genesis and external-anchor coverage with denominators.
+- Independent audit repairs retain block precedence under conflicting claims,
+  propagate reopened remainders, compare canonical history rather than Python
+  equality, and reserve JSON wrapper budgets before accepting envelopes.
 - Publish schema migration rules, synchronized manuscript and claim boundaries,
   adversarial controls and reconciled publication metadata. Release-tree
   measurements, fixture provenance and artifact hashes belong to the release packet.
