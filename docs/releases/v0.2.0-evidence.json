@@ -1,23 +1,26 @@
 {
-  "measured_source_commit": "c332708d1de21a24d02d02a38fe883f0c1adc31a",
-  "build_epoch": 1792641675,
+  "measured_source_commit": "2bddacd4511d6a747494d7df22c2654e79b6d3c3",
+  "build_epoch": 1792642961,
   "engine_commit": "4670c48cc490636455f2eac09ba4396baed9ffd7",
   "gates": {
-    "source_commit": "c332708d1de21a24d02d02a38fe883f0c1adc31a",
-    "tests_passed": 396,
-    "coverage_with_branches_percent": 96.37163276525564,
+    "source_commit": "2bddacd4511d6a747494d7df22c2654e79b6d3c3",
+    "tests_passed": 403,
+    "coverage_with_branches_percent": 96.3795940756994,
+    "branch_coverage_percent": 96.13733905579399,
+    "covered_branches": 448,
+    "total_branches": 466,
     "coverage_floor": 90,
     "branch_collection": true,
     "figure_sha256": {
-      "figure_registry.json": "80d13654c388b4dad95e123f90634efb94247318481a2c304297a63399bb1af5",
+      "figure_registry.json": "d41149b4ec865dfcada2bc5b57b52d9e2f366e6537f60360f0c3d4c568e2d3bf",
       "wr_battery.png": "32dcae7272f05a75bf0c021c6dc09f318454a54a43227cecc246687ba77b0a9d",
       "wr_battery.svg": "9c6565b22ae6a708d5a4d9bb3adfe4cd0ed387b6280420d58c33e8eaa6d763a5",
       "wr_chain.png": "8ae33a07b4d652414c4e5d721256abe04306c28ff09d72cd12f8633e1df61d84",
       "wr_chain.svg": "4e0f49626244649425940570cce9cb6496260f28e6c9e77a3f1f3fae10da4d3f",
       "wr_cover.png": "d350d7208b37e75982cfa3533fae8e9b83e5e1708cd778f30ca52b2fc627459d",
       "wr_cover.svg": "72bd6a2dc7acafbd8d81c12f9328be5877d1ca5b670a9737bab8a00ea2f94b7c",
-      "wr_zone.png": "c6ba0be0d07ed67c39df032e4d3d8f05a0a6f203d1c306af2937fb7c6a87174e",
-      "wr_zone.svg": "a7b3d910fefde4e4c97d658038fd6ca820ad0f540e331666e32f2c2bd6775ead"
+      "wr_zone.png": "de65452094833926b85f91bb34d87974991b5ed7c78f9dd0989fe2b6e599cc76",
+      "wr_zone.svg": "2a20c9f581aaaf499d52661746bba4a0012f0ff8e57bfe3350805a4fe5e4209e"
     },
     "commands": [
       {
@@ -27,9 +30,9 @@
           "HEAD"
         ],
         "exit_code": 0,
-        "seconds": 0.065,
+        "seconds": 0.048,
         "log": "source-commit.log",
-        "sha256": "4360d06ec6ac232a10c2b1db641d91d2a32e232324252bfb85f0d5df7e95be55"
+        "sha256": "97343f2a1f1dfcee1d0371903ea407adaf74e10a5605877b91d219cd8d1583d1"
       },
       {
         "argv": [
@@ -38,7 +41,7 @@
           "import sys; from pathlib import Path; print(sys.prefix, sys.base_prefix); assert all(str(Path(p).resolve()).startswith('/Volumes/GitVault/') for p in (sys.prefix, sys.base_prefix))"
         ],
         "exit_code": 0,
-        "seconds": 0.081,
+        "seconds": 0.075,
         "log": "interpreter.log",
         "sha256": "b425c98fce1ae2eb94f343bc62e13ba4c4cea33c3abaef220ea83eee6974c4e4"
       },
@@ -48,7 +51,7 @@
           "--version"
         ],
         "exit_code": 0,
-        "seconds": 0.081,
+        "seconds": 0.071,
         "log": "rsvg.log",
         "sha256": "339999b9e4063879f16f23ab2318389f2fbc4b6805b71e57c9e1e10b7686f9f4"
       },
@@ -60,7 +63,7 @@
           "scripts/build_figures.py"
         ],
         "exit_code": 0,
-        "seconds": 5.338,
+        "seconds": 5.045,
         "log": "figures-first.log",
         "sha256": "8f3ea48ab38dbe91dc64da535aec59282ebed7ab527a6fc3978b590fea2b162f"
       },
@@ -72,7 +75,7 @@
           "scripts/build_figures.py"
         ],
         "exit_code": 0,
-        "seconds": 5.817,
+        "seconds": 4.431,
         "log": "figures-second.log",
         "sha256": "8f3ea48ab38dbe91dc64da535aec59282ebed7ab527a6fc3978b590fea2b162f"
       },
@@ -84,7 +87,7 @@
           "scripts/gen_formalism_ledger.py"
         ],
         "exit_code": 0,
-        "seconds": 0.212,
+        "seconds": 0.225,
         "log": "formalism-ledger.log",
         "sha256": "8cd1a35e57f5b84464ff5af8410e5b6f4465985da0473f5a3907fc563f79f59a"
       },
@@ -96,7 +99,7 @@
           "scripts/build_release_cohort.py"
         ],
         "exit_code": 0,
-        "seconds": 0.199,
+        "seconds": 0.189,
         "log": "release-cohort.log",
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
@@ -110,7 +113,7 @@
           "data/envelopes/releases/v0.2.0/co_registration.json"
         ],
         "exit_code": 0,
-        "seconds": 0.246,
+        "seconds": 0.063,
         "log": "generated-bindings.log",
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       },
@@ -123,13 +126,13 @@
           "--cov=src",
           "--cov-branch",
           "--cov-report=term-missing",
-          "--cov-report=json:/Volumes/GitVault/Local/tmp/witness-register-c332708-gates-20261022/coverage.json",
+          "--cov-report=json:/Volumes/GitVault/Local/tmp/witness-register-r4-fixed-gates-20261022/coverage.json",
           "-q"
         ],
         "exit_code": 0,
-        "seconds": 67.098,
+        "seconds": 53.882,
         "log": "suite.log",
-        "sha256": "ccbdc45a3c2b2551e99404799d093258020b6ae43dfd90e4cad6fd198dcb10c9"
+        "sha256": "4708978e1d1db7d1d3ad9c31a7785d0aa89be1d4f92024603c2044c6db3205b1"
       },
       {
         "argv": [
@@ -142,7 +145,7 @@
           "scripts"
         ],
         "exit_code": 0,
-        "seconds": 0.302,
+        "seconds": 0.125,
         "log": "lint.log",
         "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
       },
@@ -158,7 +161,7 @@
           "scripts"
         ],
         "exit_code": 0,
-        "seconds": 0.296,
+        "seconds": 0.05,
         "log": "format.log",
         "sha256": "eb27c90aa064a61ea9229c3acedb339696979cc4f1b6d1e8e8dd6eab0c1292a7"
       },
@@ -171,7 +174,7 @@
           "--check-untyped-defs"
         ],
         "exit_code": 0,
-        "seconds": 1.301,
+        "seconds": 0.397,
         "log": "types.log",
         "sha256": "59cc4d21606d1f60735af82101c6094ef4d27a1054cb5061988711c9db04c37e"
       },
@@ -182,7 +185,7 @@
           "--check"
         ],
         "exit_code": 0,
-        "seconds": 0.178,
+        "seconds": 0.041,
         "log": "diff-check.log",
         "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
@@ -206,11 +209,11 @@
     },
     "output": {
       "file_count": 26,
-      "sha256": "20dd0fc45d3c41693ef06759aff84002e0e4f58f8cc181bb001b6ea9edebe4f7"
+      "sha256": "7b98d9d77dd22e5cd5091b8d5ccaafffe4d2d6f15374d8ee392e39a0f30ab9fd"
     },
     "source": {
       "file_count": 67,
-      "sha256": "0989059a7896b80d83539528bf22c841912e309463e0a0571aa8e65558333f9d"
+      "sha256": "7c8109fb92657fd65efcb418d9b0510ed7de3a50c73728dd641667deb993ca50"
     },
     "stage": {
       "file_count": 1777,
@@ -219,28 +222,28 @@
   },
   "artifacts": {
     "pdf/witness_register_combined.pdf": {
-      "sha256": "b9894272b7b1547ebecade3bfce903e13a7301bf02f8780674cfe76d9238a1f0",
-      "size_bytes": 742232
+      "sha256": "8edccf829962fc0761c0f94fd6b10dc06db7cffd944d242870d4e7ffd5899c23",
+      "size_bytes": 745617
     },
     "web/index.html": {
-      "sha256": "0c967914aa069e2fd8842cf3ed71b1614713caa8d029f5b0d15bbe4f1e98b991",
-      "size_bytes": 101411
+      "sha256": "ce75ee6f81e8c54d02ebf48858febe9cb520501b470247663ade595aa2f88694",
+      "size_bytes": 101719
     },
     "reports/artifact_manifest.json": {
-      "sha256": "b1407bce914b3b23cfc6ef62cca95393adbf638aa5bcc110df3e08691df80ce0",
+      "sha256": "42c848d06e6b23b68889c69a5264c050daf061c971e99c8cf0def1c9283f7a22",
       "size_bytes": 8430
     },
     "reports/rendered_provenance.json": {
-      "sha256": "504fed3316e9861ef0fa012ffe1307269ca884880d8086ac5827f745a7ebc550",
+      "sha256": "5316f6fde6e5c46002f79b4e0960e3e34e0a6049873f270f1820f416b7631a5b",
       "size_bytes": 5002
     },
     "reports/manuscript_composition.json": {
-      "sha256": "bc5dc5f92c44c4642501396338c465e73ecdcfcd2ca166ad3b1765e63893185d",
+      "sha256": "c85c1309c882d3bfbd04e68f2c980fbb6dabcac5c5be48231b0bead75d6924f2",
       "size_bytes": 2660
     },
     "dist/witness_register-0.2.0-py3-none-any.whl": {
-      "sha256": "0bb8cb0dccd169136a41e2d84c7461851bd4c36accea60e60cb436a2b53ef6a4",
-      "size_bytes": 56254
+      "sha256": "f76595c235e5eb01d2430ffb3c801dd24031280d09868042e757a7c1077dafd5",
+      "size_bytes": 56326
     }
   },
   "siblings": [
