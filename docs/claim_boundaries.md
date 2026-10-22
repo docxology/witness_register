@@ -19,6 +19,7 @@ assert, and what it must never be read as asserting.
 | **Resolution / rescope event** | An authored authority claim names an exact immutable target, exact next use, evidence reference and prior basis state | Verified decision truth, permission, clearance for another use or clearance of protected absence |
 | **Conflicting decisions** | Contradictory claims stay visible; a block retains `-1`, other holds retain `0` | A winner selected by tuple order; softening an unresolved block |
 | **Reopened remainder** | Its verified closure no longer closes an ancestor for that exact use | Erasing verification history or closing another obligation |
+| **Reopened return relation** | Its exact-use hold returns despite completion or a separate contract rescope; linked remainder closure cannot close an ancestor | Rewriting the original verification or withdrawing completion for another use |
 | **Unchanged history** | Canonical record bytes preserve JSON type and numeric distinctions | Python equality as a substitute for byte preservation |
 | **InvalidStateError** | Bookkeeping has named defects; no posture was issued | A substantive block against the subject |
 | **Projection `+1`** | Nothing RECORDED forbids the declared next use, and at least one envelope exists | Endorsement, safety, quality, permission from any boundary owner |

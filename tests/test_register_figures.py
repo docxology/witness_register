@@ -141,6 +141,20 @@ def test_the_projection_plate_rows_match_fresh_calls() -> None:
     assert project(genesis_state("s", "2026-07-29"), "u").value == -1
 
 
+def test_projection_labels_fit_their_column() -> None:
+    import xml.etree.ElementTree as ET
+
+    root = ET.fromstring(projection_plate())
+    labels = [
+        node
+        for node in root.iter("{http://www.w3.org/2000/svg}text")
+        if node.attrib["x"] == "84"
+    ]
+    assert labels
+    for node in labels:
+        assert len(node.text or "") * float(node.attrib["font-size"]) * 0.5 <= 512
+
+
 def test_the_battery_plate_names_every_case_and_the_defeat_proof() -> None:
     svg = battery_plate()
     for case_id in CASE_IDS:

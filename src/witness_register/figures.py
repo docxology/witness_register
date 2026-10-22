@@ -36,6 +36,7 @@ import hashlib
 import json
 import os
 import subprocess
+from textwrap import wrap
 from dataclasses import dataclass
 from pathlib import Path
 from collections.abc import Callable
@@ -547,7 +548,8 @@ def projection_plate() -> str:
         fill = DARK if value == -1 else (CARD if value == 0 else PAPER)
         text_fill = PAPER if value == -1 else INK
         body.append(rect(60, y, 560, 84, CARD, FAINT))
-        body.append(text(84, y + 34, label, 20, weight="700"))
+        for index, line in enumerate(wrap(label, width=48)):
+            body.append(text(84, y + 34 + index * 26, line, 20, weight="700"))
         body.append(rect(640, y, 330, 84, fill, MID))
         body.append(text(664, y + 50, value_word, 18, text_fill, weight="700"))
         snippet = reason if len(reason) <= 56 else reason[:53] + "…"

@@ -8,10 +8,15 @@ document order, and none is written in this source.
 
 ::: {.definition #def:envelope-record title="Envelope record"}
 An accepted envelope is the frozen record
-$e = (\mathrm{schema\_version},\ \mathrm{line\_id},\ \mathrm{subject\_id},\
-\mathrm{review\_date},\ \mathrm{registry\_version},\
-\mathrm{registry\_digest},\ \mathrm{native\_status},\ \mathrm{report\_ref},\
-\mathrm{source\_snapshot\_refs},\ \mathrm{scope\_and\_nonclaims})$ with
+$$
+\begin{aligned}
+e = (&\mathrm{schema\_version},\ \mathrm{line\_id},\ \mathrm{subject\_id},\ \\
+&\mathrm{review\_date},\ \mathrm{registry\_version},\ \mathrm{registry\_digest},\ \\
+&\mathrm{native\_status},\ \mathrm{report\_ref},\ \mathrm{source\_snapshot\_refs},\ \\
+&\mathrm{scope\_and\_nonclaims})
+\end{aligned}
+$$
+with
 exactly those ten fields, in order — the published
 `line.report-envelope/1.0` shape, held verbatim. $\mathrm{native\_status}$
 is opaque here: the register stores it and never parses, compares, ranks,
@@ -22,13 +27,19 @@ digest over text that is not JSON would seal a non-interchangeable value.
 
 ::: {.definition #def:witness-state title="Witness state and chain"}
 A witness state is the frozen record
-$X = (\mathrm{subject\_id},\ \mathrm{review\_moment},\ \mathrm{envelopes},\
-\mathrm{relations},\ \mathrm{unclassified},\ \mathrm{returns},\
-\mathrm{prior\_ref},\ \mathrm{state\_digest},\ \mathrm{decisions},\ \mathrm{history\_refs})$ with exactly those ten
+$$
+\begin{aligned}
+X = (&\mathrm{subject\_id},\ \mathrm{review\_moment},\ \mathrm{envelopes},\ \\
+&\mathrm{relations},\ \mathrm{unclassified},\ \mathrm{returns},\ \\
+&\mathrm{prior\_ref},\ \mathrm{state\_digest},\ \\
+&\mathrm{decisions},\ \mathrm{history\_refs})
+\end{aligned}
+$$
+with exactly those ten
 fields, sealed by $\mathrm{state\_digest} = \mathrm{SHA\text{-}256}$ over
 the canonical JSON of every other field including record order. States form
 a chain: a genesis state carries an empty $\mathrm{prior\_ref}$; every
-every other state carries the digest of the state it extends and must contain
+other state carries the digest of the state it extends and must contain
 every prior envelope record (see [@def:envelope-record]) unchanged and in
 place before any addition.
 :::

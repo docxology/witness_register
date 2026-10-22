@@ -81,8 +81,11 @@ Sealing binds content; structural validation makes it eligible for projection.
 Typed structural refusal emits no substantive posture. Return pairs preserve
 every obligation term, require an open predecessor and link partial-return
 remainders explicitly; only verification of that subset can close it.
-Reopening a remainder prevents its closure from propagating to a parent
-for the named use. Conflicting clearance and reopening preserve the
+Reopening a return relation or its contract restores its hold for the named
+use, even after recorded completion; a contract rescope cannot erase a
+separately reopened relation. Reopening a remainder through either target
+prevents its closure from propagating to a parent for that use.
+Conflicting clearance and reopening preserve the
 original categorical constraint, including a block's refusal posture.
 History preservation compares canonical bytes, so opaque JSON booleans
 and numbers cannot be substituted merely because Python equality agrees.

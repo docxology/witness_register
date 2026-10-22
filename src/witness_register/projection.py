@@ -92,6 +92,12 @@ def witness_hold_reasons(
             state.decisions, return_contract_digest(contract), declared_next_use
         )
         in ("conflict", "reopened")
+    ) | frozenset(
+        relation.return_contract_ref
+        for relation in state.relations
+        if relation.relation_type is RelationType.RETURN_DUE
+        and _relation_status(state, relation, declared_next_use)
+        in ("conflict", "reopened")
     )
     for relation in state.relations:
         status = _relation_status(state, relation, declared_next_use)
@@ -132,8 +138,9 @@ def witness_hold_reasons(
             met = contract_met(
                 state.returns, relation.return_contract_ref, blocked_contracts
             )
-            if return_status != "cleared" and (
-                not met or return_status in ("conflict", "reopened")
+            if status in ("conflict", "reopened") or (
+                return_status != "cleared"
+                and (not met or return_status in ("conflict", "reopened"))
             ):
                 holds.append(
                     HoldReason(

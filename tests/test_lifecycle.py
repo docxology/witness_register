@@ -232,6 +232,86 @@ def test_partial_then_remainder_verification_closes_only_that_obligation(
     assert verify_chain((first, second, third, fourth, reopened)) == ()
 
 
+@pytest.mark.parametrize("support_count", [0, 50])
+@pytest.mark.parametrize("rescope_contract", [False, True])
+def test_reopening_completed_return_relation_restores_hold(
+    envelope, support_count, rescope_contract
+):
+    contract = make_contract()
+    due = make_relation(
+        envelope, RelationType.RETURN_DUE, return_contract_ref=contract.contract_id
+    )
+    supporters = tuple(
+        replace(envelope, report_ref=f"{n + 1:064x}") for n in range(support_count)
+    )
+    support = tuple(
+        make_relation(e, relation_id=f"support-{n}") for n, e in enumerate(supporters)
+    )
+    first = genesis_state(
+        "subject-1",
+        "2026-10-21",
+        (envelope,) + supporters,
+        (due,) + support,
+        returns=(contract,),
+    )
+    second = update_state(
+        first, "2026-10-21", returns=(record_return(contract, "verified in full", ""),)
+    )
+    events = (decision(second, due, DecisionKind.REOPEN),)
+    if rescope_contract:
+        events += (decision(second, contract, DecisionKind.RESCOPE, name="D2"),)
+    third = update_state(second, "2026-10-21", decisions=events)
+    assert verify_chain((first, second, third)) == ()
+    assert [project(s, USE).value for s in (first, second, third)] == [0, 1, 0]
+    assert project(third, "another use").value == 1
+    assert any("return_due" in reason for reason in project(third, USE).reasons)
+
+
+@pytest.mark.parametrize("support_count", [0, 50])
+def test_reopened_remainder_relation_restores_parent_reason(envelope, support_count):
+    contract = make_contract()
+    due = make_relation(
+        envelope, RelationType.RETURN_DUE, return_contract_ref=contract.contract_id
+    )
+    support = tuple(
+        make_relation(envelope, relation_id=f"support-{n}")
+        for n in range(support_count)
+    )
+    first = genesis_state(
+        "subject-1", "2026-10-21", (envelope,), (due,) + support, returns=(contract,)
+    )
+    partial = record_return(contract, "part verified", "remainder due")
+    second = update_state(first, "2026-10-21", returns=(partial,))
+    child = remainder_contract(partial, "child", second.state_digest)
+    child_due = make_relation(
+        envelope,
+        RelationType.RETURN_DUE,
+        relation_id="child-due",
+        return_contract_ref=child.contract_id,
+    )
+    third = update_state(second, "2026-10-21", returns=(child,), relations=(child_due,))
+    fourth = update_state(
+        third, "2026-10-21", returns=(record_return(child, "remainder verified", ""),)
+    )
+    fifth = update_state(
+        fourth,
+        "2026-10-21",
+        decisions=(decision(fourth, child_due, DecisionKind.REOPEN),),
+    )
+    assert verify_chain((first, second, third, fourth, fifth)) == ()
+    assert project(fourth, USE).value == 1
+    assert project(fifth, USE).value == 0
+    assert any(
+        f"return_due ({due.relation_id})" in reason
+        for reason in project(fifth, USE).reasons
+    )
+    assert any(
+        f"return_due ({child_due.relation_id})" in reason
+        for reason in project(fifth, USE).reasons
+    )
+    assert project(fifth, "another use").value == 1
+
+
 def test_remainder_rejects_unknown_parent_changed_terms_and_ambiguous_children(
     envelope,
 ):
