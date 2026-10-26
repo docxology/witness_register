@@ -20,6 +20,10 @@ carries its non-claims in its docstring; the package docstring
 | `battery.py` | `run_battery` — the review's 3×3 canonical witness cases, with injected-wrong variants | returns green without every required behavior holding |
 | `serialization.py` | canonical JSON, SHA-256, versioned `witness-register.<thing>` schema strings | security semantics |
 | `figures.py` | deterministic figure plates drawn from live register calls; byte-identical rebuilds | invents any value the code could have produced |
+| `decisions.py` | `DecisionEvent`, `DecisionKind`, `TargetKind` — append-only acknowledgment, resolution, rescope and reopening claims, each naming an exact target digest, exact declared use and the basis state reviewed | fetches the references it names; picks a winner among incompatible claims for one target/use; infers permission or evidence truth |
+| `validation.py` | `validate_state`, `InvalidStateError`, `StructuralIssue` — dependency-neutral bookkeeping checks, required before any posture | turns a structural defect into a subject verdict |
+| `json_data.py` | `json_domain_issues` and the `MAX_JSON_*` bounds — strict-JSON checks over type, Unicode, finiteness, depth, nodes and characters | interprets a payload vocabulary; coerces a value or recurses without a bound |
+| `formalism_ledger.py` | `data/formalism_claim_ledger.json` re-derived from the manuscript's formalism blocks and the running package (`scripts/gen_formalism_ledger.py`) | lets a declared block go unregistered, or registers a label the manuscript does not declare |
 
 ## Data flow
 
