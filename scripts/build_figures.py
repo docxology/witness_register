@@ -3,7 +3,7 @@
 
 Thin CLI: the package owns every drawing decision and every live derivation;
 this script names an output directory and reports what was written. Two runs
-produce byte-identical artifacts; ``tests/test_figures.py`` gates that.
+produce byte-identical artifacts; ``tests/test_register_figures.py`` gates that.
 """
 
 from __future__ import annotations

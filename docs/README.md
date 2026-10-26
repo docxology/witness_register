@@ -23,7 +23,7 @@ uv run python scripts/build_figures.py
 
 # Re-render manuscript (from template repo)
 cd /path/to/template
-uv run python scripts/pipeline/stage_03_render.py --project working/witness_register
+uv run python scripts/pipeline/stage_03_render.py --project active/witness_register
 ```
 
 See [AGENTS.md](AGENTS.md) for the working contract.
