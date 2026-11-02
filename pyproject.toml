@@ -7,7 +7,7 @@ name = "witness_register"
 version = "0.2.0"
 description = "A shared witness register: co-registration of line report envelopes without aggregation"
 authors = [{name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = []
 
 [dependency-groups]
