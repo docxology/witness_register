@@ -9,6 +9,8 @@
   before truthiness, hashing, or reference lookup; preserve malformed raw
   alternatives rather than iterating them into a different value. Refuse
   non-string verified subsets when declaring a remainder obligation.
+- Admit appended return domains before contextual prior-state linkage checks,
+  preserving inspectable `RETURN_DOMAIN` refusals for malformed additions.
 - Share record-domain admission without interpreting native evaluator output.
   Package 0.3.0 retains register 2.0 payload schemas, decision 1.0, and
   `line.report-envelope/1.0`; none establishes native correspondence or freshness.

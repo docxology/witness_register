@@ -83,14 +83,14 @@ def check_relation_domains(state: WitnessState) -> tuple[str, ...]:
     )
 
 
-def _return_domain_errors(state: WitnessState) -> tuple[str, ...]:
+def _return_domain_errors(returns) -> tuple[str, ...]:
     return _record_domain_errors(
-        state.returns, "contract", frozenset(("alternatives_live",))
+        returns, "contract", frozenset(("alternatives_live",))
     )
 
 
 def _domain_errors(state: WitnessState) -> tuple[str, ...]:
-    return check_relation_domains(state) + _return_domain_errors(state)
+    return check_relation_domains(state) + _return_domain_errors(state.returns)
 
 
 def check_distinct_ids(state: WitnessState) -> tuple[str, ...]:
@@ -345,13 +345,13 @@ def validate_state(state: WitnessState) -> tuple[StructuralIssue, ...]:
     """All local structure issues, deterministic and inspectable on refusal."""
 
     issues: list[StructuralIssue] = []
-    for code, check in (
-        ("RELATION_DOMAIN", check_relation_domains),
-        ("RETURN_DOMAIN", _return_domain_errors),
+    for code, messages in (
+        ("RELATION_DOMAIN", check_relation_domains(state)),
+        ("RETURN_DOMAIN", _return_domain_errors(state.returns)),
     ):
         issues.extend(
             StructuralIssue(code, state.state_digest, message)
-            for message in check(state)
+            for message in messages
         )
     if issues:
         return tuple(issues)

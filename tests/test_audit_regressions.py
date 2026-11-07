@@ -303,9 +303,11 @@ def test_return_domains_refuse_before_replay_and_projection(envelope, field, val
     for check in (check_distinct_ids, check_digest_shapes, check_refs_resolve):
         assert check(state)
     assert verify_chain((state,))
+    prior = genesis_state("s", "2026-11-06", (envelope,))
     for operation in (
         lambda: genesis_state("s", "2026-11-06", (envelope,), returns=(contract,)),
         lambda: update_state(state, "2026-11-06"),
+        lambda: update_state(prior, "2026-11-06", returns=(contract,)),
         lambda: project(state, "inspect return"),
     ):
         with pytest.raises(InvalidStateError) as caught:

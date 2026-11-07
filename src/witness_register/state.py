@@ -28,7 +28,13 @@ from collections.abc import Iterable, Sequence
 
 from .envelopes import EnvelopeRecord, valid_calendar_date
 from .decisions import DecisionEvent, TargetKind
-from .validation import require_valid_state, validate_state
+from .validation import (
+    InvalidStateError,
+    StructuralIssue,
+    _return_domain_errors,
+    require_valid_state,
+    validate_state,
+)
 from .held import UnclassifiedHeld
 from .relations import RelationRecord, RelationType
 from .returns import ReturnContractRecord
@@ -229,6 +235,14 @@ def update_state(
     require_valid_state(prior)
     added_decisions = tuple(decisions)
     added_returns = tuple(returns)
+    domain_errors = _return_domain_errors(added_returns)
+    if domain_errors:
+        raise InvalidStateError(
+            tuple(
+                StructuralIssue("RETURN_DOMAIN", prior.state_digest, message)
+                for message in domain_errors
+            )
+        )
     relation_targets = {relation_digest(r) for r in prior.relations}
     contract_targets = {
         return_contract_digest(r) for r in prior.returns if not r.verification_result
