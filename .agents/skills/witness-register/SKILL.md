@@ -11,7 +11,7 @@ is a state chain — `genesis_state` creates the first state from ingested
 envelopes, `update_state` appends new relations and returns while refusing
 tampering, and `verify_chain` checks the full chain after the fact.
 
-The register has no colour, no substantive question of its own, and no verdict.
+The register has no color, no substantive question of its own, and no verdict.
 Projection returns only `-1 | 0 | +1`, always with a declared next use and at
 least one reason.
 
@@ -146,7 +146,7 @@ authored `RETURN_DUE` relations; the register does not invent a missing relation
 
 The design review's 3×3 canonical witness cases ship as `run_battery()`. Every
 check passes on the real register, and — measured in the same build — every case
-raises `BatteryError` when its observed behaviour is deliberately falsified. A
+raises `BatteryError` when its observed behavior is deliberately falsified. A
 passing grid is evidence the checks can fail, not only that they passed.
 
 ```python

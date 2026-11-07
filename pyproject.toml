@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "witness_register"
-version = "0.2.0"
+version = "0.3.0"
 description = "A shared witness register: co-registration of line report envelopes without aggregation"
 authors = [{name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}]
 requires-python = ">=3.11"
@@ -19,11 +19,9 @@ dev = [
 ]
 
 [tool.ruff]
-# Pinned so "ruff clean" is a reproducible statement rather than a claim about
-# whichever settings happened to be in effect. target-version matters: the
-# tests reach the declared 3.10 floor, and ruff is what catches a construct
-# that only parses on a later interpreter while passing locally on 3.12.
-target-version = "py310"
+# Keep syntax guidance aligned with the metadata-declared Python 3.11 floor.
+# Historical runs on older interpreters are not current support evidence.
+target-version = "py311"
 
 [tool.ruff.lint]
 # Ruff's default set: pyflakes plus the syntax and logic subset of pycodestyle.

@@ -133,7 +133,7 @@ narrowing is not a criticism of PROV — it is a scope decision: the
 register stores what people record, and the people who record it are
 responsible for the categories they use. A provenance vocabulary large
 enough to model scientific workflows, software builds, and data pipelines
-would be overbuilt for eight relation types over four report envelopes.
+would be overbuilt for the historical four-envelope worked subset.
 
 The structural discipline — records about artifacts that never mutate the
 artifacts — is the single point the register takes from PROV, and the
@@ -167,9 +167,9 @@ detached from the infrastructural and standardizing work the original
 study was about [@star1989]. Her caution applies here and is adopted: not
 everything that sits between groups is a boundary object, and the envelope
 earns the name only while each line remains authoritative over its own
-field. Four Python packages and one shared register are not the Museum of
-Vertebrate Zoology, and the register's relationship to the lines is not a
-negotiation between amateur collectors and professional zoologists. What
+field. The historical four Python packages and one shared register are not
+the Museum of Vertebrate Zoology, and the register's relationship to the
+lines is not a negotiation between amateur collectors and professional zoologists. What
 is taken from the 1989 paper is a design move — a standardized form whose
 local fields stay local — and the concept is not doing evidentiary work
 beyond that.

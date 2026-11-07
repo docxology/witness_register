@@ -14,7 +14,7 @@ from witness_register.formalism_ledger import build_ledger
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """The CLI: no arguments are honoured besides ``--help``."""
+    """The CLI: no arguments are honored besides ``--help``."""
 
     return argparse.ArgumentParser(
         prog="gen_formalism_ledger.py",

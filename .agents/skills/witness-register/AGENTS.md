@@ -31,7 +31,7 @@ contract.
 - The non-claims section is the contract: no line imports, no interpretation of
   `native_status`, no auto-categories, the posture is bounded and never travels
   alone.
-- The gotchas section describes probed behaviour. Re-run the probe before
+- The gotchas section describes probed behavior. Re-run the probe before
   editing an entry.
 
 ## Verifying

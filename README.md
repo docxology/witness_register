@@ -3,7 +3,7 @@
 **The Shared Witness Register: co-registration without aggregation.**
 
 The register sits BESIDE the line set: independent instruments and their set
-reader. It is not a line: it has no colour, no substantive
+reader. It is not a line: it has no color, no substantive
 question of its own, and no verdict.
 
 ## What it is never (read this first)
@@ -154,3 +154,11 @@ See [development](docs/development.md) and the
 structural validation; typed failures are bookkeeping errors, not subject
 verdicts. Use wording is an auditable declaration; the code does not infer
 which constraints apply from free text.
+
+Package 0.3.0 keeps the register 2.0 canonical payloads and 1.0 envelope
+transport unchanged. Relation and return fields are admitted before replay:
+malformed identities, false-valued remainders, and non-tuple alternatives
+remain inspectable in raw records but cannot receive a projection.
+Neither transport version nor exported-byte custody proves native report
+correspondence or freshness. Historical release cohorts stay unchanged;
+new final producer snapshots belong in a new versioned cohort.

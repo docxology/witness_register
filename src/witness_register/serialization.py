@@ -114,18 +114,34 @@ def canonical_envelope(record: EnvelopeRecord) -> dict:
 
 
 def canonical_relation(record: RelationRecord) -> dict:
-    """The stored form of a relation record."""
+    """Store valid tuples as JSON arrays; retain malformed raw values for diagnosis."""
 
     return {
         "record_schema": RELATION_SCHEMA,
         "relation_id": record.relation_id,
         "subject_id": record.subject_id,
-        "source_report_refs": list(record.source_report_refs),
+        "source_report_refs": (
+            list(record.source_report_refs)
+            if type(record.source_report_refs) is tuple
+            else record.source_report_refs
+        ),
         "relation_type": record.relation_type.value,
         "bounded_description": record.bounded_description,
-        "support_refs": list(record.support_refs),
-        "resistance_refs": list(record.resistance_refs),
-        "protected_boundary_refs": list(record.protected_boundary_refs),
+        "support_refs": (
+            list(record.support_refs)
+            if type(record.support_refs) is tuple
+            else record.support_refs
+        ),
+        "resistance_refs": (
+            list(record.resistance_refs)
+            if type(record.resistance_refs) is tuple
+            else record.resistance_refs
+        ),
+        "protected_boundary_refs": (
+            list(record.protected_boundary_refs)
+            if type(record.protected_boundary_refs) is tuple
+            else record.protected_boundary_refs
+        ),
         "return_contract_ref": record.return_contract_ref,
         "human_decision_ref": record.human_decision_ref,
         "promoted_from_ref": record.promoted_from_ref,
@@ -134,14 +150,18 @@ def canonical_relation(record: RelationRecord) -> dict:
 
 
 def canonical_return_contract(record: ReturnContractRecord) -> dict:
-    """The stored form of a return contract record."""
+    """Store valid alternatives as an array; retain malformed raw domains."""
 
     return {
         "record_schema": RETURN_CONTRACT_SCHEMA,
         "contract_id": record.contract_id,
         "subject_id": record.subject_id,
         "why_held": record.why_held,
-        "alternatives_live": list(record.alternatives_live),
+        "alternatives_live": (
+            list(record.alternatives_live)
+            if type(record.alternatives_live) is tuple
+            else record.alternatives_live
+        ),
         "change_condition": record.change_condition,
         "standing": record.standing,
         "protected": record.protected,

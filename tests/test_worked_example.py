@@ -190,3 +190,16 @@ def test_intake_rejects_a_tampered_export_loudly() -> None:
     record, issues = intake_envelope(payload)
     assert record is None
     assert any(issue.field == "report_ref" for issue in issues)
+
+
+def test_valid_pointer_syntax_does_not_establish_native_correspondence() -> None:
+    """A well-shaped pointer is opaque even when no native report is supplied."""
+    payload = _payloads()[0]
+    payload["report_ref"] = "0" * 64
+    record, issues = intake_envelope(payload)
+    assert record is not None, issues
+    assert issues == ()
+    state = genesis_state("registrar-declared-subject", "2026-10-21", (record,))
+    assert state.envelopes[0].report_ref == "0" * 64
+    assert state.envelopes[0].subject_id != state.subject_id
+    assert project(state, "inspect envelope shape only").value == 1

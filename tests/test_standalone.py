@@ -156,7 +156,7 @@ def test_the_link_gate_rejects_a_planted_escape_and_a_planted_dead_link(
     assert escaping_links(tmp_path) == ["clean.md -> ../outside.md"]
     assert unresolvable_links(tmp_path) == ["clean.md -> docs/ghost.md"]
 
-    # An https acknowledgement of a sibling work is not an escape.
+    # An https acknowledgment of a sibling work is not an escape.
     clean.write_text(
         "See [line_set](https://github.com/docxology/line_set).\n",
         encoding="utf-8",

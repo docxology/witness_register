@@ -10,7 +10,7 @@ assert, and what it must never be read as asserting.
 | **Intake refusal** (`IntakeIssue`) | The payload failed a named shape rule at a named field | That the exporting line erred substantively; that its report is wrong |
 | **Relation record** | Someone described these envelopes as standing in this typed relation, with this bounded description | Any correction, override, or re-scoring of a line's own status; that the relation is exhaustive |
 | **`human_decision_ref` empty** | No human decision is on file (NOT_RECORDED) | A default verdict in either direction |
-| **Return contract, open** | An obligation of return is recorded: why held, what could change it, who has standing, what stays protected | That the material is bad, or that fulfilment will yield approval |
+| **Return contract, open** | An obligation of return is recorded: why held, what could change it, who has standing, what stays protected | That the material is bad, or that fulfillment will yield approval |
 | **Return contract, completed** | The verified part — and only it — came back; the remainder keeps its trigger | That the whole obligation is discharged when `open_remainder` is non-empty |
 | **Unclassified holding** | A raw observation is held outside every category, with a stated reason | Any classification, however provisional; permission to act on it |
 | **Sealed raw state** | A digest binds serialized records and order | Structural validity, truth or current tip |

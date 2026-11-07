@@ -19,8 +19,8 @@ Design constraints, shared with the sibling line works but written natively:
   :func:`text` raises below the floor rather than shipping an unreadable
   label. ``tests/test_register_figures.py`` re-derives the arithmetic from
   the config.
-- **No colour of its own.** The register is not a line and has no colour in
-  the set's sense; the plates are greyscale on paper, and no meaning is
+- **No color of its own.** The register is not a line and has no color in
+  the set's sense; the plates are grayscale on paper, and no meaning is
   carried by ink alone — every distinction also has a word.
 - **Determinism.** Two builds are byte-identical; the registry records the
   SHA-256 of every artifact so a replaced image fails the check, not review.
@@ -63,7 +63,7 @@ MAX_CANVAS_WIDTH = 1600
 #: Smallest label, in canvas units, any plate may draw (6.35 pt rendered).
 MIN_TEXT_SIZE = 18
 
-# Greyscale palette. The register has no colour in the set's sense.
+# Grayscale palette. The register has no color in the set's sense.
 PAPER = "#f5f3ef"
 INK = "#1a1a1a"
 MID = "#666666"
@@ -626,7 +626,7 @@ def battery_plate() -> str:
         text(
             90,
             footer_y + 50,
-            f"defeat proof: {defeats}/{len(CASE_IDS)} cases raised BatteryError when their observed behaviour was falsified",
+            f"defeat proof: {defeats}/{len(CASE_IDS)} cases raised BatteryError when their observed behavior was falsified",
             22,
             PAPER,
             weight="700",
@@ -657,9 +657,9 @@ class PlateSpec:
 def cover_plate() -> str:
     """Render a rich cover plate for the Witness Register title page.
 
-    The register has no colour of its own, so this cover uses only the
-    greyscale palette. Four vertical ledger columns — one per instrument
-    line — carry distinct hatch textures and run in parallel without
+    The register has no color of its own, so this cover uses only the
+    grayscale palette. Four schematic vertical ledger columns — not a current
+    instrument count — carry distinct hatch textures and run in parallel without
     converging. A horizontal register band crosses all four, carrying the
     title; ledger rules repeat beneath. A circular seal block at the base
     marks each column, and the witness mark sits apart, above and alone.
@@ -678,7 +678,7 @@ def cover_plate() -> str:
         return lines
 
     def _column_hatch(cx, top, bot, kind, count=12):
-        """Four kinds of greyscale hatching in a vertical column."""
+        """Four kinds of grayscale hatching in a vertical column."""
         lines = []
         col_w = 340
         x0 = cx - col_w // 2
@@ -881,7 +881,7 @@ def cover_plate() -> str:
         height,
         body,
         "Rich cover plate for the Witness Register: four vertical ledger columns "
-        "with distinct greyscale hatch textures run in parallel without converging; "
+        "with distinct grayscale hatch textures run in parallel without converging; "
         "a horizontal register band carries the title; four seal circles mark the "
         "instruments below; the witness mark sits above, alone.",
     )
@@ -894,15 +894,15 @@ PLATES: tuple[PlateSpec, ...] = (
         build=cover_plate,
         caption=(
             "The Witness Register cover plate: four vertical ledger columns "
-            "with distinct greyscale hatch textures run in parallel without "
+            "with distinct grayscale hatch textures run in parallel without "
             "converging; a horizontal register band carries the title across "
             "all four; four seal circles mark the instruments below, and the "
             "witness mark sits above and alone. The cover uses only the "
-            "register's greyscale palette — no colour that would affiliate "
+            "register's grayscale palette — no color that would affiliate "
             "it with any one instrument."
         ),
         alt=(
-            "Four vertical ledger columns with distinct grey hatch textures "
+            "Four vertical ledger columns with distinct gray hatch textures "
             "on a warm paper field, joined by a horizontal register band "
             "bearing the title; four seal circles anchor the base; a "
             "circular witness mark floats above the columns."
@@ -915,7 +915,7 @@ PLATES: tuple[PlateSpec, ...] = (
         ),
         epistemic_boundary=(
             "The four lines are a schematic metaphor, not a measurement "
-            "of any instrument's trend, quality, or behaviour."
+            "of any instrument's trend, quality, or behavior."
         ),
     ),
     PlateSpec(
@@ -986,7 +986,7 @@ PLATES: tuple[PlateSpec, ...] = (
             "The design review's 3×3 canonical witness cases as the shipped "
             "battery, run at figure-build time: every check passed on the "
             "real register, and — measured in the same build — every case "
-            "raised BatteryError when its observed behaviour was deliberately "
+            "raised BatteryError when its observed behavior was deliberately "
             "falsified, so a green grid is evidence the checks can fail, not "
             "only that they passed."
         ),
@@ -998,7 +998,7 @@ PLATES: tuple[PlateSpec, ...] = (
         source="witness_register.battery.run_battery, clean and per-case defeat",
         interpretive_claim=(
             "The battery passes on the real register and demonstrably rejects "
-            "falsified behaviour case by case."
+            "falsified behavior case by case."
         ),
         epistemic_boundary=(
             "The cases are constructed canonical scenarios from the design "

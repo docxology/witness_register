@@ -9,7 +9,7 @@ earns a re-review, and the honest outcome of a return may be that the
 material stays held.
 
 A completed return NEVER closes more than the verified part. That rule is
-modelled as fields, not prose: :func:`record_return` fills
+modeled as fields, not prose: :func:`record_return` fills
 ``verification_result`` with what was actually verified and
 ``open_remainder`` with what was not, keeping the trigger unchanged so the
 remainder stays due. The open record is never rewritten — the completed
@@ -34,6 +34,8 @@ class ReturnContractRecord:
     answers rather than rewriting it. ``open_remainder`` on a completed
     record names what the verified return did NOT close; the unchanged
     ``trigger`` keeps that remainder due.
+    Malformed field domains remain inspectable as raw records; structural
+    validation refuses them before replay or projection.
     """
 
     contract_id: str
@@ -53,28 +55,39 @@ class ReturnContractRecord:
     def __post_init__(self) -> None:
         for name in ("prior_state_ref", "parent_return_ref"):
             value = getattr(self, name)
-            if value and not HEX_DIGEST_RE.fullmatch(value):
+            if type(value) is str and value and not HEX_DIGEST_RE.fullmatch(value):
                 raise ValueError(
                     f"{name} must be empty or exactly 64 lowercase hex characters"
                 )
-        if not self.contract_id.strip():
+        if type(self.contract_id) is str and not self.contract_id.strip():
             raise ValueError("contract_id must be non-blank")
-        if not self.why_held.strip():
+        if type(self.why_held) is str and not self.why_held.strip():
             raise ValueError(
                 "why_held must be non-blank: a hold without a stated reason "
                 "cannot be returned to"
             )
-        if not self.trigger.strip():
+        if type(self.trigger) is str and not self.trigger.strip():
             raise ValueError("trigger must be non-blank")
-        if not self.acceptance_condition.strip():
+        if (
+            type(self.acceptance_condition) is str
+            and not self.acceptance_condition.strip()
+        ):
             raise ValueError("acceptance_condition must be non-blank and observable")
-        if self.verification_result and not self.verification_result.strip():
+        if (
+            type(self.verification_result) is str
+            and self.verification_result
+            and not self.verification_result.strip()
+        ):
             raise ValueError(
                 "verification_result must be empty (open) or carry content: "
                 "a whitespace-only value would read as a verified return "
                 "that verified nothing"
             )
-        if self.open_remainder and not self.open_remainder.strip():
+        if (
+            type(self.open_remainder) is str
+            and self.open_remainder
+            and not self.open_remainder.strip()
+        ):
             raise ValueError(
                 "open_remainder must be empty (nothing remains) or name the "
                 "remainder: a whitespace-only value is neither"
@@ -108,7 +121,7 @@ def record_return(
     modified; append the returned record to a new state beside it.
     """
 
-    if not verification_result.strip():
+    if type(verification_result) is not str or not verification_result.strip():
         raise ValueError(
             "verification_result must be non-blank: record_return records a "
             "return that happened, it does not manufacture one"
@@ -136,7 +149,12 @@ def remainder_contract(
 
     from .serialization import return_contract_digest
 
-    if not partial.verification_result or not partial.open_remainder:
+    if (
+        type(partial.verification_result) is not str
+        or not partial.verification_result.strip()
+        or type(partial.open_remainder) is not str
+        or not partial.open_remainder.strip()
+    ):
         raise ValueError("a remainder obligation requires a verified partial return")
     if contract_id == partial.contract_id:
         raise ValueError("a remainder obligation requires a new contract_id")

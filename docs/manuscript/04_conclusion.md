@@ -40,7 +40,7 @@ it lifted exactly the return hold and nothing else.
 
 Each instrument retains its own question, vocabulary and non-claims.
 The Witness Register stands beside
-the set, not among them: it has no colour, no substantive question of its
+the set, not among them: it has no color, no substantive question of its
 own, and no verdict. Its motto is *precedence without information
 destruction*; *no crown without return*. It lives at `docxology/witness_register`,
 beside the rest of that index.

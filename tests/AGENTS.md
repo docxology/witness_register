@@ -14,8 +14,8 @@ determinism, intake validation, manuscript bindings, and cross-cutting contracts
 - `test_serialization.py` — canonical JSON and registry digest
 - `test_invariants.py` — structural checks and planted-bad cases
 - `test_metrics.py` — recoverability, fidelity, and composite metrics
-- `test_formalism.py` — formalism block parsing and label resolution
-- `test_register_figures.py` — every plate is embedded with its registered caption
+- `test_formalism.py` — public intake and projection boundary behavior
+- `test_register_figures.py` — figure geometry, deterministic builds, artifact custody
 - `test_worked_example.py` — the historical stored export collection, end to end
 - `test_same_subject.py` — same-subject co-registration contract
 - `test_publication_metadata.py` — publication metadata across config and package

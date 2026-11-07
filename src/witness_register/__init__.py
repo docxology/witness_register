@@ -1,7 +1,7 @@
 """witness_register — co-registration without aggregation.
 
 The Shared Witness Register sits BESIDE the line set. It is not a line: it
-has no colour, no substantive question of its own, and no verdict. It
+has no color, no substantive question of its own, and no verdict. It
 accepts each line's published report envelope by value, stores it verbatim,
 records cross-line relations as separate records, keeps history append-only,
 and — when explicitly asked, for one declared next use — emits a bounded

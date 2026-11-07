@@ -1,8 +1,8 @@
 # The Formal Core {#sec:formalism}
 
-The register's behaviour is small enough to state completely. Every
-definition and proposition below is written from the module it describes and
-bound to the running package by a named test in `tests/test_formalism.py`;
+The register's behavior is small enough to state completely. Every
+definition and proposition below is written from the module it describes;
+behavioral regressions exercise the public API independently of prose, and
 the numbers the reader sees are assigned by the render toolchain from
 document order, and none is written in this source.
 
@@ -131,7 +131,7 @@ Three favorable readings and one open question is a held posture, not a
 crown; `tests/test_same_subject.py` measures every sentence of this
 paragraph.
 
-![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behaviour was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../../output/figures/wr_battery.png){#fig:wr-battery width=100%}
+![The design review's 3×3 canonical witness cases as the shipped battery, run at figure-build time: every check passed on the real register, and — measured in the same build — every case raised BatteryError when its observed behavior was deliberately falsified, so a green grid is evidence the checks can fail, not only that they passed.](../../output/figures/wr_battery.png){#fig:wr-battery width=100%}
 
 ## Authority and return lifecycle
 

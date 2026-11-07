@@ -1,6 +1,6 @@
 # The Problem {#sec:problem}
 
-![The Witness Register cover plate: four vertical ledger columns with distinct greyscale hatch textures run in parallel without converging; a horizontal register band carries the title across all four; four seal circles mark the instruments below, and the witness mark sits above and alone. The cover uses only the register's greyscale palette — no colour that would affiliate it with any one instrument.](../../output/figures/wr_cover.png){#fig:wr-cover width=100%}
+![The Witness Register cover plate: four vertical ledger columns with distinct grayscale hatch textures run in parallel without converging; a horizontal register band carries the title across all four; four seal circles mark the instruments below, and the witness mark sits above and alone. The cover uses only the register's grayscale palette — no color that would affiliate it with any one instrument.](../../output/figures/wr_cover.png){#fig:wr-cover width=100%}
 
 Independent instruments — the line works — each answer their own
 substantive question about a subject in their own vocabulary, and each ends
@@ -25,7 +25,7 @@ must never rank, average, merge, score, or override the lines. Its mottos:
 *precedence without information destruction*; *no crown without return*.
 
 This work is that register, built as a shared register standing beside the set.
-It is deliberately not a line. It has no colour, no substantive question of
+It is deliberately not a line. It has no color, no substantive question of
 its own, and no verdict. Each line already exports one common report
 envelope under the published schema string `line.report-envelope/1.0` — a
 digest pointer to its complete native report, its identity, subject, review

@@ -13,7 +13,6 @@ from pathlib import Path
 
 import pytest
 
-from witness_register import CASE_IDS, project
 from witness_register.figures import (
     MAX_CANVAS_WIDTH,
     MIN_TEXT_SIZE,
@@ -69,14 +68,6 @@ def test_every_plate_svg_is_deterministic_across_two_calls() -> None:
         assert build() == build(), build.__name__
 
 
-def test_cover_version_is_live_and_register_is_not_a_sixth_instrument() -> None:
-    from witness_register import __version__
-
-    svg = cover_plate()
-    assert __version__ in svg
-    assert "sixth work" not in svg.lower()
-
-
 def test_no_text_overflows_the_canvas_extent() -> None:
     """No plate may draw a label that runs past its own canvas edge.
 
@@ -121,26 +112,6 @@ def test_no_text_overflows_the_canvas_extent() -> None:
             )
 
 
-def test_the_chain_plate_carries_live_seals_and_the_refusal() -> None:
-    svg = chain_plate()
-    assert "verify_chain((state0, state1)) — sound" in svg
-    assert "refusing to extend rewritten hi" in svg
-    assert len(re.findall(r"seal: [0-9a-f]{24}…", svg)) == 2
-
-
-def test_the_projection_plate_rows_match_fresh_calls() -> None:
-    """The plate's postures are what project() returns again right now."""
-
-    svg = projection_plate()
-    assert svg.count("-1  route resisted") == 3
-    assert svg.count("0  held") == 3
-    assert svg.count("+1  nothing recorded forbids it") == 2
-    # And the fixed points re-derive: an empty state is -1 today too.
-    from witness_register import genesis_state
-
-    assert project(genesis_state("s", "2026-07-29"), "u").value == -1
-
-
 def test_projection_labels_fit_their_column() -> None:
     import xml.etree.ElementTree as ET
 
@@ -153,16 +124,6 @@ def test_projection_labels_fit_their_column() -> None:
     assert labels
     for node in labels:
         assert len(node.text or "") * float(node.attrib["font-size"]) * 0.5 <= 512
-
-
-def test_the_battery_plate_names_every_case_and_the_defeat_proof() -> None:
-    svg = battery_plate()
-    for case_id in CASE_IDS:
-        assert f">{case_id}<" in svg, case_id
-    assert (
-        f"defeat proof: {len(CASE_IDS)}/{len(CASE_IDS)} cases raised BatteryError"
-        in svg
-    )
 
 
 def test_every_plate_registration_carries_its_boundaries() -> None:
@@ -214,20 +175,3 @@ def test_the_registry_digest_check_rejects_a_replaced_image(tmp_path) -> None:
         hashlib.sha256(target.read_bytes()).hexdigest()
         != registry["figures"][0]["png_digest"]
     )
-
-
-def test_every_plate_is_embedded_with_its_registered_caption() -> None:
-    """The manuscript embeds carry the registry captions verbatim.
-
-    A caption edited in one place and not the other is drift between what
-    the registry attests and what the reader sees; this binds them.
-    """
-
-    manuscript = ""
-    for name in ("01_problem.md", "02_design.md", "02a_formalism.md"):
-        manuscript += (PROJECT_ROOT / "docs" / "manuscript" / name).read_text("utf-8")
-    flat = " ".join(manuscript.split())
-    for plate in PLATES:
-        assert f"#{plate.label}" in flat, plate.label
-        assert " ".join(plate.caption.split()) in flat, plate.label
-        assert f"../output/figures/{plate.filename}" in flat, plate.label

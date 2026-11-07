@@ -74,6 +74,9 @@ class RelationRecord:
     ``classification_decision_ref`` records only the category choice.
     Historic ``human_decision_ref`` remains verbatim provenance but has no
     discharge authority; resolution requires a separate scoped DecisionEvent.
+    Declared field domains are admitted by the shared structural validator.
+    Malformed domain values may be retained in raw states for inspection, but
+    cannot enter validated states or receive a projection.
     """
 
     relation_id: str
@@ -90,20 +93,26 @@ class RelationRecord:
     classification_decision_ref: str = ""
 
     def __post_init__(self) -> None:
-        if not self.relation_id.strip():
+        if type(self.relation_id) is str and not self.relation_id.strip():
             raise ValueError("relation_id must be non-blank")
-        if not self.source_report_refs:
+        refs = self.source_report_refs
+        if type(refs) is tuple and not refs:
             raise ValueError(
                 "source_report_refs must be non-empty: a relation about "
                 "nothing is not a record"
             )
-        for ref in self.source_report_refs:
+        for ref in refs if type(refs) is tuple else ():
+            if type(ref) is not str:
+                continue
             if not HEX_DIGEST_RE.fullmatch(ref):
                 raise ValueError(
                     f"source_report_refs entry {ref!r} is not a 64-char "
                     "lowercase hex envelope report_ref"
                 )
-        if not self.bounded_description.strip():
+        if (
+            type(self.bounded_description) is str
+            and not self.bounded_description.strip()
+        ):
             raise ValueError(
                 "bounded_description must be non-blank: an undescribed "
                 "relation cannot be reviewed"
@@ -112,13 +121,18 @@ class RelationRecord:
             raise ValueError(
                 f"relation_type must be a RelationType, got {self.relation_type!r}"
             )
-        if self.human_decision_ref and not self.human_decision_ref.strip():
+        if (
+            type(self.human_decision_ref) is str
+            and self.human_decision_ref
+            and not self.human_decision_ref.strip()
+        ):
             raise ValueError(
                 "human_decision_ref must be empty (NOT_RECORDED) or non-blank; "
                 "whitespace-only is not a recorded decision"
             )
         if (
-            self.classification_decision_ref
+            type(self.classification_decision_ref) is str
+            and self.classification_decision_ref
             and not self.classification_decision_ref.strip()
         ):
             raise ValueError("classification_decision_ref must be empty or non-blank")

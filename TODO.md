@@ -12,8 +12,8 @@ Open items, each with the reason it is open. Dates are real.
   memory, so those wait for a real reading session.
 - **Figures: BUILT (2026-07-29, third window); geometry re-derived and
   visual gaps closed (2026-08-01, assessment pass)** — see CHANGELOG. What
-  remains open here is only the greyscale-print human check the siblings
-  also carry: no person has yet read the plates in a greyscale print. The
+  remains open here is only the grayscale-print human check the siblings
+  also carry: no person has yet read the plates in a grayscale print. The
   2026-08-01 pass re-derived the legibility floor to the manuscript's
   current 0.33 in side margins (7.84 in text block, 6.35 pt rendered),
   right-anchored the cover's edge labels so they no longer clip, bounded the

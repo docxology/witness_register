@@ -84,3 +84,26 @@ def test_cohort_refuses_invalid_and_misattributed_exports(tmp_path, defect):
     manifest_path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="refused export|does not match"):
         build_cohort(directory)
+
+
+def test_new_cohort_uses_its_authored_classification_reference(tmp_path):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY, directory)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["cohort_id"] = "new-declared-cohort"
+    manifest["reviewed_on"] = "2026-11-06"
+    manifest["classification_decision_ref"] = "registrar:new-cohort-classification"
+    manifest_path.write_text(json.dumps(manifest))
+    generated = build_cohort(directory)
+    relations = generated["states"][-1]["payload"]["relations"]
+    assert all(
+        relation["classification_decision_ref"]
+        == manifest["classification_decision_ref"]
+        for relation in relations
+    )
+    assert generated["projection"]["value"] == 0
+    assert (
+        generated["states"][-1]["payload"]["envelopes"]
+        == generated["states"][0]["payload"]["envelopes"]
+    )

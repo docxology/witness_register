@@ -22,12 +22,15 @@ repositories. A separated copy of this one is a clone held on its own, with
 no sibling checkout beside it and no monorepo around it. This document
 states what that copy can do and what it cannot.
 
+Source availability can be optional or access-controlled. A stored envelope
+or declared roster member does not imply a current runnable source checkout.
+
 ## What it can do alone
 
 From a clone of this repository and nothing else:
 
 - Install: `pyproject.toml` declares `dependencies = []`. The package is
-  pure standard library on Python 3.10 or later; the `dev` group is
+  pure standard library on Python 3.11 or later; the `dev` group is
   `pytest`, `pytest-cov`, `ruff`, and `mypy`. `uv.lock` is tracked, so `uv sync`
   reproduces the pinned development environment.
 - Run the full test suite and meet the branch-coverage gate

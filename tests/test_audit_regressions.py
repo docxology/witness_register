@@ -8,6 +8,7 @@ from conftest import (
     make_contract,
     make_relation,
     supporting_context,
+    make_holding,
 )
 from witness_register import (
     InvalidStateError,
@@ -24,6 +25,9 @@ from witness_register import (
     check_state,
     project,
     record_return,
+    check_distinct_ids,
+    check_digest_shapes,
+    check_refs_resolve,
 )
 
 
@@ -183,3 +187,154 @@ def test_non_envelope_invalid_json_retains_typed_diagnostics(envelope, record_ki
     assert any("strict JSON" in issue.message for issue in caught.value.issues)
     assert verify_chain((first, second))
     assert not chain_coverage((first, second)).full_chain_valid
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "relation_id",
+        "subject_id",
+        "bounded_description",
+        "return_contract_ref",
+        "human_decision_ref",
+        "promoted_from_ref",
+        "classification_decision_ref",
+    ],
+)
+@pytest.mark.parametrize("value", [False, 0, 1, None, [], {}])
+def test_relation_string_domains_refuse_before_projection(envelope, field, value):
+    relation = make_relation(envelope, **{field: value})
+    state = raw_state("register-subject", "2026-10-21", (envelope,), (relation,))
+    assert getattr(state.relations[0], field) is value
+    assert state.state_digest == state_content_digest(
+        state.subject_id,
+        state.review_moment,
+        state.envelopes,
+        state.relations,
+        state.unclassified,
+        state.returns,
+        state.prior_ref,
+        state.decisions,
+        state.history_refs,
+    )
+    for check in (check_distinct_ids, check_digest_shapes, check_refs_resolve):
+        assert check(state)
+    assert verify_chain((state,))
+    with pytest.raises(InvalidStateError):
+        project_chain((state,), "inspect records")
+    with pytest.raises(InvalidStateError):
+        update_state(state, "2026-10-22")
+    with pytest.raises(InvalidStateError) as caught:
+        project(state, "inspect records")
+    assert any(
+        issue.code == "RELATION_DOMAIN" and field in issue.message
+        for issue in caught.value.issues
+    )
+    with pytest.raises(InvalidStateError):
+        genesis_state("register-subject", "2026-10-21", (envelope,), (relation,))
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "source_report_refs",
+        "support_refs",
+        "resistance_refs",
+        "protected_boundary_refs",
+    ],
+)
+@pytest.mark.parametrize(
+    "value", [False, 0, 1, None, (False,), (0,), ([],), ({},), ["a" * 64]]
+)
+def test_relation_reference_domains_precede_hash_and_lookup(envelope, field, value):
+    relation = make_relation(envelope, **{field: value})
+    state = raw_state("register-subject", "2026-10-21", (envelope,), (relation,))
+    assert check_state(state)
+    for check in (check_distinct_ids, check_digest_shapes, check_refs_resolve):
+        assert check(state)
+    with pytest.raises(InvalidStateError):
+        genesis_state("register-subject", "2026-10-21", (envelope,), (relation,))
+    with pytest.raises(InvalidStateError) as caught:
+        project(state, "inspect records")
+    assert any(issue.code == "RELATION_DOMAIN" for issue in caught.value.issues)
+
+
+def test_false_classification_authority_is_a_typed_structural_refusal(envelope):
+    holding = make_holding()
+    relation = make_relation(
+        envelope,
+        promoted_from_ref=holding.held_id,
+        classification_decision_ref=False,
+    )
+    state = raw_state(
+        "register-subject", "2026-10-21", (envelope,), (relation,), (holding,)
+    )
+    with pytest.raises(InvalidStateError) as caught:
+        project(state, "inspect records")
+    assert any(
+        issue.code == "RELATION_DOMAIN"
+        and "classification_decision_ref" in issue.message
+        for issue in caught.value.issues
+    )
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "contract_id",
+        "subject_id",
+        "why_held",
+        "change_condition",
+        "standing",
+        "protected",
+        "trigger",
+        "acceptance_condition",
+        "verification_result",
+        "open_remainder",
+        "prior_state_ref",
+        "parent_return_ref",
+    ],
+)
+@pytest.mark.parametrize("value", [False, 0, 1, None, [], {}])
+def test_return_domains_refuse_before_replay_and_projection(envelope, field, value):
+    contract = make_contract(**{field: value})
+    state = raw_state("s", "2026-11-06", (envelope,), returns=(contract,))
+    assert getattr(state.returns[0], field) is value
+    for check in (check_distinct_ids, check_digest_shapes, check_refs_resolve):
+        assert check(state)
+    assert verify_chain((state,))
+    for operation in (
+        lambda: genesis_state("s", "2026-11-06", (envelope,), returns=(contract,)),
+        lambda: update_state(state, "2026-11-06"),
+        lambda: project(state, "inspect return"),
+    ):
+        with pytest.raises(InvalidStateError) as caught:
+            operation()
+        assert any(
+            issue.code == "RETURN_DOMAIN" and field in issue.message
+            for issue in caught.value.issues
+        )
+    with pytest.raises(InvalidStateError):
+        project_chain((state,), "inspect return")
+
+
+@pytest.mark.parametrize("value", [False, 0, None, (False,), ([],), ["alternative"]])
+def test_return_alternatives_stay_raw_and_fail_closed(envelope, value):
+    from witness_register import canonical_return_contract
+
+    contract = make_contract(alternatives_live=value)
+    serialized = canonical_return_contract(contract)["alternatives_live"]
+    assert serialized == (list(value) if type(value) is tuple else value)
+    state = raw_state("s", "2026-11-06", (envelope,), returns=(contract,))
+    with pytest.raises(InvalidStateError) as caught:
+        project(state, "inspect return")
+    assert any(issue.code == "RETURN_DOMAIN" for issue in caught.value.issues)
+
+
+@pytest.mark.parametrize("value", [False, 0, 1, None, [], {}])
+def test_malformed_remainder_cannot_become_a_new_obligation(value):
+    from witness_register import remainder_contract
+
+    partial = make_contract(verification_result="verified subset", open_remainder=value)
+    with pytest.raises(ValueError, match="partial"):
+        remainder_contract(partial, "child")

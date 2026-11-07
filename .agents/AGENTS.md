@@ -21,8 +21,8 @@ guidance to the current API.
   and the working contract disagree, the contract wins and the descriptor is
   the defect.
 - **No line imports.** The register reads envelopes by value and never imports
-  `red_line`, `black_line`, `golden_line`, `white_line`, or `line_set`. A
-  descriptor that implies otherwise is wrong.
+  any of the eight line instruments or `line_set`. A descriptor that implies
+  otherwise is wrong.
 - **The posture is bounded.** Projection returns only `-1 | 0 | +1`, always
   with a declared next use and reasons. Descriptors must not imply that these
   are endorsements, safety findings, or permissions.

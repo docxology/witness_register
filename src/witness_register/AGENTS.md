@@ -24,7 +24,7 @@ typed cross-line relations, and a bounded posture that never erases the state.
 1. No line imports. Envelopes arrive by value, not by import.
 2. No interpretation of `native_status`. Projection is driven by relation records only.
 3. Append-only history. `update_state` fails closed on tampering.
-4. No auto-categories. Promotion requires a non-empty `human_decision_ref`.
+4. No auto-categories. Promotion records a non-empty `classification_decision_ref`.
 5. The posture is bounded: only `-1 | 0 | +1`, only with a declared next use.
 
 Validation: `uv run pytest tests/ --cov=src --cov-fail-under=90`.

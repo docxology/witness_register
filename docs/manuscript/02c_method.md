@@ -9,9 +9,10 @@ construction.
 ## Building the chain
 
 The register lives as a Python package — `witness_register` — with no
-import dependencies on any line package. It never imports `black_line`,
-`golden_line`, `red_line`, or `white_line`. Each line already exports one
-common report envelope under the published schema string
+import dependencies on any line package. It never imports any of the eight
+instruments (Black, Golden, Red, White, Silver, Violet, Blue, and Green) or
+their Line Set reader. Each line exports one common report envelope under
+the published schema string
 `line.report-envelope/1.0` ([@def:envelope-record]), and the register
 accepts those envelopes as JSON files stored by value under `data/envelopes/`.
 

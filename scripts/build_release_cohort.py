@@ -25,6 +25,9 @@ from witness_register import (
 def build_cohort(directory: Path) -> dict:
     """Bind exported bytes to one declared cohort, without claiming a shared subject."""
     manifest = json.loads((directory / "manifest.json").read_text())
+    classification_ref = manifest.get(
+        "classification_decision_ref", "registrar:release-cohort-20261021"
+    )
     envelopes = []
     for entry in manifest["siblings"]:
         raw = (directory / entry["file"]).read_bytes()
@@ -59,7 +62,7 @@ def build_cohort(directory: Path) -> dict:
             refs,
             RelationType.CANNOT_COMPARE,
             "The imported worked subjects are distinct; no cross-instrument comparison is admitted.",
-            classification_decision_ref="registrar:release-cohort-20261021",
+            classification_decision_ref=classification_ref,
         ),
         RelationRecord(
             "released-worked-return-due",
@@ -68,7 +71,7 @@ def build_cohort(directory: Path) -> dict:
             RelationType.RETURN_DUE,
             "Using the cohort as one subject record requires explicit correspondence first.",
             return_contract_ref=contract.contract_id,
-            classification_decision_ref="registrar:release-cohort-20261021",
+            classification_decision_ref=classification_ref,
         ),
     )
     second = update_state(
@@ -101,8 +104,6 @@ def main() -> None:
     parser.add_argument(
         "directory",
         type=Path,
-        nargs="?",
-        default=Path(__file__).resolve().parents[1] / "data/envelopes/releases/v0.2.0",
     )
     args = parser.parse_args()
     payload = build_cohort(args.directory)

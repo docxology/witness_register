@@ -41,24 +41,66 @@ class InvalidStateError(ValueError):
         )
 
 
+def _record_domain_errors(
+    records, kind: str, tuple_fields: frozenset[str]
+) -> tuple[str, ...]:
+    """Admit record fields before identity, truthiness, reference, or hash work."""
+
+    errors: list[str] = []
+    for index, record in enumerate(records):
+        for term in fields(record):
+            value = getattr(record, term.name)
+            if term.name in tuple_fields:
+                valid = type(value) is tuple and all(
+                    type(item) is str for item in value
+                )
+                domain = "a tuple of strings"
+            elif term.name == "relation_type":
+                valid = isinstance(value, RelationType)
+                domain = "a RelationType"
+            else:
+                valid = type(value) is str
+                domain = "a string"
+            if not valid:
+                errors.append(f"{kind} at index {index}: {term.name} must be {domain}")
+    return tuple(errors)
+
+
+def check_relation_domains(state: WitnessState) -> tuple[str, ...]:
+    """Admit relation fields before identity, reference, or hash work."""
+
+    return _record_domain_errors(
+        state.relations,
+        "relation",
+        frozenset(
+            (
+                "source_report_refs",
+                "support_refs",
+                "resistance_refs",
+                "protected_boundary_refs",
+            )
+        ),
+    )
+
+
+def _return_domain_errors(state: WitnessState) -> tuple[str, ...]:
+    return _record_domain_errors(
+        state.returns, "contract", frozenset(("alternatives_live",))
+    )
+
+
+def _domain_errors(state: WitnessState) -> tuple[str, ...]:
+    return check_relation_domains(state) + _return_domain_errors(state)
+
+
 def check_distinct_ids(state: WitnessState) -> tuple[str, ...]:
     """Distinct identities, with only an immutable open/completed return pair."""
 
+    domain_errors = _domain_errors(state)
+    if domain_errors:
+        return domain_errors
+
     errors: list[str] = []
-    for record in state.returns:
-        for term in fields(ReturnContractRecord):
-            value = getattr(record, term.name)
-            if term.name == "alternatives_live":
-                if type(value) is not tuple or any(
-                    type(item) is not str for item in value
-                ):
-                    errors.append(
-                        f"contract {record.contract_id}: alternatives_live must be a tuple of strings"
-                    )
-            elif type(value) is not str:
-                errors.append(
-                    f"contract {record.contract_id}: {term.name} must be a string"
-                )
     for kind, field in (
         ("envelopes", "report_ref"),
         ("relations", "relation_id"),
@@ -111,6 +153,10 @@ def check_distinct_ids(state: WitnessState) -> tuple[str, ...]:
 def check_digest_shapes(state: WitnessState) -> tuple[str, ...]:
     """Exact digest lexing, including every event and ancestry reference."""
 
+    domain_errors = _domain_errors(state)
+    if domain_errors:
+        return domain_errors
+
     errors: list[str] = []
 
     def digest(value: str, name: str, optional: bool = False) -> None:
@@ -149,6 +195,10 @@ def check_digest_shapes(state: WitnessState) -> tuple[str, ...]:
 
 def check_refs_resolve(state: WitnessState) -> tuple[str, ...]:
     """Record references resolve locally; history context is separately replayed."""
+
+    domain_errors = _domain_errors(state)
+    if domain_errors:
+        return domain_errors
 
     errors: list[str] = []
     envelopes = {e.report_ref for e in state.envelopes}
@@ -295,6 +345,16 @@ def validate_state(state: WitnessState) -> tuple[StructuralIssue, ...]:
     """All local structure issues, deterministic and inspectable on refusal."""
 
     issues: list[StructuralIssue] = []
+    for code, check in (
+        ("RELATION_DOMAIN", check_relation_domains),
+        ("RETURN_DOMAIN", _return_domain_errors),
+    ):
+        issues.extend(
+            StructuralIssue(code, state.state_digest, message)
+            for message in check(state)
+        )
+    if issues:
+        return tuple(issues)
     if type(state.subject_id) is not str:
         issues.append(
             StructuralIssue(

@@ -70,5 +70,5 @@ restates what each result does *not* claim.
 | [@prop:return-contract-constraint] | same-subject return contracts constrain the projection; partial returns do not close the obligation | `tests/test_formalism_bindings.py::test_return_contract_constrains_projection_across_chains` | records of obligation, never promises of approval |
 | [@prop:projection-determinism] | identical state and use produce identical projection; deterministic code path | `tests/test_formalism_bindings.py::test_projection_is_deterministic_for_identical_inputs` | determinism of the code path, not truth of records |
 
-The bindings are themselves code behaviour: they show which claims the suite
+The bindings are themselves code behavior: they show which claims the suite
 would catch, not that the register's posture is wise or well grounded.

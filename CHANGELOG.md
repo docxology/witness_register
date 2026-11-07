@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.0 — 2026-11-06
+
+- Admit every relation field's declared domain before identity, reference,
+  string, and hash operations; malformed sealed raw states remain inspectable
+  but raise typed structural issues rather than receiving a posture.
+- Apply the same fail-closed field admission to return obligations and remainders
+  before truthiness, hashing, or reference lookup; preserve malformed raw
+  alternatives rather than iterating them into a different value. Refuse
+  non-string verified subsets when declaring a remainder obligation.
+- Share record-domain admission without interpreting native evaluator output.
+  Package 0.3.0 retains register 2.0 payload schemas, decision 1.0, and
+  `line.report-envelope/1.0`; none establishes native correspondence or freshness.
+- Preserve native subject spellings separately from registrar subject identity,
+  and test that pointer syntax does not establish native correspondence.
+- Require refreshed exports to form a new versioned cohort; retained historical
+  envelopes, manifests, source identities, and release packets are not overwritten.
+- Use American English in maintained prose and figures, document the Python
+  3.11 floor, and distinguish historical four-instrument examples from the
+  current eight-instrument family. Remove wording and caption-copy tests.
+- Document isolated locked-tool execution and source/child import paths so an
+  unrelated project's script package cannot shadow native verification.
+
+Earlier dated entries below are historical records; original wording and
+recorded measurements are preserved, including original British spelling.
+
 ## 0.2.0 — 2026-10-21
 
 - Separate classification from exact-target, exact-use append-only resolution
