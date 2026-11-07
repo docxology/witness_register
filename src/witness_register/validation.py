@@ -84,9 +84,7 @@ def check_relation_domains(state: WitnessState) -> tuple[str, ...]:
 
 
 def _return_domain_errors(returns) -> tuple[str, ...]:
-    return _record_domain_errors(
-        returns, "contract", frozenset(("alternatives_live",))
-    )
+    return _record_domain_errors(returns, "contract", frozenset(("alternatives_live",)))
 
 
 def _domain_errors(state: WitnessState) -> tuple[str, ...]:
@@ -350,8 +348,7 @@ def validate_state(state: WitnessState) -> tuple[StructuralIssue, ...]:
         ("RETURN_DOMAIN", _return_domain_errors(state.returns)),
     ):
         issues.extend(
-            StructuralIssue(code, state.state_digest, message)
-            for message in messages
+            StructuralIssue(code, state.state_digest, message) for message in messages
         )
     if issues:
         return tuple(issues)

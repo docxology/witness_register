@@ -8,6 +8,11 @@ Thin build entry points. No business logic here — import from `witness_registe
   ```bash
   uv run python scripts/build_figures.py
   ```
+  The current registry schema is `witness-register.figure-registry/2.0`.
+  Every plate, including the cover, supplies authored `alt_text`; consumers
+  must read that field, not the retired `alt` key or a caption fallback.
+  Figure metadata versioning does not change native register, projection,
+  or report-envelope schemas. Retained release evidence is historical.
 - `gen_formalism_ledger.py` — regenerate `data/formalism_claim_ledger.json` from the manuscript and package
   ```bash
   uv run python scripts/gen_formalism_ledger.py

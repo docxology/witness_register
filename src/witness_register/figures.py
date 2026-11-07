@@ -55,7 +55,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 ENVELOPE_DIR = PROJECT_ROOT / "data" / "envelopes"
 OUTPUT_DIR = PROJECT_ROOT / "output" / "figures"
 
-FIGURE_REGISTRY_SCHEMA = "witness-register.figure-registry/1.0"
+FIGURE_REGISTRY_SCHEMA = "witness-register.figure-registry/2.0"
 
 #: Widest canvas any plate may open; caps how small an embedded label prints.
 MAX_CANVAS_WIDTH = 1600
@@ -1045,7 +1045,7 @@ def build_figures(output_dir: Path = OUTPUT_DIR) -> list[Path]:
                 "label": plate.label,
                 "filename": plate.filename,
                 "caption": plate.caption,
-                "alt": plate.alt,
+                "alt_text": plate.alt,
                 "source": plate.source,
                 "interpretive_claim": plate.interpretive_claim,
                 "epistemic_boundary": plate.epistemic_boundary,

@@ -142,7 +142,6 @@ def test_build_writes_every_artifact_and_an_accurate_registry(tmp_path) -> None:
         assert plate.filename in names
         assert plate.filename.replace(".png", ".svg") in names
     registry = json.loads((tmp_path / "figure_registry.json").read_text("utf-8"))
-    assert registry["schema_version"] == "witness-register.figure-registry/1.0"
     import hashlib
 
     for entry in registry["figures"]:

@@ -23,6 +23,8 @@
   current eight-instrument family. Remove wording and caption-copy tests.
 - Document isolated locked-tool execution and source/child import paths so an
   unrelated project's script package cannot shadow native verification.
+- Emit figure registry 2.0 using canonical `alt_text` for accessible publication;
+  native register, report-envelope, and projection schemas are unchanged.
 
 Earlier dated entries below are historical records; original wording and
 recorded measurements are preserved, including original British spelling.
