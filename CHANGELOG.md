@@ -25,6 +25,14 @@
   unrelated project's script package cannot shadow native verification.
 - Emit figure registry 2.0 using canonical `alt_text` for accessible publication;
   native register, report-envelope, and projection schemas are unchanged.
+- Add the current `data/envelopes/releases/v0.3.0/` transport cohort from all
+  eight actual native producer snapshots. Preserve exact export bytes, distinct
+  worked subjects, an incomparability relation and an open correspondence return.
+  Deterministic replay and changed-export refusal were exercised independently
+  of the unchanged historical cohort; intake is not native-report verification.
+- Publish only Violet's separately reviewed synthetic common envelope. Its
+  private source identity, implementation, native reports and receipts stay
+  private; empty exported source references are not filled by inference.
 
 Earlier dated entries below are historical records; original wording and
 recorded measurements are preserved, including original British spelling.

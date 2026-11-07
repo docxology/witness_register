@@ -24,9 +24,10 @@ See [AGENTS.md](AGENTS.md) for the working contract.
 `uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.0`
 checks exported byte custody, intakes by value, and writes deterministic
 `co_registration.json`. The directory argument is required: no default command
-rewrites a retained cohort. The new directory must first contain eight exports
-and a manifest binding final native release commits and exact exported-byte
-hashes. Set `classification_decision_ref` to the current registrar's explicit
+rewrites a retained cohort. The new directory contains eight genuine native
+exports and a manifest binding exact exported-byte hashes and disclosed producer
+commits. Violet's private producer custody is deliberately not published.
+Set `classification_decision_ref` to the current registrar's explicit
 classification reference; manifests without it retain the historical
 2026-10-21 authority reference for byte-identical historical replay.
 This records authored incomparability and a correspondence return obligation,

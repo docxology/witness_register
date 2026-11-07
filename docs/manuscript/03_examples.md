@@ -98,3 +98,17 @@ the actual tags or bounded-wait fallback commits and exported byte hashes.
 The registrar records `CANNOT_COMPARE` and an open correspondence return:
 the native worked subjects remain distinct. A successful intake verifies
 the envelope shape, not its native report, consent, truth or applicability.
+
+## Current native transport edition
+
+The current edition in `data/envelopes/releases/v0.3.0/` was generated through
+the native producers from immutable source snapshots. Its manifest retains exact
+export hashes and disclosed producer identities. The native fixture review dates
+and distinct subject identifiers remain intact; registration does not make them
+fresh observations about one subject.
+
+Its byte-identical replay and changed-export refusal were exercised. The register
+retains incomparability and an open correspondence return rather than turning
+successful transport into a shared-subject finding. Violet contributes only a
+separately disclosure-reviewed synthetic common envelope; its private source,
+native assessment and release custody do not travel with the public cohort.
