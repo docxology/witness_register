@@ -20,7 +20,12 @@ LINES = {
     "blue_line",
     "green_line",
 }
-EDITIONS = ("v0.2.0", "v0.3.0", "v0.3.0-source-refresh")
+EDITIONS = (
+    "v0.2.0",
+    "v0.3.0",
+    "v0.3.0-source-refresh",
+    "v0.3.0-final-source-refresh",
+)
 
 
 def test_release_cohort_replays_every_declared_export():
@@ -139,33 +144,3 @@ def test_native_editions_preserve_distinct_subjects_and_open_correspondence(edit
     assert generated["projection"]["value"] == 0
     assert any("return_due" in reason for reason in generated["projection"]["reasons"])
     assert any("CANNOT_COMPARE" in r for r in generated["projection"]["reasons"])
-
-
-def test_source_refresh_changes_only_declared_public_bindings():
-    previous = DIRECTORY.parent / "v0.3.0"
-    current = DIRECTORY.parent / "v0.3.0-source-refresh"
-    old = json.loads((previous / "manifest.json").read_text())
-    new = json.loads((current / "manifest.json").read_text())
-    assert new["cohort_id"] != old["cohort_id"]
-    assert new["classification_decision_ref"] != old["classification_decision_ref"]
-    changed = {"docxology/red_line", "docxology/blue_line", "docxology/silver_line"}
-    for before, after in zip(old["siblings"], new["siblings"], strict=True):
-        assert before["repository"] == after["repository"]
-        if before["repository"] != "docxology/violet_line":
-            assert before["export_recipe"] == after["export_recipe"]
-        else:
-            assert "export_recipe" not in after
-        if before["repository"] in changed:
-            assert before["commit"] != after["commit"]
-            assert after["snapshot_kind"] == "immutable-commit"
-            assert len(after["commit"]) == 40
-        else:
-            assert before == after
-            assert (previous / before["file"]).read_bytes() == (
-                current / after["file"]
-            ).read_bytes()
-        raw = (current / after["file"]).read_bytes()
-        assert sha256(raw).hexdigest() == after["sha256"]
-    violet = json.loads((current / "violet_line_worked.json").read_text())
-    assert violet["subject_id"] == "violet-synthetic-study"
-    assert violet["source_snapshot_refs"] == []

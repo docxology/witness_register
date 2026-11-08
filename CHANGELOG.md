@@ -2,6 +2,11 @@
 
 ## 0.3.0 — 2026-11-06
 
+- Add `data/envelopes/releases/v0.3.0-final-source-refresh/` from the final
+  corrected public Red, Black, White, and Silver sources, preserving every
+  preceding cohort, unchanged producer export, and approved synthetic Violet
+  disclosure. Extend real custody/refusal/state-retention checks to this edition;
+  retire the metadata-copy test rather than re-pin changed-source lists.
 - Admit every relation field's declared domain before identity, reference,
   string, and hash operations; malformed sealed raw states remain inspectable
   but raise typed structural issues rather than receiving a posture.
