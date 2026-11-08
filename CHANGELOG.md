@@ -33,6 +33,12 @@
 - Publish only Violet's separately reviewed synthetic common envelope. Its
   private source identity, implementation, native reports and receipts stay
   private; empty exported source references are not filled by inference.
+- Add `data/envelopes/releases/v0.3.0-source-refresh/` as a separately authored
+  source-preparation edition. Recompute Red, Blue, and Silver worked exports
+  from their actual corrected immutable commits through their existing native
+  producers, then replay the native Witness consumer. Preserve the prior
+  `v0.3.0` and `v0.2.0` cohorts byte-for-byte, the other producer bindings, and
+  Violet's approved synthetic envelope without disclosing private custody.
 
 Earlier dated entries below are historical records; original wording and
 recorded measurements are preserved, including original British spelling.

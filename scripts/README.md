@@ -21,7 +21,7 @@ Thin build entry points. No business logic here — import from `witness_registe
 See [AGENTS.md](AGENTS.md) for the working contract.
 ## Release cohort replay
 
-`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.0`
+`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.0-source-refresh`
 checks exported byte custody, intakes by value, and writes deterministic
 `co_registration.json`. The directory argument is required: no default command
 rewrites a retained cohort. The new directory contains eight genuine native

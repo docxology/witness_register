@@ -26,9 +26,12 @@ The package version does not change the canonical register 2.0 payloads,
 decision 1.0 records, or `line.report-envelope/1.0` transport. Native schema
 versions (including Silver/Violet 3.0) belong to their producers, not this
 register. Exact exported-byte custody proves neither native correspondence
-nor currentness. The v0.2.0 cohort and prior release packets remain historical;
-the new v0.3.0 cohort must bind all eight final native release commits before
-its integration evidence can be published.
+nor currentness. The `v0.2.0` and `v0.3.0` cohorts and prior release packets
+remain historical. The `v0.3.0-source-refresh` edition binds corrected public
+Red, Blue, and Silver commits and separately recomputed exports; the other
+public producer bindings and approved synthetic Violet bytes remain unchanged.
+Violet's private producer identity is not a public release prerequisite.
+This local integration does not publish a tag, archive, or DOI.
 
 ## Reserve-first DOI publication (Daniel)
 

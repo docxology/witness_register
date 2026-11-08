@@ -101,8 +101,10 @@ the envelope shape, not its native report, consent, truth or applicability.
 
 ## Current native transport edition
 
-The current edition in `data/envelopes/releases/v0.3.0/` was generated through
-the native producers from immutable source snapshots. Its manifest retains exact
+The current edition in `data/envelopes/releases/v0.3.0-source-refresh/` refreshes
+Red, Blue, and Silver through their native producers from corrected immutable
+source snapshots. The prior `v0.3.0` and `v0.2.0` editions remain unchanged.
+Its manifest retains exact
 export hashes and disclosed producer identities. The native fixture review dates
 and distinct subject identifiers remain intact; registration does not make them
 fresh observations about one subject.

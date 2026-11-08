@@ -1,0 +1,93 @@
+{
+  "cohort_id": "witness-register-0.3.0-native-source-refresh",
+  "reviewed_on": "2026-11-07",
+  "declared_next_use": "inspect the coordinated native worked examples as a transport demonstration, without treating their distinct subjects as one record",
+  "classification_decision_ref": "registrar:native-source-refresh-20261107",
+  "scope": "synthetic native worked exports; no shared-subject correspondence is declared",
+  "siblings": [
+    {
+      "repository": "docxology/red_line",
+      "producer_package_version": "0.5.0",
+      "file": "red_line_worked.json",
+      "sha256": "2b7cda07e6b7df30ff631bb2453af8818c28fb3ccb1969e54d4bd4f2e3b79e9f",
+      "commit": "6495e898826de3caf78b5bd4068b8f54b333e496",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "from red_line import review_engagement, finding_envelope, canonical_envelope, canonical_intake, replay_finding, envelope_contract_issues, envelope_finding_issues\nfrom red_line.analysis import canonical_battery, BATTERY_AS_OF\naction=canonical_battery()[-1].action\nfinding=review_engagement(action,reviewed_on=BATTERY_AS_OF)\nenvelope=finding_envelope(finding,subject_id=\"red-line-worked-non-compliant\")\nassert not replay_finding(finding,canonical_intake(action))\nassert not envelope_contract_issues(envelope)\nassert not envelope_finding_issues(envelope,finding)\nprint(canonical_envelope(envelope))"
+    },
+    {
+      "repository": "docxology/black_line",
+      "producer_package_version": "0.6.0",
+      "file": "black_line_worked.json",
+      "sha256": "40c25a3042002dec847095c0d674d1e298b8065a21b15c616d5b6f6f8c3933ca",
+      "commit": "4b203050adc812e86e77eee1297ddb1894c7ab4b",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "from black_line import evaluation_record,assessment_envelope,canonical_envelope,replay_evaluation_record,envelope_matches_record\nfrom black_line.figures.scenarios import SURFACES_ATTEMPT,SURFACES_AS_OF,SURFACES_WINDOW\nrecord=evaluation_record(SURFACES_ATTEMPT,as_of=SURFACES_AS_OF,max_evidence_age_days=SURFACES_WINDOW,subject_id=\"black-line-worked-surfaces\")\nenvelope=assessment_envelope(record.assessment,subject_id=record.subject_id,source_snapshot_refs=record.source_snapshot_refs,strict=True)\nreplay_evaluation_record(record)\nassert envelope_matches_record(envelope,record)\nprint(canonical_envelope(envelope))"
+    },
+    {
+      "repository": "docxology/golden_line",
+      "producer_package_version": "0.6.0",
+      "file": "golden_line_worked.json",
+      "sha256": "92b6461c399a6a1c6a8c39e70e5a12ec89a703b25b7b51b0adaddff35d980fd0",
+      "commit": "af9bf48ed34e6508f773cce0a5eae9ea2115c166",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "from golden_line import GOLDEN_ASPIRATIONS,HorizonEntry,progress_report,report_envelope,canonical_envelope,canonical_archive,decode_archive,validate_instrument_envelope\na,r=GOLDEN_ASPIRATIONS[0],GOLDEN_ASPIRATIONS[2]\nentries=[\"not an entry at all\",HorizonEntry(\"no-such-aspiration\",frozenset()),HorizonEntry(a.id,frozenset(a.markers)),HorizonEntry(a.id,frozenset()),HorizonEntry(r.id,counter_signals=frozenset(r.counter_signals))]\nreport=progress_report(entries,as_of=\"2026-07-29\")\nenvelope=report_envelope(report,subject_id=\"golden-line-worked-intake-case\")\nassert not validate_instrument_envelope(envelope)\ndecode_archive(canonical_archive(report),canonical_envelope(envelope))\nprint(canonical_envelope(envelope))"
+    },
+    {
+      "repository": "docxology/white_line",
+      "producer_package_version": "0.9.0",
+      "file": "white_line_worked.json",
+      "sha256": "991934406a4770790e2357c6412b961dfc3297862a4cf5b838fbc30983461114",
+      "commit": "cc99cbf8588df1be8a3831f344f153acd9881fdb",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "from white_line import worked_report,report_envelope,canonical_envelope,envelope_matches_report\nreport=worked_report()\nenvelope=report_envelope(report,subject_id=\"white-line-worked-example\")\nassert envelope_matches_report(envelope,report)\nprint(canonical_envelope(envelope))"
+    },
+    {
+      "repository": "docxology/silver_line",
+      "producer_package_version": "0.3.0",
+      "file": "silver_line_worked.json",
+      "sha256": "db80d093babcb0d512f1058a24998ed9255c9e994f235323624b1db052d85b99",
+      "commit": "8f00a1f47a5f80916c8c73fd4944bd04d302ec90",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "import json\nfrom pathlib import Path\nfrom silver_line.artifacts import artifact_payloads\nenvelope,native_files=artifact_payloads(json.loads(Path(\"data/fixtures/silver_line_worked.json\").read_text(encoding=\"utf-8\")))\nprint(json.dumps(envelope,indent=2,sort_keys=True))"
+    },
+    {
+      "repository": "docxology/violet_line",
+      "producer_package_version": "0.3.0",
+      "file": "violet_line_worked.json",
+      "sha256": "89080cab935ac57551cc5cf4ccf72d674ec799e48283871d97220c225501120d",
+      "snapshot_kind": "disclosure-reviewed-synthetic-envelope",
+      "disclosure_review": {
+        "reviewed_on": "2026-11-07",
+        "scope": "exact synthetic common-envelope bytes only",
+        "subject": "violet-synthetic-study",
+        "source_references": "empty as exported; no inference or fill",
+        "private_producer_identity": "withheld; native implementation, assessments and custody remain private"
+      }
+    },
+    {
+      "repository": "docxology/blue_line",
+      "producer_package_version": "0.3.0",
+      "file": "blue_line_worked.json",
+      "sha256": "23a800631658a4f9cd442289482713127f0c113457fa945bff82a8124b16bda5",
+      "commit": "03b71534f9024f098fbf0afe05dbd80e1d75587a",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "import json\nfrom pathlib import Path\nfrom blue_line import read_with_surfaces,build_envelope,build_report,replay_report\nfrom blue_line.json_adapter import declaration_from_json\ncontext=json.loads(Path(\"data/example_contexts.json\").read_text())[\"blue_line_worked.json\"]\ndeclaration=declaration_from_json(json.loads(Path(\"data/declared_files/blue_line_worked.json\").read_text()))\nreading,surfaces=read_with_surfaces(declaration,as_of=context[\"review_date\"])\nenvelope=build_envelope(reading,subject_id=context[\"subject_id\"],source_snapshot_refs=tuple(context[\"source_snapshot_refs\"]))\nreplayed,_=replay_report(build_report(reading,surfaces))\nassert envelope==build_envelope(replayed,subject_id=context[\"subject_id\"],source_snapshot_refs=tuple(context[\"source_snapshot_refs\"]))\nprint(json.dumps(envelope,indent=2,sort_keys=True))"
+    },
+    {
+      "repository": "docxology/green_line",
+      "producer_package_version": "0.3.0",
+      "file": "green_line_worked.json",
+      "sha256": "17e2ad6325fe4d66bf645a31a74a4f87b81ba84feff6cca5400e305957bb027e",
+      "commit": "3edf49f5426a2c9dfa8c925846d318476206988d",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null,
+      "export_recipe": "scripts/gen_envelopes.py --output-dir <new-private-native-edition> --source-commit <actual-checked-out-commit>"
+    }
+  ]
+}
