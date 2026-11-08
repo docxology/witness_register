@@ -1,13 +1,13 @@
 # Publication and citation
 
-Software and manuscript sources declare version 0.3.1 together. Until its
+Software and manuscript sources declare version 0.4.0 together. Until its
 source tag is published, cite the exact inspected source revision; the
 versioned source URL below is the intended publication target, not evidence
 that publication has occurred:
 
 > Friedman, D. A. (2026). *The Witness Register: Co-Registration Without
-> Aggregation* (version 0.3.1) [Software and manuscript sources].
-> [Versioned source](https://github.com/docxology/witness_register/tree/v0.3.1).
+> Aggregation* (version 0.4.0) [Software and manuscript sources].
+> [Versioned source](https://github.com/docxology/witness_register/tree/v0.4.0).
 
 The last verified archived DOI is
 `10.5281/zenodo.22833511` ([archived record](https://zenodo.org/records/22833511)), identifying
@@ -28,17 +28,30 @@ The package version does not change the canonical register 2.0 payloads,
 decision 1.0 records, or `line.report-envelope/1.0` transport. Native schema
 versions (including Silver/Violet 3.0) belong to their producers, not this
 register. Exact exported-byte custody proves neither native correspondence
-nor currentness. All prior cohorts, including `v0.3.0-final-source-refresh`,
-and prior release packets remain unchanged. The
-`v0.3.1-runtime-source-refresh` edition recomputes the seven public exports
-through their existing native recipes from actual current pins, including
-Golden 0.6.1. Violet's approved synthetic bytes, empty source references, and
-disclosure review remain unchanged. See the [current source packet](releases/v0.3.1.md).
-Violet's private producer identity is not a public release prerequisite.
-Source preparation is separate from source-tag publication; no new archive or
-DOI is asserted.
+nor currentness. All prior cohorts, including `v0.3.1-runtime-source-refresh`,
+and prior release packets remain unchanged. The new
+`v0.4.0-element-admission` edition requires ten real native exports produced
+separately after final source commits. Its manifest and co-registration are
+release-owner outputs, never invented during source preparation. See the
+[cohort authoring contract](../data/envelopes/README.md).
 
-## Reserve-first DOI publication (Daniel)
+Copper, Iron, and Violet are private instruments. Public Witness additions
+contain only separately disclosure-reviewed synthetic native exports with
+empty `source_snapshot_refs`; full native provenance, source revisions and
+trees, source paths, private export recipes, native reports and replay
+receipts stay outside public Witness. Preserve Violet's approved synthetic
+bytes and disclosure statement. Review the entire proposed public payload,
+manifest and rendered artifacts, not just the reference list. Repository
+citations name works without implying public source access.
+
+The current family has ten instruments, the Main reader, and this separate
+Witness companion. Witness remains outside `LINE_SET` and the eleven-work
+private omnibus. Source preparation is separate from source-tag publication;
+no new archive or DOI is asserted, and neither successful transport nor
+additional instruments establish shared-subject correspondence or override
+noncompensatory constraints.
+
+## Manual reserve-first DOI publication
 
 1. Create the new Zenodo version draft without publishing; reserve its DOI.
 2. Record the exact reserved identifier in citation metadata and manuscript
@@ -47,11 +60,15 @@ DOI is asserted.
 3. Re-render the manuscript so the new deposit carries its own DOI.
 4. Upload the re-rendered artifacts and publish the deposition.
 
-Never prefill or guess a DOI. A GitHub Release can trigger permanent Zenodo
-publication: inspect repository hooks immediately before creating one.
-If a Zenodo hook exists or the check is inconclusive, push the annotated tag
-and skip the Release object. An empty, successfully read hook list permits
-the GitHub Release authorized for this release.
+Never prefill or guess a DOI. Inspect authenticated repository hooks immediately
+before a GitHub Release. For this November 8, 2026 campaign, the owner explicitly
+authorized the existing public repositories' automatic Zenodo publication;
+retain those hooks and verify the resulting repository, tag, version, and archive
+contents. The manual reserve-first workflow is an alternative, not a veto on
+this authorized integration. Without explicit archive-publication authority,
+a Zenodo hook or inconclusive observation still blocks the Release object.
+PyPI publication, private-source disclosure, and new deposit automation for
+private Violet, Copper, and Iron remain unauthorized.
 
 After release, changes to `main` require another version. Do not amend the
 published tag to add a DOI; plan metadata and re-rendering as a new versioned
@@ -63,7 +80,8 @@ The register co-registers instruments beside their set reader; it is not
 another instrument. Siblings are referenced by name and GitHub URL, never
 imported. The README lists the family. Fixture provenance records tags and
 commits actually used and distinguishes historical examples from refreshed
-exports. A private source supplies only an already-published worked envelope.
+exports. Private instruments supply only disclosure-reviewed synthetic public
+envelopes; their full private native provenance is not published here.
 
 Run every gate in [AGENTS.md](../AGENTS.md), plus the type check in
 [development](development.md). Regenerate the formalism ledger and inspect

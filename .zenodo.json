@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "keywords": [
     "co-registration",
     "append-only log",
@@ -97,7 +97,17 @@
       "identifier": "https://github.com/docxology/green_line",
       "relation": "references",
       "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/copper_line",
+      "relation": "references",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/docxology/iron_line",
+      "relation": "references",
+      "scheme": "url"
     }
   ],
-  "notes": "The register stands beside the instruments and their reader. Prior archived DOI: 10.5281/zenodo.22833511 (version 0.1.1). No DOI has been reserved or minted for this version; reserve-first publication is the owner's follow-up."
+  "notes": "The register stands beside the ten instruments and their reader, outside LINE_SET. Violet, Copper, and Iron repositories are private; their public Witness envelopes are separately disclosure-reviewed synthetic exports with empty source references. Full native provenance stays private. Prior archived DOI: 10.5281/zenodo.22833511 (version 0.1.1). No DOI has been reserved or minted for this version. This metadata does not authorize a deposit."
 }

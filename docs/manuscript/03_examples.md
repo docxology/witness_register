@@ -101,17 +101,25 @@ the envelope shape, not its native report, consent, truth or applicability.
 
 ## Current native transport edition
 
-The current edition in `data/envelopes/releases/v0.3.1-runtime-source-refresh/`
-binds the actual current public producer source snapshots, including Golden
-0.6.1, through separately recomputed native exports. The prior
-`v0.3.0-final-source-refresh`, `v0.3.0-source-refresh`, `v0.3.0`, and
-`v0.2.0` editions remain unchanged. Its manifest retains exact export hashes,
-native export recipes, and disclosed producer identities. The native fixture review dates
-and distinct subject identifiers remain intact; registration does not make them
-fresh observations about one subject.
+The 0.4.0 edition is assigned
+`data/envelopes/releases/v0.4.0-element-admission/`. It requires ten actual
+native exports produced separately from final producer sources, not a
+relabeled historical collection. Each older edition keeps its own explicit
+eight-instrument membership and unchanged exported bytes. The top-level
+historical corpus remains separate from the current citation roster.
 
-Its byte-identical replay and changed-export refusal were exercised. The register
-retains incomparability and an open correspondence return rather than turning
-successful transport into a shared-subject finding. Violet contributes only a
-separately disclosure-reviewed synthetic common envelope; its private source,
-native assessment and release custody do not travel with the public cohort.
+The new edition's manifest must bind exact export hashes and explicit
+registrar decisions. Public producers carry their disclosed source identities
+and native export recipes. Copper, Iron, and Violet contribute only separately
+disclosure-reviewed synthetic native exports with empty source references;
+full provenance, native reports, replay evidence, and private source locators
+stay outside public Witness. Transport does not verify those native reports.
+
+The release gate replays both states, preserves every envelope's opaque
+`native_status`, native subject and date, and refuses changed or misattributed
+exports and non-strict JSON. The registrar retains `CANNOT_COMPARE` and an
+open `RETURN_DUE` correspondence obligation with held posture. Ten successful
+intakes do not establish a shared subject, freshness, or a favorable native
+assessment; additional resource or recovery reports cannot compensate for a
+block or protected absence. These are acceptance conditions, not an assertion
+that the new source edition's gates have already run.

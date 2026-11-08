@@ -82,7 +82,7 @@ One dict per line report, field names by published convention:
 | `registry_digest` | 64-char lowercase hex |
 | `native_status` | bounded strict JSON, with state-wrapper headroom — stored verbatim, never interpreted |
 | `report_ref` | 64-char lowercase hex pointer to the complete native report |
-| `source_snapshot_refs` | list of non-blank strings |
+| `source_snapshot_refs` | list of non-blank strings; may be empty for a disclosure-reviewed synthetic export |
 | `scope_and_nonclaims` | non-empty list of non-blank strings |
 
 ## The projection's boundary
@@ -116,9 +116,11 @@ Referenced by name and URL only — never by import, never by relative path:
 [golden_line](https://github.com/docxology/golden_line),
 [white_line](https://github.com/docxology/white_line),
 [silver_line](https://github.com/docxology/silver_line),
-[violet_line](https://github.com/docxology/violet_line),
+[violet_line](https://github.com/docxology/violet_line) (private),
 [blue_line](https://github.com/docxology/blue_line),
 [green_line](https://github.com/docxology/green_line),
+[copper_line](https://github.com/docxology/copper_line) (private),
+[iron_line](https://github.com/docxology/iron_line) (private),
 [line_set](https://github.com/docxology/line_set).
 
 ## License
@@ -127,8 +129,9 @@ CC-BY-4.0 (prose); MIT (code).
 
 ## The Line Set
 
-This work is one of ten in the Line Set family — eight instruments, their
-cross-line reader, and the witness register that co-registers their report
+The current family comprises ten instruments, their cross-line reader, and
+this separate companion register: twelve projects. Witness is outside
+`LINE_SET` and outside the eleven-work private omnibus. It co-registers report
 envelopes without aggregation:
 
 - [Black Line](https://github.com/docxology/black_line) — the practice registry of realized craft
@@ -136,10 +139,18 @@ envelopes without aggregation:
 - [Red Line](https://github.com/docxology/red_line) — the cognitive-security registry of self-assessments
 - [White Line](https://github.com/docxology/white_line) — the absence and omission ledger
 - [Silver Line](https://github.com/docxology/silver_line) — the memory-and-succession instrument
-- [Violet Line](https://github.com/docxology/violet_line) — the consent ledger of affected parties
+- [Violet Line](https://github.com/docxology/violet_line) (private) — the consent ledger of affected parties
 - [Blue Line](https://github.com/docxology/blue_line) — the stewardship instrument for maintained commitments
 - [Green Line](https://github.com/docxology/green_line) — the capacity-under-development instrument
+- [Copper Line](https://github.com/docxology/copper_line) (private) — dimensioned resource use, outstanding commitments, and bearer attribution; not fairness or permission
+- [Iron Line](https://github.com/docxology/iron_line) (private) — scenario-bound recorded recovery target comparisons; not future recovery or reliability certification
 - [The Line Set](https://github.com/docxology/line_set) — the cross-line set reader holding instruments apart
+
+The private repository links identify works, not anonymous source access.
+Public Witness holds only separately disclosure-reviewed synthetic
+Copper, Iron, and Violet exports with empty `source_snapshot_refs`. Full
+native provenance, reports, replay receipts, source revisions, and private
+locators stay outside public Witness.
 
 ## Authority and migration
 
@@ -155,14 +166,20 @@ structural validation; typed failures are bookkeeping errors, not subject
 verdicts. Use wording is an auditable declaration; the code does not infer
 which constraints apply from free text.
 
-Package 0.3.1 keeps the register 2.0 canonical payloads and 1.0 envelope
+Package 0.4.0 keeps the register 2.0 canonical payloads and 1.0 envelope
 transport unchanged. Relation and return fields are admitted before replay:
 malformed identities, false-valued remainders, and non-tuple alternatives
 remain inspectable in raw records but cannot receive a projection.
 
-The current [native transport cohort](data/envelopes/releases/v0.3.1-runtime-source-refresh/README.md)
-recomputes public exports from actual source pins, including Golden 0.6.1.
-Prior cohorts remain historical and unchanged; see the [0.3.1 source packet](docs/releases/v0.3.1.md).
+The 0.4.0 transport edition belongs in
+`data/envelopes/releases/v0.4.0-element-admission/`. Publication requires ten
+actual separately produced native envelopes, exact exported-byte hashes, and
+an explicitly authored manifest and co-registration. Copper, Iron, and Violet
+contribute only disclosure-reviewed synthetic exports. Historical top-level
+examples and every older eight-member edition retain their original bytes,
+subjects, dates, and independent membership. See
+[cohort authoring requirements](data/envelopes/README.md).
 Neither transport version nor exported-byte custody proves native report
-correspondence or freshness. Historical release cohorts stay unchanged;
-new final producer snapshots belong in a new versioned cohort.
+correspondence, authenticity, freshness, or a shared subject. Native status
+stays opaque; additional envelopes cannot compensate for Red constraints,
+Violet protection, or any authored block, absence, or unmet return.

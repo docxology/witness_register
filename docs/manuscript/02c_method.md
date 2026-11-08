@@ -9,9 +9,9 @@ construction.
 ## Building the chain
 
 The register lives as a Python package — `witness_register` — with no
-import dependencies on any line package. It never imports any of the eight
-instruments (Black, Golden, Red, White, Silver, Violet, Blue, and Green) or
-their Line Set reader. Each line exports one common report envelope under
+import dependencies on any line package. It never imports the instruments
+or their Line Set reader, including the current Copper and Iron additions.
+Each line exports one common report envelope under
 the published schema string
 `line.report-envelope/1.0` ([@def:envelope-record]), and the register
 accepts those envelopes as JSON files stored by value under `data/envelopes/`.
@@ -20,8 +20,9 @@ Intake is a shape check over the published payload: the schema string must
 be `line.report-envelope/1.0` exactly, the line identity must be non-blank,
 the review date must be a real ISO calendar date, the registry digest and
 report pointer must be 64 lowercase hexadecimal characters, snapshot
-references must be non-blank strings, and the non-claims set must be
-non-empty. `native_status` may be any JSON-compatible value and is stored
+references must be non-blank strings when supplied (the list may be empty),
+and the non-claims set must be non-empty. `native_status` may be any bounded
+strict JSON value and is stored
 verbatim — the register never parses, compares, ranks, averages, or merges
 it.
 

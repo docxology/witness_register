@@ -1,12 +1,54 @@
 # Worked envelopes — provenance
 
-## Current release cohort
+## Current edition: ten instruments
 
-[`releases/v0.3.1-runtime-source-refresh/`](releases/v0.3.1-runtime-source-refresh/README.md)
-is the current source-refreshed cohort. Its seven public exports were recomputed
-from actual current source pins, including Golden 0.6.1; the approved synthetic
-Violet envelope and its disclosure review remain unchanged. Fixture dates and
-distinct native subjects are preserved. Source packaging is not evidence freshness.
+The 0.4.0 edition is reserved at
+`releases/v0.4.0-element-admission/`. It requires one real native export from
+each of Red, Black, Golden, White, Silver, Violet, Blue, Green, Copper, and
+Iron, generated separately after the final producer source commits. Main and
+Witness are not instrument envelopes. Do not manufacture exports, copy an old
+manifest into a new edition, or overwrite the top-level historical corpus.
+
+The release owner supplies `manifest.json` with `cohort_id`, `reviewed_on`,
+`declared_next_use`, `classification_decision_ref`, and ten `siblings`. Each
+sibling entry names `repository` (`docxology/<line_id>`), `file`, the SHA-256
+of the exact held exported bytes in `sha256`, and its honest `snapshot_kind`.
+Public entries also record actual final source commit/tree identities,
+source-byte custody, declared version, and the native export recipe actually
+executed. The registrar's review moment does not replace native review dates
+or make distinct worked subjects correspond.
+
+Violet, Copper, and Iron are private. Their public entries use
+`snapshot_kind: disclosure-reviewed-synthetic-envelope`, identify only the
+approved exported bytes and disclosure review, and omit private commits,
+trees, source paths and export recipes. Their native envelopes are generated
+from disclosure-reviewed synthetic inputs and contain empty
+`source_snapshot_refs`. Preserve Violet's approved synthetic bytes and
+disclosure statement. Keep full native reports, provenance, replay receipts,
+private source identities and locators outside public Witness. Review every
+public byte, including `native_status`, subject text and nonclaims; an empty
+reference list alone is not a privacy audit.
+
+After all ten exports and the manifest exist, run from the Witness root:
+
+```bash
+uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.4.0-element-admission
+```
+
+This checks exact exported-byte custody, strict JSON without duplicate fields
+or nonfinite extensions, envelope shape, and repository-to-line attribution.
+It writes only the new directory's `co_registration.json`, containing both
+states, preserved opaque native status, explicit `CANNOT_COMPARE` and
+`RETURN_DUE`, and held posture for the distinct native subjects. The builder
+does not execute export recipes or authenticate source claims or native
+report correspondence. Generation and native gates are release-owner steps;
+this authoring contract is not an execution receipt.
+
+The preceding
+[`v0.3.1-runtime-source-refresh` edition](releases/v0.3.1-runtime-source-refresh/README.md)
+is retained historical evidence, together with all other eight-member
+editions. Edition-specific tests independently declare each older roster and
+the new ten-member roster; citation URLs cannot substitute for missing exports.
 
 ## Retained release cohorts
 

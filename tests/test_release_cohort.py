@@ -8,33 +8,86 @@ import shutil
 import pytest
 
 from scripts.build_release_cohort import build_cohort
+from witness_register import canonical_json
 
 DIRECTORY = Path(__file__).resolve().parents[1] / "data/envelopes/releases/v0.2.0"
-LINES = {
-    "red_line",
-    "black_line",
-    "golden_line",
-    "white_line",
-    "silver_line",
-    "violet_line",
-    "blue_line",
-    "green_line",
+# Membership belongs to each edition, not to its tested manifest or the current
+# family roster. Historical editions must not acquire later admissions.
+EDITION_LINES = {
+    "v0.2.0": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+    },
+    "v0.3.0": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+    },
+    "v0.3.0-source-refresh": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+    },
+    "v0.3.0-final-source-refresh": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+    },
+    "v0.3.1-runtime-source-refresh": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+    },
+    "v0.4.0-element-admission": {
+        "red_line",
+        "black_line",
+        "golden_line",
+        "white_line",
+        "silver_line",
+        "violet_line",
+        "blue_line",
+        "green_line",
+        "copper_line",
+        "iron_line",
+    },
 }
-EDITIONS = (
-    "v0.2.0",
-    "v0.3.0",
-    "v0.3.0-source-refresh",
-    "v0.3.0-final-source-refresh",
-    "v0.3.1-runtime-source-refresh",
-)
+EDITIONS = tuple(EDITION_LINES)
+CURRENT_EDITION = "v0.4.0-element-admission"
 
 
 def test_release_cohort_replays_every_declared_export():
     manifest = json.loads((DIRECTORY / "manifest.json").read_text())
+    lines = EDITION_LINES[DIRECTORY.name]
     assert {
         entry["repository"].split("/")[1] for entry in manifest["siblings"]
-    } == LINES
-    assert len(manifest["siblings"]) == len(LINES)
+    } == lines
+    assert len(manifest["siblings"]) == len(lines)
     for entry in manifest["siblings"]:
         if entry.get("source_path"):
             assert entry["source_path"] == f"data/envelopes/{entry['file']}"
@@ -58,7 +111,7 @@ def test_release_cohort_replays_every_declared_export():
     assert generated == json.loads((DIRECTORY / "co_registration.json").read_text())
     assert generated["projection"]["value"] == 0
     states = generated["states"]
-    assert len(states[-1]["payload"]["envelopes"]) == len(LINES)
+    assert len(states[-1]["payload"]["envelopes"]) == len(lines)
     assert states[-1]["payload"]["envelopes"] == states[0]["payload"]["envelopes"]
     assert states[-1]["payload"]["prior_ref"] == states[0]["state_digest"]
 
@@ -123,13 +176,14 @@ def test_new_cohort_uses_its_authored_classification_reference(tmp_path):
 def test_native_editions_preserve_distinct_subjects_and_open_correspondence(edition):
     directory = DIRECTORY.parent / edition
     manifest = json.loads((directory / "manifest.json").read_text())
-    assert len(manifest["siblings"]) == len(LINES)
-    assert {e["repository"].split("/")[1] for e in manifest["siblings"]} == LINES
+    lines = EDITION_LINES[edition]
+    assert len(manifest["siblings"]) == len(lines)
+    assert {e["repository"].split("/")[1] for e in manifest["siblings"]} == lines
     generated = build_cohort(directory)
     assert generated == json.loads((directory / "co_registration.json").read_text())
     first, second = generated["states"]
     envelopes = second["payload"]["envelopes"]
-    assert len({e["subject_id"] for e in envelopes}) == len(LINES)
+    assert len({e["subject_id"] for e in envelopes}) == len(lines)
     assert envelopes == first["payload"]["envelopes"]
     assert second["payload"]["prior_ref"] == first["state_digest"]
     relations = second["payload"]["relations"]
@@ -145,3 +199,87 @@ def test_native_editions_preserve_distinct_subjects_and_open_correspondence(edit
     assert generated["projection"]["value"] == 0
     assert any("return_due" in reason for reason in generated["projection"]["reasons"])
     assert any("CANNOT_COMPARE" in r for r in generated["projection"]["reasons"])
+
+
+def test_current_edition_keeps_native_status_opaque_and_private_sources_outside():
+    directory = DIRECTORY.parent / CURRENT_EDITION
+    manifest = json.loads((directory / "manifest.json").read_text())
+    generated = build_cohort(directory)
+    stored = {
+        envelope["line_id"]: envelope
+        for envelope in generated["states"][-1]["payload"]["envelopes"]
+    }
+    assert set(stored) == EDITION_LINES[CURRENT_EDITION]
+    for entry in manifest["siblings"]:
+        payload = json.loads((directory / entry["file"]).read_text())
+        envelope = stored[payload["line_id"]]
+        assert canonical_json(envelope["native_status"]) == canonical_json(
+            payload["native_status"]
+        )
+        assert envelope["report_ref"] == payload["report_ref"]
+        assert envelope["scope_and_nonclaims"] == payload["scope_and_nonclaims"]
+        if payload["line_id"] in {"violet_line", "copper_line", "iron_line"}:
+            assert payload["source_snapshot_refs"] == []
+            assert entry["snapshot_kind"] == "disclosure-reviewed-synthetic-envelope"
+            assert not {
+                "commit",
+                "tree",
+                "tag_object",
+                "export_recipe",
+                "source_path",
+            }.intersection(entry)
+
+
+@pytest.mark.parametrize("document", ("manifest", "export"))
+@pytest.mark.parametrize("defect", ("duplicate", "NaN", "Infinity", "-Infinity", "array"))
+def test_cohort_file_intake_requires_strict_json(tmp_path, document, defect):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY.parent / CURRENT_EDITION, directory)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    entry = manifest["siblings"][0]
+    target = manifest_path if document == "manifest" else directory / entry["file"]
+    original = target.read_text()
+    if defect == "duplicate":
+        key = "cohort_id" if document == "manifest" else "line_id"
+        malformed = f'{{"{key}":"ambiguous",' + original.lstrip()[1:]
+    elif defect == "array":
+        malformed = "[]"
+    else:
+        malformed = f'{{"nonfinite":{defect},' + original.lstrip()[1:]
+    target.write_text(malformed)
+    if document == "export":
+        entry["sha256"] = sha256(target.read_bytes()).hexdigest()
+        manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(
+        ValueError,
+        match="duplicate JSON field|nonfinite JSON constant|expected a JSON object",
+    ):
+        build_cohort(directory)
+
+
+def test_ten_native_status_vectors_cannot_clear_authored_holds(tmp_path):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY.parent / CURRENT_EDITION, directory)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    status = {"uninterpreted": [True, 1, 1.0, None, {"claim": "all clear"}]}
+    for entry in manifest["siblings"]:
+        path = directory / entry["file"]
+        payload = json.loads(path.read_text())
+        payload["native_status"] = status
+        path.write_text(json.dumps(payload))
+        entry["sha256"] = sha256(path.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest))
+    generated = build_cohort(directory)
+    envelopes = generated["states"][-1]["payload"]["envelopes"]
+    expected_lines = EDITION_LINES[CURRENT_EDITION]
+    assert {envelope["line_id"] for envelope in envelopes} == expected_lines
+    assert all(
+        canonical_json(envelope["native_status"]) == canonical_json(status)
+        for envelope in envelopes
+    )
+    assert generated["projection"]["value"] == 0
+    reasons = generated["projection"]["reasons"]
+    assert any("return_due" in reason for reason in reasons)
+    assert any("CANNOT_COMPARE" in reason for reason in reasons)

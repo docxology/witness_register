@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use or refer to this work, please cite it as below."
 type: software
 title: "The Witness Register: Co-Registration Without Aggregation"
-version: "0.3.1"
+version: "0.4.0"
 date-released: "2026-11-08"
 authors:
   - family-names: "Friedman"
@@ -103,6 +103,7 @@ references:
       - family-names: "Friedman"
         given-names: "Daniel Ari"
     repository-code: "https://github.com/docxology/violet_line"
+    notes: "Private repository; public registration uses a separately disclosure-reviewed synthetic envelope, not private native provenance."
 
   - type: software
     title: "blue_line"
@@ -117,3 +118,21 @@ references:
       - family-names: "Friedman"
         given-names: "Daniel Ari"
     repository-code: "https://github.com/docxology/green_line"
+
+  - type: software
+    title: "copper_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/copper_line"
+    notes: "Dimensioned resource use, outstanding commitments, and bearer attribution. Private repository; public registration uses a separately disclosure-reviewed synthetic envelope."
+
+  - type: software
+    title: "iron_line"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+        orcid: "https://orcid.org/0000-0001-6232-9096"
+    repository-code: "https://github.com/docxology/iron_line"
+    notes: "Scenario-bound recorded recovery target comparisons. Private repository; public registration uses a separately disclosure-reviewed synthetic envelope."

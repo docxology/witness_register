@@ -7,10 +7,11 @@ a committed artifact with provenance.
 ## Envelopes
 
 `envelopes/` preserves historical `line.report-envelope/1.0` records and
-versioned release cohorts copied from immutable sibling snapshots. Each
-cohort manifest binds repository, tag or bounded fallback, commit and file
-hash. The register reads these envelopes through
-`intake_envelope()` and never imports any line package.
+versioned release cohorts. Public producer entries bind immutable source
+snapshots and exact exported-byte hashes. Private producers contribute only
+disclosure-reviewed synthetic public envelopes with empty source references;
+private native provenance stays outside this repository. The register reads
+all envelopes through `intake_envelope()` and never imports any line package.
 
 See `envelopes/README.md` for the generation commands and provenance record.
 

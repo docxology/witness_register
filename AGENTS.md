@@ -5,8 +5,9 @@ Rules and gates for any agent (or human) working in this repository.
 ## The invariants that must survive any change
 
 1. **No line imports.** No file under `src/` or `tests/` imports any of the
-   eight instruments (`red_line`, `black_line`, `golden_line`, `white_line`,
-   `silver_line`, `violet_line`, `blue_line`, `green_line`) or `line_set`.
+   ten instruments (`red_line`, `black_line`, `golden_line`, `white_line`,
+   `silver_line`, `violet_line`, `blue_line`, `green_line`, `copper_line`,
+   `iron_line`) or `line_set`.
    Envelopes arrive by value under the published schema string
    `line.report-envelope/1.0`, declared as this repository's own literal.
 2. **No interpretation of `native_status`.** The register stores it verbatim
@@ -46,8 +47,9 @@ guard undiscriminating fails the guard's positive control, not just review:
 - `defect_battery()` — 12 planted structural defects, each must be detected.
 - `run_battery(defeat=<case>)` — every 3×3 case must reject its
   injected-wrong variant.
-- `tests/test_standalone.py` — link, gitignore, cd-escape, parents[], and
-  sibling-import gates, each with a planted-defect control.
+- `tests/test_standalone.py` — real isolated package intake, chain, and
+  projection without any sibling packages; relative-link and disposable-file
+  checks retain their planted-defect controls. No AST or sentence wiring gates.
 
 ## Rendering (external, optional)
 

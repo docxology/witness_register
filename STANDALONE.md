@@ -14,9 +14,11 @@ The sibling works —
 [golden_line](https://github.com/docxology/golden_line),
 [white_line](https://github.com/docxology/white_line),
 [silver_line](https://github.com/docxology/silver_line),
-[violet_line](https://github.com/docxology/violet_line),
+[violet_line](https://github.com/docxology/violet_line) (private),
 [blue_line](https://github.com/docxology/blue_line),
-[green_line](https://github.com/docxology/green_line), and the set reader
+[green_line](https://github.com/docxology/green_line),
+[copper_line](https://github.com/docxology/copper_line) (private),
+[iron_line](https://github.com/docxology/iron_line) (private), and the set reader
 [line_set](https://github.com/docxology/line_set) — live in their own
 repositories. A separated copy of this one is a clone held on its own, with
 no sibling checkout beside it and no monorepo around it. This document
@@ -24,6 +26,9 @@ states what that copy can do and what it cannot.
 
 Source availability can be optional or access-controlled. A stored envelope
 or declared roster member does not imply a current runnable source checkout.
+The three private instruments contribute only disclosure-reviewed synthetic
+public envelopes with empty source references. Full private native provenance
+and replay evidence remain outside public Witness.
 
 ## What it can do alone
 
@@ -40,9 +45,11 @@ From a clone of this repository and nothing else:
   `line.report-envelope/1.0` shape — from a line repository, from a file,
   or hand-built — because the contract is a data shape, not a dependency.
 
-No module in `src/witness_register/` imports a sibling work, and no path in
-this repository resolves above its own root; `tests/test_standalone.py`
-enforces both with positive controls.
+The standalone consumer test starts Python with `-I -S`, adds only this
+package's source to the standard-library path, confirms that all ten native
+packages and the reader are unavailable, and exercises by-value intake,
+state sealing, chain verification, and projection. This is runnable behavior,
+not an AST import scan or a check for particular documentation sentences.
 
 ## What it cannot do alone
 

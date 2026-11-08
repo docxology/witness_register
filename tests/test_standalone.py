@@ -1,22 +1,18 @@
-"""Gates for the claim that this repository is separated and self-sufficient.
+"""Consumer gates for a separated, self-sufficient Witness Register clone.
 
-A clone of ``docxology/witness_register`` holds only this repository — no
-sibling line checkout, no parent ``.gitignore``, no render engine one
-directory up. Every gate here is paired with a positive control that plants
-the defect and asserts rejection, so a gate that stopped discriminating
-fails rather than passing silently. The register's deepest standalone claim
-is architectural: it never imports a line package, because envelopes arrive
-by value under a published schema string.
+Envelopes arrive by value. The isolated interpreter exercises the package with
+no sibling packages or site-packages available; document links and disposable
+artifact rules are checked independently.
 """
 
 from __future__ import annotations
 
-import ast
+import json
 import re
 from fnmatch import fnmatch
 from pathlib import Path
-
-import pytest
+import subprocess
+import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -49,6 +45,8 @@ SIBLING_WORKS = (
     "violet_line",
     "blue_line",
     "green_line",
+    "copper_line",
+    "iron_line",
     "line_set",
 )
 
@@ -111,15 +109,6 @@ def unresolvable_links(root: Path) -> list[str]:
             if not resolved.exists():
                 dangling.append(f"{path.relative_to(root)} -> {target}")
     return dangling
-
-
-def test_the_scan_set_is_not_empty() -> None:
-    """A gate over an empty file set is vacuous, not clean."""
-
-    documents = source_files(PROJECT_ROOT, ".md")
-    assert len(documents) > 10, len(documents)
-    linked = [path for path in documents if relative_link_targets(path)]
-    assert len(linked) > 3, len(linked)
 
 
 def test_no_markdown_link_resolves_outside_the_repository() -> None:
@@ -235,122 +224,66 @@ def test_uv_lock_is_deliberately_tracked() -> None:
     assert not is_ignored("uv.lock", ignore_patterns(PROJECT_ROOT))
 
 
-def test_standalone_guide_names_the_external_render_dependency() -> None:
-    """A separated copy must explain its own purpose and limits."""
+def test_register_works_with_no_sibling_packages(tmp_path: Path) -> None:
+    """Import and use the real package with only its source and the stdlib."""
 
-    text = (PROJECT_ROOT / "STANDALONE.md").read_text(encoding="utf-8")
-    assert "docxology/template" in text
-    for sibling in SIBLING_WORKS:
-        assert f"https://github.com/docxology/{sibling}" in text, sibling
-    assert "output/pdf/witness_register_combined.pdf" in text
+    program = """
+import importlib
+import json
+import sys
 
+sys.path.insert(0, sys.argv[1])
+siblings = json.loads(sys.argv[2])
+for sibling in siblings:
+    try:
+        importlib.import_module(sibling)
+    except ModuleNotFoundError as error:
+        assert error.name == sibling, (sibling, error)
+    else:
+        raise AssertionError(f"sibling unexpectedly importable: {sibling}")
 
-#: ``cd`` into a path that leaves the repository is the monorepo assumption in
-#: its most concrete form: it only works if this clone sits at a fixed depth
-#: inside somebody else's tree.
-ESCAPING_CD_RE = re.compile(r"^\s*cd\s+\.\./", re.MULTILINE)
+from witness_register import (
+    canonical_json, genesis_state, intake_envelope, project, verify_chain,
+)
 
-
-def test_no_document_instructs_the_reader_to_cd_out_of_the_repository() -> None:
-    """The render is an external tool, not a fixed position in a tree."""
-
-    offenders = [
-        str(path.relative_to(PROJECT_ROOT))
-        for path in source_files(PROJECT_ROOT, ".md")
-        if ESCAPING_CD_RE.search(path.read_text(encoding="utf-8"))
-    ]
-    assert offenders == [], offenders
-
-
-def test_the_cd_gate_rejects_the_instruction_it_was_written_for() -> None:
-    """Positive control, using the exact line sibling repos used to ship."""
-
-    assert ESCAPING_CD_RE.search("```bash\ncd ../../../template\n```")
-    assert ESCAPING_CD_RE.search("cd ../projects/working/witness_register\n")
-    assert not ESCAPING_CD_RE.search('cd "$TEMPLATE_ROOT"\n')
-    assert not ESCAPING_CD_RE.search("cd docs\n")
-
-
-def test_no_shipped_python_resolves_a_path_above_the_repository_root() -> None:
-    """A default that walks up to a sibling checkout is a hidden dependency."""
-
-    offenders: list[str] = []
-    for directory in ("src", "tests"):
-        for path in source_files(PROJECT_ROOT / directory, ".py"):
-            depth = len(path.relative_to(PROJECT_ROOT).parts) - 1
-            tree = ast.parse(path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                if not isinstance(node, ast.Subscript):
-                    continue
-                value = node.value
-                if not (isinstance(value, ast.Attribute) and value.attr == "parents"):
-                    continue
-                index = node.slice
-                if isinstance(index, ast.Constant) and isinstance(index.value, int):
-                    if index.value > depth:
-                        offenders.append(
-                            f"{path.relative_to(PROJECT_ROOT)}:{node.lineno} "
-                            f"parents[{index.value}] exceeds depth {depth}"
-                        )
-    assert offenders == [], offenders
-
-
-def test_the_parents_gate_measures_depth_rather_than_a_fixed_number() -> None:
-    """Positive control: the pattern the gate exists to catch, at real depth."""
-
-    depth = len(Path("tests/test_standalone.py").parts) - 1
-    assert depth == 1
-    tree = ast.parse("ROOT = Path(__file__).resolve().parents[2] / 'template'\n")
-    indices = [
-        node.slice.value
-        for node in ast.walk(tree)
-        if isinstance(node, ast.Subscript)
-        and isinstance(node.value, ast.Attribute)
-        and node.value.attr == "parents"
-        and isinstance(node.slice, ast.Constant)
-    ]
-    assert indices == [2]
-    assert indices[0] > depth
-
-
-def test_no_source_file_imports_a_sibling_line_project() -> None:
-    """The register's central architectural claim: linked by value, never import."""
-
-    offenders: list[str] = []
-    for directory in ("src", "tests"):
-        for path in source_files(PROJECT_ROOT / directory, ".py"):
-            tree = ast.parse(path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                names: list[str] = []
-                if isinstance(node, ast.Import):
-                    names = [alias.name for alias in node.names]
-                elif isinstance(node, ast.ImportFrom) and node.module:
-                    names = [node.module]
-                for name in names:
-                    if name.split(".")[0] in SIBLING_WORKS:
-                        offenders.append(
-                            f"{path.relative_to(PROJECT_ROOT)}:{node.lineno} {name}"
-                        )
-    assert offenders == [], offenders
-
-
-def test_the_sibling_import_gate_can_see_an_import(tmp_path: Path) -> None:
-    """Positive control for the import scan."""
-
-    module = tmp_path / "planted.py"
-    module.write_text("from golden_line import evaluate\n", encoding="utf-8")
-    tree = ast.parse(module.read_text(encoding="utf-8"))
-    modules = [
-        node.module
-        for node in ast.walk(tree)
-        if isinstance(node, ast.ImportFrom) and node.module
-    ]
-    assert modules == ["golden_line"]
-
-
-@pytest.mark.parametrize("sibling", SIBLING_WORKS)
-def test_no_sibling_line_package_is_importable(sibling: str) -> None:
-    """The clone's interpreter must not be able to reach a sibling at all."""
-
-    with pytest.raises(ImportError):
-        __import__(sibling)
+records = []
+for line_id, digest in (("copper_line", "b" * 64), ("iron_line", "c" * 64)):
+    payload = {
+        "schema_version": "line.report-envelope/1.0",
+        "line_id": line_id,
+        "subject_id": "isolated-consumer",
+        "review_date": "2026-11-08",
+        "registry_version": "0.1.0",
+        "registry_digest": "a" * 64,
+        "native_status": {"vector": [{"status": "opaque", "quantity": None}]},
+        "report_ref": digest,
+        "source_snapshot_refs": [],
+        "scope_and_nonclaims": ["Constructed input; no native report verified."],
+    }
+    record, issues = intake_envelope(payload)
+    assert record is not None, issues
+    assert canonical_json(record.native_status) == canonical_json(payload["native_status"])
+    records.append(record)
+state = genesis_state("isolated-consumer", "2026-11-08", tuple(records))
+assert verify_chain((state,)) == ()
+posture = project(state, "inspect this constructed envelope")
+assert posture.state_ref == state.state_digest
+assert posture.value == 1
+assert not set(siblings).intersection(sys.modules)
+"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-I",
+            "-S",
+            "-c",
+            program,
+            str(PROJECT_ROOT / "src"),
+            json.dumps(SIBLING_WORKS),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr

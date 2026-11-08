@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.4.0 — 2026-11-08
+
+- Orient the current family to ten instruments plus the Main reader and
+  separate Witness companion. Copper adds dimensioned resource use and
+  commitments; Iron adds scenario-bound recorded recovery target comparisons.
+  Witness stays outside `LINE_SET` and does not interpret native status.
+- Assign `v0.4.0-element-admission` its independent ten-member acceptance
+  contract. Retain each older edition's explicit eight-member expectation,
+  byte-custody and misattribution refusals, distinct subjects, and held posture.
+  Final native exports, manifest and co-registration are generated separately
+  from actual final producer sources, not fabricated in source preparation.
+- Separate current citation references from the historical top-level corpus.
+  Document disclosure-reviewed synthetic public Copper, Iron, and Violet
+  exports with empty source references and full native provenance kept private.
+- Exercise standalone intake, state, and projection in an isolated standard-
+  library interpreter without any sibling package. Remove incidental AST,
+  source-text and documentation-sentence wiring assertions.
+- Refuse duplicate JSON fields and nonfinite JSON extensions at cohort file
+  intake without interpreting native status or changing register/envelope
+  schemas. Preserve noncompensatory projection and every historical artifact.
+- Align software, manuscript, citation, archive metadata and the existing
+  editable lock entry at 0.4.0. No new DOI or deposit is asserted.
+
 ## 0.3.1 — 2026-11-08
 
 - Refresh current package and manuscript metadata and add a separately authored

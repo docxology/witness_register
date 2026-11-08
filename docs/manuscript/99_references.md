@@ -1,17 +1,20 @@
 # References {#sec:references}
 
-The original line works and their set reader, referenced by name and repository
-URL in the set's convention (by published convention, never by import or
-relative path):
+The current instruments and their set reader, referenced by repository
+identity (by published convention, never by import or relative path).
+Violet, Copper, and Iron repositories are private; naming them does not grant
+source access or disclose their native provenance:
 
 - Friedman, D. A. *Red Line*. [Red Line, the cognitive-security registry of self-assessments](https://github.com/docxology/red_line)
 - Friedman, D. A. *Black Line*. [Black Line, the practice registry of realized craft](https://github.com/docxology/black_line)
 - Friedman, D. A. *Golden Line*. [Golden Line, the aspiration and horizon registry](https://github.com/docxology/golden_line)
 - Friedman, D. A. *White Line*. [White Line, the absence and omission ledger](https://github.com/docxology/white_line)
 - Friedman, D. A. *Silver Line*. [Silver Line](https://github.com/docxology/silver_line)
-- Friedman, D. A. *Violet Line*. [Violet Line](https://github.com/docxology/violet_line)
+- Friedman, D. A. *Violet Line* (private). [Violet Line](https://github.com/docxology/violet_line)
 - Friedman, D. A. *Blue Line*. [Blue Line](https://github.com/docxology/blue_line)
 - Friedman, D. A. *Green Line*. [Green Line](https://github.com/docxology/green_line)
+- Friedman, D. A. *Copper Line* (private). [Copper Line, dimensioned resource use, commitments, and attribution](https://github.com/docxology/copper_line)
+- Friedman, D. A. *Iron Line* (private). [Iron Line, scenario-bound recorded recovery target comparisons](https://github.com/docxology/iron_line)
 - Friedman, D. A. *Line Set*. [Line Set, the cross-line set reader](https://github.com/docxology/line_set)
 
 The scholarly references cited in the design and scholarship sections are

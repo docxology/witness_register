@@ -1,11 +1,11 @@
-"""The publication-metadata contract: one version, exact URLs, no placeholder DOI.
+"""Publication metadata: consistent identity, current references, no invented DOI.
 
 Publication metadata is the surface where a wrong value does the most damage,
 because it is copied verbatim into other people's bibliographies and cannot be
 recalled. These tests bind the four places this work states its own identity —
 the package, the manuscript config, ``CITATION.cff``, and ``.zenodo.json`` — to
-each other, require every sibling reference to be the exact public URL, and
-refuse any DOI-shaped string that a person has not explicitly asserted to be
+each other, validate the current citation roster independently of historical
+worked exports, and refuse DOI-shaped strings not explicitly asserted to be
 real.
 """
 
@@ -24,7 +24,7 @@ CONFIG = ROOT / "docs" / "manuscript" / "config.yaml"
 LICENSE = ROOT / "LICENSE"
 
 SELF = "witness_register"
-SIBLINGS = (
+CURRENT_REFERENCES = (
     "red_line",
     "black_line",
     "golden_line",
@@ -33,6 +33,8 @@ SIBLINGS = (
     "violet_line",
     "blue_line",
     "green_line",
+    "copper_line",
+    "iron_line",
     "line_set",
 )
 
@@ -116,21 +118,16 @@ def test_the_citation_names_this_repository_exactly() -> None:
     assert supplements == [expected]
 
 
-def test_every_sibling_is_referenced_by_its_exact_public_url() -> None:
-    """Every declared family reference uses its canonical repository URL."""
+def test_current_citation_references_use_canonical_repository_identifiers() -> None:
+    """Citation identity does not imply public access to a private repository."""
 
     citation = CITATION.read_text(encoding="utf-8")
     zenodo = json.loads(ZENODO.read_text(encoding="utf-8"))
     identifiers = {item["identifier"] for item in zenodo["related_identifiers"]}
-    for sibling in SIBLINGS:
+    for sibling in CURRENT_REFERENCES:
         url = f"https://github.com/docxology/{sibling}"
         assert f'repository-code: "{url}"' in citation, sibling
         assert url in identifiers, sibling
-    worked = {
-        json.loads(p.read_text())["line_id"]
-        for p in (ROOT / "data" / "envelopes").glob("*_worked.json")
-    }
-    assert set(SIBLINGS) == worked | {"line_set"}
 
 
 def test_no_unverified_doi_appears_in_metadata() -> None:
