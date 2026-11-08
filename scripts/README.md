@@ -21,12 +21,13 @@ Thin build entry points. No business logic here — import from `witness_registe
 See [AGENTS.md](AGENTS.md) for the working contract.
 ## Release cohort replay
 
-`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.0-source-refresh`
+`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.1-runtime-source-refresh`
 checks exported byte custody, intakes by value, and writes deterministic
 `co_registration.json`. The directory argument is required: no default command
-rewrites a retained cohort. The new directory contains eight genuine native
-exports and a manifest binding exact exported-byte hashes and disclosed producer
-commits. Violet's private producer custody is deliberately not published.
+rewrites a retained cohort. The current directory contains seven recomputed
+public native exports and the unchanged approved synthetic Violet envelope,
+with exact byte hashes, public producer commits, and native export recipes.
+Violet's private producer custody is deliberately not published.
 Set `classification_decision_ref` to the current registrar's explicit
 classification reference; manifests without it retain the historical
 2026-10-21 authority reference for byte-identical historical replay.

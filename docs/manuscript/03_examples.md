@@ -101,12 +101,12 @@ the envelope shape, not its native report, consent, truth or applicability.
 
 ## Current native transport edition
 
-The current edition in `data/envelopes/releases/v0.3.0-final-source-refresh/`
-binds the final corrected public Red, Black, White, and Silver source snapshots
-through their native producers. Golden, Blue, and Green retain their unchanged
-committed bindings and exports. The prior `v0.3.0-source-refresh`, `v0.3.0`, and
-`v0.2.0` editions remain unchanged. Its manifest retains exact export hashes and
-disclosed producer identities. The native fixture review dates
+The current edition in `data/envelopes/releases/v0.3.1-runtime-source-refresh/`
+binds the actual current public producer source snapshots, including Golden
+0.6.1, through separately recomputed native exports. The prior
+`v0.3.0-final-source-refresh`, `v0.3.0-source-refresh`, `v0.3.0`, and
+`v0.2.0` editions remain unchanged. Its manifest retains exact export hashes,
+native export recipes, and disclosed producer identities. The native fixture review dates
 and distinct subject identifiers remain intact; registration does not make them
 fresh observations about one subject.
 

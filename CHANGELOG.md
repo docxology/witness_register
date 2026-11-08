@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 — 2026-11-08
+
+- Refresh current package and manuscript metadata and add a separately authored
+  `v0.3.1-runtime-source-refresh` cohort from actual current public producer
+  pins, including Golden 0.6.1, through the existing native export recipes.
+- Preserve every prior cohort and historical packet byte-for-byte, native
+  fixture dates and distinct subjects, and Violet's exact approved synthetic
+  envelope and disclosure review without exposing private source custody.
+- Keep the generic cohort builder, native evidence boundaries, two-state
+  registration, `CANNOT_COMPARE`, `RETURN_DUE`, and zero projection unchanged.
+
 ## 0.3.0 — 2026-11-06
 
 - Add `data/envelopes/releases/v0.3.0-final-source-refresh/` from the final

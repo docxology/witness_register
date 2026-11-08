@@ -25,6 +25,7 @@ EDITIONS = (
     "v0.3.0",
     "v0.3.0-source-refresh",
     "v0.3.0-final-source-refresh",
+    "v0.3.1-runtime-source-refresh",
 )
 
 

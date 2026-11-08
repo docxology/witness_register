@@ -7,4 +7,4 @@ value; a binding test holds them equal so the copies cannot drift apart.
 
 from __future__ import annotations
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"

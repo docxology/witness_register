@@ -155,10 +155,14 @@ structural validation; typed failures are bookkeeping errors, not subject
 verdicts. Use wording is an auditable declaration; the code does not infer
 which constraints apply from free text.
 
-Package 0.3.0 keeps the register 2.0 canonical payloads and 1.0 envelope
+Package 0.3.1 keeps the register 2.0 canonical payloads and 1.0 envelope
 transport unchanged. Relation and return fields are admitted before replay:
 malformed identities, false-valued remainders, and non-tuple alternatives
 remain inspectable in raw records but cannot receive a projection.
+
+The current [native transport cohort](data/envelopes/releases/v0.3.1-runtime-source-refresh/README.md)
+recomputes public exports from actual source pins, including Golden 0.6.1.
+Prior cohorts remain historical and unchanged; see the [0.3.1 source packet](docs/releases/v0.3.1.md).
 Neither transport version nor exported-byte custody proves native report
 correspondence or freshness. Historical release cohorts stay unchanged;
 new final producer snapshots belong in a new versioned cohort.

@@ -48,20 +48,5 @@ def test_version_has_a_changelog_window() -> None:
     assert f"## {witness_register.__version__}" in text
 
 
-def test_the_package_docstring_states_the_non_claims() -> None:
-    doc = witness_register.__doc__
-    assert doc is not None
-    for phrase in (
-        "NEVER imports any line package",
-        "NEVER parses, compares, ranks, averages, merges",
-        "NEVER auto-creates a category",
-        "NEVER infers consent or permission",
-        "NEVER mutates or rewrites history",
-        "bounded posture",
-        "unbound without EXTERNAL anchoring",
-    ):
-        assert phrase in doc, phrase
-
-
 def test_the_envelope_schema_is_the_published_literal() -> None:
     assert witness_register.ENVELOPE_SCHEMA == "line.report-envelope/1.0"

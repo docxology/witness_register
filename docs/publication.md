@@ -1,11 +1,13 @@
 # Publication and citation
 
-Software and manuscript sources declare version 0.3.0 together. Cite the
-versioned repository until Daniel reserves and mints its Zenodo version DOI:
+Software and manuscript sources declare version 0.3.1 together. Until its
+source tag is published, cite the exact inspected source revision; the
+versioned source URL below is the intended publication target, not evidence
+that publication has occurred:
 
 > Friedman, D. A. (2026). *The Witness Register: Co-Registration Without
-> Aggregation* (version 0.3.0) [Software and manuscript sources].
-> [Versioned source](https://github.com/docxology/witness_register/tree/v0.3.0).
+> Aggregation* (version 0.3.1) [Software and manuscript sources].
+> [Versioned source](https://github.com/docxology/witness_register/tree/v0.3.1).
 
 The last verified archived DOI is
 `10.5281/zenodo.22833511` ([archived record](https://zenodo.org/records/22833511)), identifying
@@ -26,12 +28,12 @@ The package version does not change the canonical register 2.0 payloads,
 decision 1.0 records, or `line.report-envelope/1.0` transport. Native schema
 versions (including Silver/Violet 3.0) belong to their producers, not this
 register. Exact exported-byte custody proves neither native correspondence
-nor currentness. The `v0.2.0`, `v0.3.0`, and `v0.3.0-source-refresh` cohorts
-and prior release packets remain unchanged. The `v0.3.0-final-source-refresh`
-edition binds the final corrected public Red, Black, White, and Silver commits
-through separately recomputed native exports. Golden, Blue, and Green retain
-their unchanged committed producer bindings and exact exports; Violet's approved
-synthetic bytes and disclosure review remain unchanged.
+nor currentness. All prior cohorts, including `v0.3.0-final-source-refresh`,
+and prior release packets remain unchanged. The
+`v0.3.1-runtime-source-refresh` edition recomputes the seven public exports
+through their existing native recipes from actual current pins, including
+Golden 0.6.1. Violet's approved synthetic bytes, empty source references, and
+disclosure review remain unchanged. See the [current source packet](releases/v0.3.1.md).
 Violet's private producer identity is not a public release prerequisite.
 Source preparation is separate from source-tag publication; no new archive or
 DOI is asserted.
