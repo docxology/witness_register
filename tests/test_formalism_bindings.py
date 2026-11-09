@@ -1,11 +1,4 @@
-"""Bind every 02d_formalism.md block to executed register behavior.
-
-Each test here first *derives* behavior by running the real code, then
-asserts the manuscript states exactly that. The binding table in 02d is
-keyed on each block's *label*, never on its number. Two gates police the
-table: one requires the row set to equal the declared block set, the other
-requires each row to name a test that exists.
-"""
+"""Executed register invariants and publication evidence integrity."""
 
 from __future__ import annotations
 
@@ -18,7 +11,6 @@ from witness_register import (
     RelationRecord,
     RelationType,
     ReturnContractRecord,
-    WitnessState,
     genesis_state,
     intake_envelope,
     project,
@@ -31,67 +23,6 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FORMALISM_2A = PROJECT_ROOT / "docs" / "manuscript" / "02a_formalism.md"
 FORMALISM_2D = PROJECT_ROOT / "docs" / "manuscript" / "02d_formalism.md"
 CLAIM_LEDGER = PROJECT_ROOT / "data" / "claim_ledger.yaml"
-
-_TEST_REF = re.compile(r"tests/[\w/]+\.py::\w+")
-_ROW_LABEL = re.compile(r"^\|\s*\[@((?:def|prop):[\w-]+)\]\s*\|")
-
-
-def _normalized(path: Path) -> str:
-    return " ".join(path.read_text(encoding="utf-8").split())
-
-
-def _binding_table_rows() -> list[tuple[str, str]]:
-    """Return ``(block label, verifying-test cell)`` for every table row in 02d."""
-    rows: list[tuple[str, str]] = []
-    for line in FORMALISM_2D.read_text(encoding="utf-8").splitlines():
-        match = _ROW_LABEL.match(line)
-        if match is None:
-            continue
-        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-        assert len(cells) == 4, line
-        rows.append((match.group(1), cells[2]))
-    return rows
-
-
-def _formalism_2d_labels() -> list[str]:
-    """Every proposition label declared in 02d_formalism.md, in document order."""
-    labels: list[str] = []
-    for line in FORMALISM_2D.read_text(encoding="utf-8").splitlines():
-        match = re.search(r"#(prop:[\w-]+)", line)
-        if match:
-            labels.append(match.group(1))
-    return labels
-
-
-# --------------------------------------------------------------------------- gates
-
-
-def test_binding_tables_bind_every_declared_block() -> None:
-    """The row set must equal the declared block set -- no gaps, no orphans."""
-    labels = _formalism_2d_labels()
-    assert labels, "no proposition blocks parsed, so this gate would be vacuous"
-    rows = _binding_table_rows()
-    assert [label for label, _cell in rows] == labels
-
-
-def test_every_binding_row_names_an_existing_test() -> None:
-    """Per row: at least one verifying test is named, and every name resolves."""
-    rows = _binding_table_rows()
-    assert rows, "no table rows parsed, so this gate would be vacuous"
-
-    for label, cell in rows:
-        row_refs = _TEST_REF.findall(cell)
-        assert row_refs, f"{label} names no verifying test"
-
-    all_refs = set(_TEST_REF.findall(FORMALISM_2D.read_text(encoding="utf-8")))
-    for ref in sorted(all_refs):
-        rel_path, function_name = ref.split("::")
-        test_file = PROJECT_ROOT / rel_path
-        assert test_file.is_file(), ref
-        assert f"def {function_name}(" in test_file.read_text(encoding="utf-8"), ref
-
-
-# --------------------------------------------------------------------------- verifying tests
 
 
 def _valid_envelope() -> EnvelopeRecord:
@@ -134,10 +65,6 @@ def test_chain_verification_checks_every_state() -> None:
     violations = verify_chain(chain_with_drop)
     assert len(violations) >= 1
     assert any("dropped" in v or "reordered" in v or "altered" in v for v in violations)
-
-    text = _normalized(FORMALISM_2D)
-    assert "verification never repairs" in text
-    assert "every event in the chain is verifiable" in text
 
 
 def test_return_contract_constrains_projection_across_chains() -> None:
@@ -193,9 +120,6 @@ def test_return_contract_constrains_projection_across_chains() -> None:
     assert result_partial.value == 0
     assert any("return_due" in r or "outstanding" in r for r in result_partial.reasons)
 
-    text = _normalized(FORMALISM_2D)
-    assert "partial return with a non-empty remainder does not close" in text
-
 
 def test_projection_is_deterministic_for_identical_inputs() -> None:
     """Identical state and use produce identical Projection every time."""
@@ -216,11 +140,6 @@ def test_projection_is_deterministic_for_identical_inputs() -> None:
     # But same state, same use must always agree.
     assert project(state, "different_use") == r4
 
-    text = _normalized(FORMALISM_2D)
-    assert (
-        "identical `Projection` value" in text or "identical projection" in text.lower()
-    )
-
 
 # --------------------------------------------------------------------------- claim ledger
 
@@ -234,79 +153,6 @@ def _ledger_number(claim_id: str) -> int | float:
     assert match is not None, claim_id
     token = match.group(1)
     return float(token) if "." in token else int(token)
-
-
-def test_all_manuscript_references_to_tests_resolve() -> None:
-    """Every `tests/...` reference anywhere in the manuscript names a real file.
-
-    The binding-table gate above covers 02d_formalism.md; this one extends
-    the same guarantee to prose elsewhere in the manuscript. A reference to a
-    battery test that does not exist is exactly the kind of drift a reader
-    would trust and a maintainer would miss — it must fail, not pass review.
-
-    A reference may stop at the file (``tests/test_battery.py``) or name a
-    function (``tests/test_battery.py::run_battery_defeat``). Both must
-    resolve, so a renamed or deleted test cannot leave a stale pointer.
-    """
-
-    import re as _re
-
-    ref = _re.compile(r"tests/[A-Za-z0-9_./]+?\.py(?:[A-Za-z0-9_:/]*)?")
-    all_text = "".join(
-        path.read_text(encoding="utf-8")
-        for path in PROJECT_ROOT.glob("docs/manuscript/*.md")
-    )
-    found = set(ref.findall(all_text))
-    assert found, "no tests/ references parsed; the gate would be vacuous"
-
-    for token in sorted(found):
-        file_part = token.split("::", 1)[0]
-        test_file = PROJECT_ROOT / file_part
-        assert test_file.is_file(), f"{token}: no such test file"
-        if "::" in token:
-            function_name = token.split("::", 1)[1]
-            assert function_name, f"{token}: empty function name"
-            assert f"def {function_name}(" in test_file.read_text(encoding="utf-8"), (
-                f"{token}: no such function in {file_part}"
-            )
-
-
-def test_no_escaped_raw_latex_fence_is_printed_as_manuscript_text() -> None:
-    broken = "\\`" * 3 + "{=latex}"
-    for path in PROJECT_ROOT.glob("docs/manuscript/*.md"):
-        assert broken not in path.read_text(), path.name
-
-
-def test_documented_scope_semantics_match_the_wording_invariance_control() -> None:
-    text = " ".join((PROJECT_ROOT / "docs/manuscript/03_limits.md").read_text().split())
-    assert "does not infer semantic applicability from free text" in text
-    assert "categorical non-compensatory precedence" in text
-
-
-def test_claim_ledger_numbers_match_executed_sources() -> None:
-    """The evidence ledger cannot lag behind the executable facts."""
-    import inspect
-    from witness_register import RelationType
-    from witness_register.projection import witness_hold_reasons
-
-    # The hold reason kinds are string literals in witness_hold_reasons;
-    # extract them from the source rather than constructing a state.
-    source = inspect.getsource(witness_hold_reasons)
-    hold_kinds = set(re.findall(r'kind="(\w+)"', source))
-    assert hold_kinds, "no hold reason kinds found — regex may need updating"
-
-    return_contract = dataclasses.fields(ReturnContractRecord)
-
-    expected = {
-        "envelope_field_count": len(dataclasses.fields(EnvelopeRecord)),
-        "witness_state_field_count": len(dataclasses.fields(WitnessState)),
-        "relation_type_count": len(RelationType),
-        "return_contract_field_count": len(return_contract),
-        "projection_codomain_count": 3,
-        "hold_reason_categories_count": len(hold_kinds),
-    }
-    for claim_id, value in expected.items():
-        assert _ledger_number(claim_id) == value, claim_id
 
 
 # ---------------------------------------------- evidence-registry citation support

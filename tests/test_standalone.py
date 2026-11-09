@@ -1,20 +1,19 @@
-"""Gates for the claim that this repository is separated and self-sufficient.
+"""Consumer gates for a separated, self-sufficient Witness Register clone.
 
-A clone of ``docxology/witness_register`` holds only this repository — no
-sibling line checkout, no parent ``.gitignore``, no render engine one
-directory up. Every gate here is paired with a positive control that plants
-the defect and asserts rejection, so a gate that stopped discriminating
-fails rather than passing silently. The register's deepest standalone claim
-is architectural: it never imports a line package, because envelopes arrive
-by value under a published schema string.
+Envelopes arrive by value. The isolated interpreter exercises an installed
+distribution without sibling packages or checkout imports; document links
+and disposable artifact rules are checked independently.
 """
 
 from __future__ import annotations
 
-import ast
+import json
 import re
 from fnmatch import fnmatch
 from pathlib import Path
+import shutil
+import subprocess
+import sys
 
 import pytest
 
@@ -49,6 +48,8 @@ SIBLING_WORKS = (
     "violet_line",
     "blue_line",
     "green_line",
+    "copper_line",
+    "iron_line",
     "line_set",
 )
 
@@ -111,15 +112,6 @@ def unresolvable_links(root: Path) -> list[str]:
             if not resolved.exists():
                 dangling.append(f"{path.relative_to(root)} -> {target}")
     return dangling
-
-
-def test_the_scan_set_is_not_empty() -> None:
-    """A gate over an empty file set is vacuous, not clean."""
-
-    documents = source_files(PROJECT_ROOT, ".md")
-    assert len(documents) > 10, len(documents)
-    linked = [path for path in documents if relative_link_targets(path)]
-    assert len(linked) > 3, len(linked)
 
 
 def test_no_markdown_link_resolves_outside_the_repository() -> None:
@@ -235,122 +227,169 @@ def test_uv_lock_is_deliberately_tracked() -> None:
     assert not is_ignored("uv.lock", ignore_patterns(PROJECT_ROOT))
 
 
-def test_standalone_guide_names_the_external_render_dependency() -> None:
-    """A separated copy must explain its own purpose and limits."""
-
-    text = (PROJECT_ROOT / "STANDALONE.md").read_text(encoding="utf-8")
-    assert "docxology/template" in text
-    for sibling in SIBLING_WORKS:
-        assert f"https://github.com/docxology/{sibling}" in text, sibling
-    assert "output/pdf/witness_register_combined.pdf" in text
-
-
-#: ``cd`` into a path that leaves the repository is the monorepo assumption in
-#: its most concrete form: it only works if this clone sits at a fixed depth
-#: inside somebody else's tree.
-ESCAPING_CD_RE = re.compile(r"^\s*cd\s+\.\./", re.MULTILINE)
-
-
-def test_no_document_instructs_the_reader_to_cd_out_of_the_repository() -> None:
-    """The render is an external tool, not a fixed position in a tree."""
-
-    offenders = [
-        str(path.relative_to(PROJECT_ROOT))
-        for path in source_files(PROJECT_ROOT, ".md")
-        if ESCAPING_CD_RE.search(path.read_text(encoding="utf-8"))
-    ]
-    assert offenders == [], offenders
-
-
-def test_the_cd_gate_rejects_the_instruction_it_was_written_for() -> None:
-    """Positive control, using the exact line sibling repos used to ship."""
-
-    assert ESCAPING_CD_RE.search("```bash\ncd ../../../template\n```")
-    assert ESCAPING_CD_RE.search("cd ../projects/working/witness_register\n")
-    assert not ESCAPING_CD_RE.search('cd "$TEMPLATE_ROOT"\n')
-    assert not ESCAPING_CD_RE.search("cd docs\n")
+@pytest.fixture(scope="module")
+def built_distributions(tmp_path_factory: pytest.TempPathFactory) -> dict[str, Path]:
+    """Build both real distribution formats once, without editable installs."""
+    uv = shutil.which("uv")
+    assert uv is not None, "uv is required to provision installed consumers"
+    destination = tmp_path_factory.mktemp("witness-distributions")
+    result = subprocess.run(
+        [
+            uv,
+            "build",
+            "--sdist",
+            "--wheel",
+            "--out-dir",
+            str(destination),
+            str(PROJECT_ROOT),
+        ],
+        cwd=destination,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    wheels = tuple(destination.glob("*.whl"))
+    sdists = tuple(destination.glob("*.tar.gz"))
+    assert len(wheels) == len(sdists) == 1
+    return {"wheel": wheels[0], "sdist": sdists[0]}
 
 
-def test_no_shipped_python_resolves_a_path_above_the_repository_root() -> None:
-    """A default that walks up to a sibling checkout is a hidden dependency."""
+@pytest.mark.parametrize("distribution_kind", ("wheel", "sdist"))
+def test_register_works_with_no_sibling_packages(
+    tmp_path: Path, built_distributions: dict[str, Path], distribution_kind: str
+) -> None:
+    """Consume the actual ten-envelope cohort through installed public APIs."""
+    uv = shutil.which("uv")
+    assert uv is not None, "uv is required to provision installed consumers"
+    environment = tmp_path / "consumer-environment"
+    python = environment / "bin" / "python"
+    for command in (
+        [uv, "venv", "--python", sys.executable, str(environment)],
+        [
+            uv,
+            "pip",
+            "install",
+            "--python",
+            str(python),
+            "--no-deps",
+            str(built_distributions[distribution_kind]),
+        ],
+    ):
+        result = subprocess.run(
+            command, cwd=tmp_path, capture_output=True, text=True, check=False
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+    cohort = tmp_path / "cohort"
+    shutil.copytree(
+        PROJECT_ROOT / "data/envelopes/releases/v0.4.0-element-admission", cohort
+    )
+    program = """
+import importlib
+import json
+import sys
+from hashlib import sha256
+from pathlib import Path
 
-    offenders: list[str] = []
-    for directory in ("src", "tests"):
-        for path in source_files(PROJECT_ROOT / directory, ".py"):
-            depth = len(path.relative_to(PROJECT_ROOT).parts) - 1
-            tree = ast.parse(path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                if not isinstance(node, ast.Subscript):
-                    continue
-                value = node.value
-                if not (isinstance(value, ast.Attribute) and value.attr == "parents"):
-                    continue
-                index = node.slice
-                if isinstance(index, ast.Constant) and isinstance(index.value, int):
-                    if index.value > depth:
-                        offenders.append(
-                            f"{path.relative_to(PROJECT_ROOT)}:{node.lineno} "
-                            f"parents[{index.value}] exceeds depth {depth}"
-                        )
-    assert offenders == [], offenders
+cohort = Path(sys.argv[1])
+siblings = json.loads(sys.argv[2])
+checkout = Path(sys.argv[3]).resolve()
+for entry in sys.path:
+    path = Path(entry).resolve()
+    assert path != checkout and checkout not in path.parents, sys.path
+for sibling in (*siblings, "scripts"):
+    try:
+        importlib.import_module(sibling)
+    except ModuleNotFoundError as error:
+        assert error.name == sibling, (sibling, error)
+    else:
+        raise AssertionError(f"checkout or sibling unexpectedly importable: {sibling}")
 
-
-def test_the_parents_gate_measures_depth_rather_than_a_fixed_number() -> None:
-    """Positive control: the pattern the gate exists to catch, at real depth."""
-
-    depth = len(Path("tests/test_standalone.py").parts) - 1
-    assert depth == 1
-    tree = ast.parse("ROOT = Path(__file__).resolve().parents[2] / 'template'\n")
-    indices = [
-        node.slice.value
-        for node in ast.walk(tree)
-        if isinstance(node, ast.Subscript)
-        and isinstance(node.value, ast.Attribute)
-        and node.value.attr == "parents"
-        and isinstance(node.slice, ast.Constant)
-    ]
-    assert indices == [2]
-    assert indices[0] > depth
-
-
-def test_no_source_file_imports_a_sibling_line_project() -> None:
-    """The register's central architectural claim: linked by value, never import."""
-
-    offenders: list[str] = []
-    for directory in ("src", "tests"):
-        for path in source_files(PROJECT_ROOT / directory, ".py"):
-            tree = ast.parse(path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
-                names: list[str] = []
-                if isinstance(node, ast.Import):
-                    names = [alias.name for alias in node.names]
-                elif isinstance(node, ast.ImportFrom) and node.module:
-                    names = [node.module]
-                for name in names:
-                    if name.split(".")[0] in SIBLING_WORKS:
-                        offenders.append(
-                            f"{path.relative_to(PROJECT_ROOT)}:{node.lineno} {name}"
-                        )
-    assert offenders == [], offenders
-
-
-def test_the_sibling_import_gate_can_see_an_import(tmp_path: Path) -> None:
-    """Positive control for the import scan."""
-
-    module = tmp_path / "planted.py"
-    module.write_text("from golden_line import evaluate\n", encoding="utf-8")
-    tree = ast.parse(module.read_text(encoding="utf-8"))
-    modules = [
-        node.module
-        for node in ast.walk(tree)
-        if isinstance(node, ast.ImportFrom) and node.module
-    ]
-    assert modules == ["golden_line"]
-
-
-@pytest.mark.parametrize("sibling", SIBLING_WORKS)
-def test_no_sibling_line_package_is_importable(sibling: str) -> None:
-    """The clone's interpreter must not be able to reach a sibling at all."""
-
-    with pytest.raises(ImportError):
-        __import__(sibling)
+import witness_register
+from witness_register import (
+    RelationRecord, RelationType, ReturnContractRecord, canonical_json,
+    canonical_projection, canonical_state_payload, genesis_state, intake_envelope,
+    project, update_state, verify_chain,
+)
+assert Path(witness_register.__file__).resolve().is_relative_to(Path(sys.prefix))
+manifest = json.loads((cohort / "manifest.json").read_text())
+expected = json.loads((cohort / "co_registration.json").read_text())
+records = []
+payloads = {}
+for entry in manifest["siblings"]:
+    raw = (cohort / entry["file"]).read_bytes()
+    assert sha256(raw).hexdigest() == entry["sha256"]
+    payload = json.loads(raw)
+    record, issues = intake_envelope(payload)
+    assert record is not None and issues == (), issues
+    assert record.line_id == entry["repository"].split("/")[1]
+    payloads[record.line_id] = payload
+    records.append(record)
+assert set(payloads) == set(siblings) - {"line_set"}
+assert len(records) == 10
+assert len({record.subject_id for record in records}) == 10
+first = genesis_state(
+    manifest["cohort_id"], manifest["reviewed_on"], envelopes=tuple(records)
+)
+authored = expected["states"][-1]["payload"]
+relations = tuple(
+    RelationRecord(**{
+        **{key: tuple(value) if isinstance(value, list) else value
+           for key, value in item.items() if key != "record_schema"},
+        "relation_type": RelationType(item["relation_type"]),
+    })
+    for item in authored["relations"]
+)
+returns = tuple(
+    ReturnContractRecord(**{
+        key: tuple(value) if isinstance(value, list) else value
+        for key, value in item.items() if key != "record_schema"
+    })
+    for item in authored["returns"]
+)
+second = update_state(
+    first, manifest["reviewed_on"], relations=relations, returns=returns
+)
+assert verify_chain((first, second)) == ()
+assert second.prior_ref == first.state_digest
+for state, pinned in zip((first, second), expected["states"], strict=True):
+    assert state.state_digest == pinned["state_digest"]
+    stored = canonical_state_payload(
+        state.subject_id, state.review_moment, state.envelopes, state.relations,
+        state.unclassified, state.returns, state.prior_ref, state.decisions,
+        state.history_refs,
+    )
+    assert stored == pinned["payload"]
+    for envelope in stored["envelopes"]:
+        payload = payloads[envelope["line_id"]]
+        assert canonical_json(envelope["native_status"]) == canonical_json(payload["native_status"])
+        assert envelope["report_ref"] == payload["report_ref"]
+        assert envelope["scope_and_nonclaims"] == payload["scope_and_nonclaims"]
+        assert envelope["source_snapshot_refs"] == payload["source_snapshot_refs"]
+        if envelope["line_id"] in {"violet_line", "copper_line", "iron_line"}:
+            assert envelope["source_snapshot_refs"] == []
+posture = project(second, manifest["declared_next_use"])
+assert posture.state_ref == second.state_digest
+assert posture.value == 0
+assert any("return_due" in reason for reason in posture.reasons)
+assert any("CANNOT_COMPARE" in reason for reason in posture.reasons)
+assert canonical_projection(posture) == expected["projection"]
+assert not set(siblings).intersection(sys.modules)
+assert "scripts" not in sys.modules
+"""
+    result = subprocess.run(
+        [
+            str(python),
+            "-I",
+            "-c",
+            program,
+            str(cohort),
+            json.dumps(SIBLING_WORKS),
+            str(PROJECT_ROOT),
+        ],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr

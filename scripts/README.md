@@ -21,15 +21,24 @@ Thin build entry points. No business logic here — import from `witness_registe
 See [AGENTS.md](AGENTS.md) for the working contract.
 ## Release cohort replay
 
-`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.3.1-runtime-source-refresh`
-checks exported byte custody, intakes by value, and writes deterministic
-`co_registration.json`. The directory argument is required: no default command
-rewrites a retained cohort. The current directory contains seven recomputed
-public native exports and the unchanged approved synthetic Violet envelope,
-with exact byte hashes, public producer commits, and native export recipes.
-Violet's private producer custody is deliberately not published.
-Set `classification_decision_ref` to the current registrar's explicit
-classification reference; manifests without it retain the historical
-2026-10-21 authority reference for byte-identical historical replay.
-This records authored incomparability and a correspondence return obligation,
-not native correspondence or freshness. Historical collections remain unchanged.
+`uv run python scripts/build_release_cohort.py data/envelopes/releases/v0.4.0-element-admission`
+checks exported byte custody, strict JSON, envelope shape and line attribution,
+then writes deterministic `co_registration.json`. The release owner first
+produces ten real native exports from actual final producer sources and
+authors their manifest. The directory argument is required: no default command
+rewrites a retained cohort.
+
+Seven public native exports carry actual disclosed producer custody and
+executed recipes. Copper, Iron, and Violet contribute separately
+disclosure-reviewed synthetic exports with empty source references. Their
+public manifest entries contain no private commit, tree, source path, or
+export recipe; full native provenance and replay evidence stay private.
+See the [complete authoring contract](../data/envelopes/README.md).
+
+Set `classification_decision_ref` to the new registrar's explicit reference.
+Manifests without it retain the historical 2026-10-21 authority reference
+solely for byte-identical historical replay. The builder records authored
+incomparability and a correspondence return obligation, not native
+correspondence or freshness. Status remains opaque and cannot clear these
+holds. Historical collections, subjects, dates and exported bytes remain
+unchanged; the ten-member edition is never inferred from the citation roster.

@@ -101,17 +101,31 @@ the envelope shape, not its native report, consent, truth or applicability.
 
 ## Current native transport edition
 
-The current edition in `data/envelopes/releases/v0.3.1-runtime-source-refresh/`
-binds the actual current public producer source snapshots, including Golden
-0.6.1, through separately recomputed native exports. The prior
-`v0.3.0-final-source-refresh`, `v0.3.0-source-refresh`, `v0.3.0`, and
-`v0.2.0` editions remain unchanged. Its manifest retains exact export hashes,
-native export recipes, and disclosed producer identities. The native fixture review dates
-and distinct subject identifiers remain intact; registration does not make them
-fresh observations about one subject.
+The 0.4.0 edition in `data/envelopes/releases/v0.4.0-element-admission/`
+contains ten actual native envelopes with ten distinct worked subjects.
+Seven public producers were executed separately under source-bound custody.
+Copper and Iron contribute separately disclosure-reviewed synthetic exports.
+Violet retains its exact previously approved synthetic 0.3.0 envelope; it is
+not relabeled as a new export from the current private source edition.
+Each older cohort keeps its explicit eight-instrument membership and unchanged
+bytes. The original four-export figures remain historical demonstrations.
 
-Its byte-identical replay and changed-export refusal were exercised. The register
-retains incomparability and an open correspondence return rather than turning
-successful transport into a shared-subject finding. Violet contributes only a
-separately disclosure-reviewed synthetic common envelope; its private source,
-native assessment and release custody do not travel with the public cohort.
+The current manifest binds exact exported-byte hashes and explicit registrar
+decisions. Public entries retain disclosed producer identities and executed
+native recipes. The three private entries contain empty source references and
+no private commit, tree, source path, or recipe. Full native reports, replay
+evidence, and private provenance remain outside public Witness. An empty
+reference list is not a substitute for separate disclosure review.
+
+The native builder produced two sealed states. Replay reproduced the stored
+chain and held projection exactly. The registrar's `CANNOT_COMPARE` relation
+and open `RETURN_DUE` correspondence obligation remain visible; the projection
+is $0$. Installed wheel and source-distribution consumers exercised the same
+ten envelopes through public APIs without importing the checkout or siblings.
+They preserved opaque native status, subjects, dates, nonclaims, and references.
+Changed or misattributed exports and non-strict JSON were refused.
+
+These actual transport results establish neither a shared subject nor native
+report truth, freshness, or a favorable assessment. Additional resource and
+recovery reports cannot compensate for a block, protected absence, or unmet
+return. The state chain remains internally checked but externally unanchored.

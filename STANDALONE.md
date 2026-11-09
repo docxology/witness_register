@@ -14,9 +14,11 @@ The sibling works —
 [golden_line](https://github.com/docxology/golden_line),
 [white_line](https://github.com/docxology/white_line),
 [silver_line](https://github.com/docxology/silver_line),
-[violet_line](https://github.com/docxology/violet_line),
+[violet_line](https://github.com/docxology/violet_line) (private),
 [blue_line](https://github.com/docxology/blue_line),
-[green_line](https://github.com/docxology/green_line), and the set reader
+[green_line](https://github.com/docxology/green_line),
+[copper_line](https://github.com/docxology/copper_line) (private),
+[iron_line](https://github.com/docxology/iron_line) (private), and the set reader
 [line_set](https://github.com/docxology/line_set) — live in their own
 repositories. A separated copy of this one is a clone held on its own, with
 no sibling checkout beside it and no monorepo around it. This document
@@ -24,6 +26,9 @@ states what that copy can do and what it cannot.
 
 Source availability can be optional or access-controlled. A stored envelope
 or declared roster member does not imply a current runnable source checkout.
+The three private instruments contribute only disclosure-reviewed synthetic
+public envelopes with empty source references. Full private native provenance
+and replay evidence remain outside public Witness.
 
 ## What it can do alone
 
@@ -40,9 +45,19 @@ From a clone of this repository and nothing else:
   `line.report-envelope/1.0` shape — from a line repository, from a file,
   or hand-built — because the contract is a data shape, not a dependency.
 
-No module in `src/witness_register/` imports a sibling work, and no path in
-this repository resolves above its own root; `tests/test_standalone.py`
-enforces both with positive controls.
+The standalone consumer test builds the current wheel and source distribution,
+installs each into a separate non-editable virtual environment, and starts its
+Python with `-I` from a temporary directory. Only installed packages and the
+standard library are available: no repository source-path injection, scripts,
+sibling packages, or reader. The consumer receives the actual current ten
+envelopes and authored cohort records as copied JSON data. Public APIs perform
+intake, sealing, append-only updates, chain verification, and held projection,
+comparing their results to the pinned co-registration. Behavioral guards retain
+opaque native status, report references and nonclaims, distinct native subjects,
+and empty source references for all three private instruments. The separate
+source-cohort integration test exercises the repository's builder; installed
+consumers do not import it. No source scanner or docstring wording assertion is
+needed to enforce this isolation, and the project's no-mock policy is unchanged.
 
 ## What it cannot do alone
 

@@ -22,9 +22,34 @@ from witness_register import (
 )
 
 
+def _unique_fields(pairs: list[tuple[str, object]]) -> dict:
+    """Reject duplicate JSON fields rather than silently replacing evidence."""
+    result: dict = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON field: {key}")
+        result[key] = value
+    return result
+
+
+def _reject_constant(value: str) -> None:
+    """Nonfinite JSON extensions are not transportable evidence."""
+    raise ValueError(f"nonfinite JSON constant: {value}")
+
+
+def _strict_json(text: str) -> dict:
+    """Decode one object as strict JSON; native status remains opaque."""
+    payload = json.loads(
+        text, object_pairs_hook=_unique_fields, parse_constant=_reject_constant
+    )
+    if type(payload) is not dict:
+        raise ValueError("expected a JSON object")
+    return payload
+
+
 def build_cohort(directory: Path) -> dict:
     """Bind exported bytes to one declared cohort, without claiming a shared subject."""
-    manifest = json.loads((directory / "manifest.json").read_text())
+    manifest = _strict_json((directory / "manifest.json").read_text(encoding="utf-8"))
     classification_ref = manifest.get(
         "classification_decision_ref", "registrar:release-cohort-20261021"
     )
@@ -33,7 +58,7 @@ def build_cohort(directory: Path) -> dict:
         raw = (directory / entry["file"]).read_bytes()
         if sha256(raw).hexdigest() != entry["sha256"]:
             raise ValueError(f"export bytes changed: {entry['file']}")
-        envelope, issues = intake_envelope(json.loads(raw))
+        envelope, issues = intake_envelope(_strict_json(raw.decode("utf-8")))
         if envelope is None:
             raise ValueError(f"refused export {entry['file']}: {issues}")
         if envelope.line_id != entry["repository"].split("/")[1]:
@@ -107,7 +132,9 @@ def main() -> None:
     )
     args = parser.parse_args()
     payload = build_cohort(args.directory)
-    (args.directory / "co_registration.json").write_text(canonical_json(payload) + "\n")
+    (args.directory / "co_registration.json").write_text(
+        canonical_json(payload) + "\n", encoding="utf-8"
+    )
 
 
 if __name__ == "__main__":

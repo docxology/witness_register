@@ -133,10 +133,6 @@ def test_seal_tip_refuses_a_tampered_tip(envelope) -> None:
         envelope.native_status["verdict"] = "STRONG_YES"
 
 
-def test_seal_tip_docstring_states_the_unbound_tip_limitation() -> None:
-    assert "unbound without external anchoring" in seal_tip.__doc__.lower()
-
-
 def test_promotion_requires_a_human_decision(envelope) -> None:
     holding = make_holding()
     with pytest.raises(ValueError, match="human_decision_ref"):

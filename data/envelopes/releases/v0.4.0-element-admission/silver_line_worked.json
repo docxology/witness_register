@@ -1,0 +1,23 @@
+{
+  "line_id": "silver_line",
+  "native_status": "NEEDS_PROVISION",
+  "registry_digest": "ce808709c7db5a60a7e6b06dac30d1a1326dff3c1973b44b5d36dd28a1e15c31",
+  "registry_version": "silver.registry/3.0",
+  "report_ref": "775e3d33a521d708b84153474a4b6375ef6873df59abe2e1cc9953fa1cdba89a",
+  "review_date": "2026-10-20",
+  "schema_version": "line.report-envelope/1.0",
+  "scope_and_nonclaims": [
+    "I report declared custody and provision within the qualified reading scope only.",
+    "I do not verify labels, custody, acceptance, legal succession or consent.",
+    "No status guarantees persistence, survival, safety or quality.",
+    "No status or scoped release authorizes disclosure, destruction, transfer or any action.",
+    "I do not rank, merge, score or compensate other line instruments.",
+    "reading_scope=COMPLETE; accepted=1; rejected=0; unmatched=0"
+  ],
+  "source_snapshot_refs": [
+    "sha256:844cc112b465b09521a385710e4532bbf982c544de3add47ed32545bd70e87b7:data/snapshots/844cc112b465b09521a385710e4532bbf982c544de3add47ed32545bd70e87b7.json",
+    "sha256:ce808709c7db5a60a7e6b06dac30d1a1326dff3c1973b44b5d36dd28a1e15c31:data/snapshots/ce808709c7db5a60a7e6b06dac30d1a1326dff3c1973b44b5d36dd28a1e15c31.json",
+    "sha256:ea1f5fe8e823619fae7fd65c5c4ab36f07c5ee4219d4505d3cc1023e268a1c0d:data/snapshots/ea1f5fe8e823619fae7fd65c5c4ab36f07c5ee4219d4505d3cc1023e268a1c0d.json"
+  ],
+  "subject_id": "silver-line-worked-lab-archive"
+}

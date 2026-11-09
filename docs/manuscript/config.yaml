@@ -1,7 +1,7 @@
 paper:
   title: "The Witness Register: Co-Registration Without Aggregation"
   subtitle: "A shared register for line report envelopes that never ranks, merges, or overrides the instruments it holds"
-  version: "0.3.1"
+  version: "0.4.0"
   date: "2026-11-08"
   description: "A shared register beside the line set: append-only co-registration of report envelopes, typed cross-line relations, and a bounded posture that never erases the state."
   cover:
@@ -16,7 +16,7 @@ authors:
 publication:
   doi: ""
   prior_version_doi: "10.5281/zenodo.22833511"
-  doi_status: "Pending reserve-first publication; prior archive: 10.5281/zenodo.22833511 (v0.1.1)."
+  doi_status: "Current-version DOI not yet verified; automatic publication authorized. Prior archive: 10.5281/zenodo.22833511 (v0.1.1)."
   github_repository: "docxology/witness_register"
   repository_url: "https://github.com/docxology/witness_register"
 

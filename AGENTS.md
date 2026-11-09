@@ -5,8 +5,9 @@ Rules and gates for any agent (or human) working in this repository.
 ## The invariants that must survive any change
 
 1. **No line imports.** No file under `src/` or `tests/` imports any of the
-   eight instruments (`red_line`, `black_line`, `golden_line`, `white_line`,
-   `silver_line`, `violet_line`, `blue_line`, `green_line`) or `line_set`.
+   ten instruments (`red_line`, `black_line`, `golden_line`, `white_line`,
+   `silver_line`, `violet_line`, `blue_line`, `green_line`, `copper_line`,
+   `iron_line`) or `line_set`.
    Envelopes arrive by value under the published schema string
    `line.report-envelope/1.0`, declared as this repository's own literal.
 2. **No interpretation of `native_status`.** The register stores it verbatim
@@ -21,8 +22,8 @@ Rules and gates for any agent (or human) working in this repository.
    non-empty `classification_decision_ref`; empty means NOT_RECORDED.
 6. **The posture is bounded and never travels alone.** Only `-1 | 0 | +1`,
    only with a declared next use, always carrying `state_ref` and reasons.
-7. **No mocks.** `tests/test_no_mocks.py` enforces the lexical ban; tests use
-   real records and real temp files.
+7. **No mocks.** Tests use real records, real temporary files, and actual
+   installed distributions. This policy is not a lexical source-scanning gate.
 8. **Every count and version has one source.** `version.py` is bound by test
    to `pyproject.toml`, `docs/manuscript/config.yaml`, and `CHANGELOG.md`.
 
@@ -46,8 +47,12 @@ guard undiscriminating fails the guard's positive control, not just review:
 - `defect_battery()` — 12 planted structural defects, each must be detected.
 - `run_battery(defeat=<case>)` — every 3×3 case must reject its
   injected-wrong variant.
-- `tests/test_standalone.py` — link, gitignore, cd-escape, parents[], and
-  sibling-import gates, each with a planted-defect control.
+- `tests/test_standalone.py` — current wheel and source-distribution installs
+  consume all ten actual envelopes through public APIs under `-I`, without
+  checkout or sibling imports. Intake, chain seals, and held projection retain
+  opaque status, report references, nonclaims, and the three private instruments'
+  empty source references. Relative-link and disposable-file checks retain their
+  planted-defect controls. No AST, source-scanning, or sentence wiring gates.
 
 ## Rendering (external, optional)
 
