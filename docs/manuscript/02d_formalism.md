@@ -54,15 +54,11 @@ the table below binds each result to the test that would fail if the code
 stopped satisfying it. Each row is keyed on the block's *label*, not on its
 number, and the label renders as the number the reader sees.
 
-Two binding tests police the table.
-`tests/test_formalism_bindings.py::test_binding_tables_bind_every_declared_block`
-fails if the set of row labels stops matching the set of labels declared in
-this section, and
-`tests/test_formalism_bindings.py::test_every_binding_row_names_an_existing_test`
-fails per row if any row's verifying-test cell names no test or names one
-that does not exist. Neither checks that a named test is a *good* test, only
-that every declared block is bound to one that exists. The boundary column
-restates what each result does *not* claim.
+The named tests execute real records: a changed seal or dropped prior record
+must fail chain verification; an open or partially answered return must keep
+projection held; repeated projections of identical inputs must agree. These are
+behavioral checks, not source-text, wording, or table-membership assertions.
+The boundary column restates what each result does *not* claim.
 
 | Proposition | Statement essence | Verifying test | Boundary |
 | --- | --- | --- | --- |
@@ -70,5 +66,10 @@ restates what each result does *not* claim.
 | [@prop:return-contract-constraint] | same-subject return contracts constrain the projection; partial returns do not close the obligation | `tests/test_formalism_bindings.py::test_return_contract_constrains_projection_across_chains` | records of obligation, never promises of approval |
 | [@prop:projection-determinism] | identical state and use produce identical projection; deterministic code path | `tests/test_formalism_bindings.py::test_projection_is_deterministic_for_identical_inputs` | determinism of the code path, not truth of records |
 
-The bindings are themselves code behavior: they show which claims the suite
-would catch, not that the register's posture is wise or well grounded.
+The table identifies behavioral evidence, not an independent correctness proof.
+The installed-consumer gate in `tests/test_standalone.py` separately exercises
+public APIs from both distribution formats against the current ten-envelope
+cohort, without checkout or sibling imports. It verifies chain seals and the
+authored held projection while retaining opaque native status, report references,
+nonclaims, and empty private-source references. None of these checks establishes
+that the native reports are true or that the register's posture is wise.

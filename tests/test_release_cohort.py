@@ -231,7 +231,9 @@ def test_current_edition_keeps_native_status_opaque_and_private_sources_outside(
 
 
 @pytest.mark.parametrize("document", ("manifest", "export"))
-@pytest.mark.parametrize("defect", ("duplicate", "NaN", "Infinity", "-Infinity", "array"))
+@pytest.mark.parametrize(
+    "defect", ("duplicate", "NaN", "Infinity", "-Infinity", "array")
+)
 def test_cohort_file_intake_requires_strict_json(tmp_path, document, defect):
     directory = tmp_path / "cohort"
     shutil.copytree(DIRECTORY.parent / CURRENT_EDITION, directory)

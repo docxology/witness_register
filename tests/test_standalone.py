@@ -1,8 +1,8 @@
 """Consumer gates for a separated, self-sufficient Witness Register clone.
 
-Envelopes arrive by value. The isolated interpreter exercises the package with
-no sibling packages or site-packages available; document links and disposable
-artifact rules are checked independently.
+Envelopes arrive by value. The isolated interpreter exercises an installed
+distribution without sibling packages or checkout imports; document links
+and disposable artifact rules are checked independently.
 """
 
 from __future__ import annotations
@@ -11,8 +11,11 @@ import json
 import re
 from fnmatch import fnmatch
 from pathlib import Path
+import shutil
 import subprocess
 import sys
+
+import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -224,62 +227,165 @@ def test_uv_lock_is_deliberately_tracked() -> None:
     assert not is_ignored("uv.lock", ignore_patterns(PROJECT_ROOT))
 
 
-def test_register_works_with_no_sibling_packages(tmp_path: Path) -> None:
-    """Import and use the real package with only its source and the stdlib."""
+@pytest.fixture(scope="module")
+def built_distributions(tmp_path_factory: pytest.TempPathFactory) -> dict[str, Path]:
+    """Build both real distribution formats once, without editable installs."""
+    uv = shutil.which("uv")
+    assert uv is not None, "uv is required to provision installed consumers"
+    destination = tmp_path_factory.mktemp("witness-distributions")
+    result = subprocess.run(
+        [
+            uv,
+            "build",
+            "--sdist",
+            "--wheel",
+            "--out-dir",
+            str(destination),
+            str(PROJECT_ROOT),
+        ],
+        cwd=destination,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    wheels = tuple(destination.glob("*.whl"))
+    sdists = tuple(destination.glob("*.tar.gz"))
+    assert len(wheels) == len(sdists) == 1
+    return {"wheel": wheels[0], "sdist": sdists[0]}
 
+
+@pytest.mark.parametrize("distribution_kind", ("wheel", "sdist"))
+def test_register_works_with_no_sibling_packages(
+    tmp_path: Path, built_distributions: dict[str, Path], distribution_kind: str
+) -> None:
+    """Consume the actual ten-envelope cohort through installed public APIs."""
+    uv = shutil.which("uv")
+    assert uv is not None, "uv is required to provision installed consumers"
+    environment = tmp_path / "consumer-environment"
+    python = environment / "bin" / "python"
+    for command in (
+        [uv, "venv", "--python", sys.executable, str(environment)],
+        [
+            uv,
+            "pip",
+            "install",
+            "--python",
+            str(python),
+            "--no-deps",
+            str(built_distributions[distribution_kind]),
+        ],
+    ):
+        result = subprocess.run(
+            command, cwd=tmp_path, capture_output=True, text=True, check=False
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+    cohort = tmp_path / "cohort"
+    shutil.copytree(
+        PROJECT_ROOT / "data/envelopes/releases/v0.4.0-element-admission", cohort
+    )
     program = """
 import importlib
 import json
 import sys
+from hashlib import sha256
+from pathlib import Path
 
-sys.path.insert(0, sys.argv[1])
+cohort = Path(sys.argv[1])
 siblings = json.loads(sys.argv[2])
-for sibling in siblings:
+checkout = Path(sys.argv[3]).resolve()
+for entry in sys.path:
+    path = Path(entry).resolve()
+    assert path != checkout and checkout not in path.parents, sys.path
+for sibling in (*siblings, "scripts"):
     try:
         importlib.import_module(sibling)
     except ModuleNotFoundError as error:
         assert error.name == sibling, (sibling, error)
     else:
-        raise AssertionError(f"sibling unexpectedly importable: {sibling}")
+        raise AssertionError(f"checkout or sibling unexpectedly importable: {sibling}")
 
+import witness_register
 from witness_register import (
-    canonical_json, genesis_state, intake_envelope, project, verify_chain,
+    RelationRecord, RelationType, ReturnContractRecord, canonical_json,
+    canonical_projection, canonical_state_payload, genesis_state, intake_envelope,
+    project, update_state, verify_chain,
 )
-
+assert Path(witness_register.__file__).resolve().is_relative_to(Path(sys.prefix))
+manifest = json.loads((cohort / "manifest.json").read_text())
+expected = json.loads((cohort / "co_registration.json").read_text())
 records = []
-for line_id, digest in (("copper_line", "b" * 64), ("iron_line", "c" * 64)):
-    payload = {
-        "schema_version": "line.report-envelope/1.0",
-        "line_id": line_id,
-        "subject_id": "isolated-consumer",
-        "review_date": "2026-11-08",
-        "registry_version": "0.1.0",
-        "registry_digest": "a" * 64,
-        "native_status": {"vector": [{"status": "opaque", "quantity": None}]},
-        "report_ref": digest,
-        "source_snapshot_refs": [],
-        "scope_and_nonclaims": ["Constructed input; no native report verified."],
-    }
+payloads = {}
+for entry in manifest["siblings"]:
+    raw = (cohort / entry["file"]).read_bytes()
+    assert sha256(raw).hexdigest() == entry["sha256"]
+    payload = json.loads(raw)
     record, issues = intake_envelope(payload)
-    assert record is not None, issues
-    assert canonical_json(record.native_status) == canonical_json(payload["native_status"])
+    assert record is not None and issues == (), issues
+    assert record.line_id == entry["repository"].split("/")[1]
+    payloads[record.line_id] = payload
     records.append(record)
-state = genesis_state("isolated-consumer", "2026-11-08", tuple(records))
-assert verify_chain((state,)) == ()
-posture = project(state, "inspect this constructed envelope")
-assert posture.state_ref == state.state_digest
-assert posture.value == 1
+assert set(payloads) == set(siblings) - {"line_set"}
+assert len(records) == 10
+assert len({record.subject_id for record in records}) == 10
+first = genesis_state(
+    manifest["cohort_id"], manifest["reviewed_on"], envelopes=tuple(records)
+)
+authored = expected["states"][-1]["payload"]
+relations = tuple(
+    RelationRecord(**{
+        **{key: tuple(value) if isinstance(value, list) else value
+           for key, value in item.items() if key != "record_schema"},
+        "relation_type": RelationType(item["relation_type"]),
+    })
+    for item in authored["relations"]
+)
+returns = tuple(
+    ReturnContractRecord(**{
+        key: tuple(value) if isinstance(value, list) else value
+        for key, value in item.items() if key != "record_schema"
+    })
+    for item in authored["returns"]
+)
+second = update_state(
+    first, manifest["reviewed_on"], relations=relations, returns=returns
+)
+assert verify_chain((first, second)) == ()
+assert second.prior_ref == first.state_digest
+for state, pinned in zip((first, second), expected["states"], strict=True):
+    assert state.state_digest == pinned["state_digest"]
+    stored = canonical_state_payload(
+        state.subject_id, state.review_moment, state.envelopes, state.relations,
+        state.unclassified, state.returns, state.prior_ref, state.decisions,
+        state.history_refs,
+    )
+    assert stored == pinned["payload"]
+    for envelope in stored["envelopes"]:
+        payload = payloads[envelope["line_id"]]
+        assert canonical_json(envelope["native_status"]) == canonical_json(payload["native_status"])
+        assert envelope["report_ref"] == payload["report_ref"]
+        assert envelope["scope_and_nonclaims"] == payload["scope_and_nonclaims"]
+        assert envelope["source_snapshot_refs"] == payload["source_snapshot_refs"]
+        if envelope["line_id"] in {"violet_line", "copper_line", "iron_line"}:
+            assert envelope["source_snapshot_refs"] == []
+posture = project(second, manifest["declared_next_use"])
+assert posture.state_ref == second.state_digest
+assert posture.value == 0
+assert any("return_due" in reason for reason in posture.reasons)
+assert any("CANNOT_COMPARE" in reason for reason in posture.reasons)
+assert canonical_projection(posture) == expected["projection"]
 assert not set(siblings).intersection(sys.modules)
+assert "scripts" not in sys.modules
 """
     result = subprocess.run(
         [
-            sys.executable,
+            str(python),
             "-I",
-            "-S",
             "-c",
             program,
-            str(PROJECT_ROOT / "src"),
+            str(cohort),
             json.dumps(SIBLING_WORKS),
+            str(PROJECT_ROOT),
         ],
         cwd=tmp_path,
         capture_output=True,

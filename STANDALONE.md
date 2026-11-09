@@ -45,11 +45,19 @@ From a clone of this repository and nothing else:
   `line.report-envelope/1.0` shape — from a line repository, from a file,
   or hand-built — because the contract is a data shape, not a dependency.
 
-The standalone consumer test starts Python with `-I -S`, adds only this
-package's source to the standard-library path, confirms that all ten native
-packages and the reader are unavailable, and exercises by-value intake,
-state sealing, chain verification, and projection. This is runnable behavior,
-not an AST import scan or a check for particular documentation sentences.
+The standalone consumer test builds the current wheel and source distribution,
+installs each into a separate non-editable virtual environment, and starts its
+Python with `-I` from a temporary directory. Only installed packages and the
+standard library are available: no repository source-path injection, scripts,
+sibling packages, or reader. The consumer receives the actual current ten
+envelopes and authored cohort records as copied JSON data. Public APIs perform
+intake, sealing, append-only updates, chain verification, and held projection,
+comparing their results to the pinned co-registration. Behavioral guards retain
+opaque native status, report references and nonclaims, distinct native subjects,
+and empty source references for all three private instruments. The separate
+source-cohort integration test exercises the repository's builder; installed
+consumers do not import it. No source scanner or docstring wording assertion is
+needed to enforce this isolation, and the project's no-mock policy is unchanged.
 
 ## What it cannot do alone
 

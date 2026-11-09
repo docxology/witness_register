@@ -101,25 +101,31 @@ the envelope shape, not its native report, consent, truth or applicability.
 
 ## Current native transport edition
 
-The 0.4.0 edition is assigned
-`data/envelopes/releases/v0.4.0-element-admission/`. It requires ten actual
-native exports produced separately from final producer sources, not a
-relabeled historical collection. Each older edition keeps its own explicit
-eight-instrument membership and unchanged exported bytes. The top-level
-historical corpus remains separate from the current citation roster.
+The 0.4.0 edition in `data/envelopes/releases/v0.4.0-element-admission/`
+contains ten actual native envelopes with ten distinct worked subjects.
+Seven public producers were executed separately under source-bound custody.
+Copper and Iron contribute separately disclosure-reviewed synthetic exports.
+Violet retains its exact previously approved synthetic 0.3.0 envelope; it is
+not relabeled as a new export from the current private source edition.
+Each older cohort keeps its explicit eight-instrument membership and unchanged
+bytes. The original four-export figures remain historical demonstrations.
 
-The new edition's manifest must bind exact export hashes and explicit
-registrar decisions. Public producers carry their disclosed source identities
-and native export recipes. Copper, Iron, and Violet contribute only separately
-disclosure-reviewed synthetic native exports with empty source references;
-full provenance, native reports, replay evidence, and private source locators
-stay outside public Witness. Transport does not verify those native reports.
+The current manifest binds exact exported-byte hashes and explicit registrar
+decisions. Public entries retain disclosed producer identities and executed
+native recipes. The three private entries contain empty source references and
+no private commit, tree, source path, or recipe. Full native reports, replay
+evidence, and private provenance remain outside public Witness. An empty
+reference list is not a substitute for separate disclosure review.
 
-The release gate replays both states, preserves every envelope's opaque
-`native_status`, native subject and date, and refuses changed or misattributed
-exports and non-strict JSON. The registrar retains `CANNOT_COMPARE` and an
-open `RETURN_DUE` correspondence obligation with held posture. Ten successful
-intakes do not establish a shared subject, freshness, or a favorable native
-assessment; additional resource or recovery reports cannot compensate for a
-block or protected absence. These are acceptance conditions, not an assertion
-that the new source edition's gates have already run.
+The native builder produced two sealed states. Replay reproduced the stored
+chain and held projection exactly. The registrar's `CANNOT_COMPARE` relation
+and open `RETURN_DUE` correspondence obligation remain visible; the projection
+is $0$. Installed wheel and source-distribution consumers exercised the same
+ten envelopes through public APIs without importing the checkout or siblings.
+They preserved opaque native status, subjects, dates, nonclaims, and references.
+Changed or misattributed exports and non-strict JSON were refused.
+
+These actual transport results establish neither a shared subject nor native
+report truth, freshness, or a favorable assessment. Additional resource and
+recovery reports cannot compensate for a block, protected absence, or unmet
+return. The state chain remains internally checked but externally unanchored.

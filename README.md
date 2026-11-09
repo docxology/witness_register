@@ -171,14 +171,15 @@ transport unchanged. Relation and return fields are admitted before replay:
 malformed identities, false-valued remainders, and non-tuple alternatives
 remain inspectable in raw records but cannot receive a projection.
 
-The 0.4.0 transport edition belongs in
-`data/envelopes/releases/v0.4.0-element-admission/`. Publication requires ten
-actual separately produced native envelopes, exact exported-byte hashes, and
-an explicitly authored manifest and co-registration. Copper, Iron, and Violet
-contribute only disclosure-reviewed synthetic exports. Historical top-level
-examples and every older eight-member edition retain their original bytes,
-subjects, dates, and independent membership. See
-[cohort authoring requirements](data/envelopes/README.md).
+The 0.4.0 transport edition in
+`data/envelopes/releases/v0.4.0-element-admission/` contains ten actual native
+envelopes, exact exported-byte hashes, and an authored two-state registration
+with held posture. Copper and Iron contribute disclosure-reviewed synthetic
+exports; Violet retains its exact previously approved synthetic 0.3.0 bytes,
+not a relabeled current-source export. All three private reference lists are
+empty. Historical examples and older eight-member editions retain their original
+bytes, subjects, dates, and independent membership. See the
+[cohort custody](data/envelopes/README.md) and [0.4.0 packet](docs/releases/v0.4.0.md).
 Neither transport version nor exported-byte custody proves native report
 correspondence, authenticity, freshness, or a shared subject. Native status
 stays opaque; additional envelopes cannot compensate for Red constraints,

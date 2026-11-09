@@ -29,10 +29,11 @@ decision 1.0 records, or `line.report-envelope/1.0` transport. Native schema
 versions (including Silver/Violet 3.0) belong to their producers, not this
 register. Exact exported-byte custody proves neither native correspondence
 nor currentness. All prior cohorts, including `v0.3.1-runtime-source-refresh`,
-and prior release packets remain unchanged. The new
-`v0.4.0-element-admission` edition requires ten real native exports produced
-separately after final source commits. Its manifest and co-registration are
-release-owner outputs, never invented during source preparation. See the
+and prior release packets remain unchanged. The actual
+`v0.4.0-element-admission` edition holds ten native exports and a reproduced
+two-state registration. Seven public producer recipes and reviewed Copper/Iron
+synthetic exports have real native custody; Violet's exact older approved
+synthetic export is explicitly preserved, not relabeled. See the
 [cohort authoring contract](../data/envelopes/README.md).
 
 Copper, Iron, and Violet are private instruments. Public Witness additions

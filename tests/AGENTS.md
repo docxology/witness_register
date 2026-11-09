@@ -1,7 +1,7 @@
 # Test folder contract
 
 `tests/` exercises the public API, state chain, projection, battery, figure
-determinism, intake validation, manuscript bindings, and cross-cutting contracts.
+determinism, intake validation, installed consumers, and publication integrity.
 
 ## Test modules
 
@@ -19,13 +19,16 @@ determinism, intake validation, manuscript bindings, and cross-cutting contracts
 - `test_worked_example.py` — the historical stored export collection, end to end
 - `test_same_subject.py` — same-subject co-registration contract
 - `test_publication_metadata.py` — publication metadata across config and package
-- `test_standalone.py` — the package works without sibling repos
+- `test_standalone.py` — isolated wheel/sdist-installed public APIs consume the
+  actual ten-envelope cohort, verify chain seals and held projection, and retain
+  opaque status, report references, nonclaims, and empty private-source references
+  without checkout scripts, source paths, or sibling packages
 - `test_wave3_hardening.py` — wave-3 hardening contracts
-- `test_no_mocks.py` — lexical ban on mocks, stand-in names, path hardcodes
 
 ## Invariants
 
-- No mocks. Use real records, temporary output roots, and constructed states.
+- No mocks. Use real records, temporary output roots, constructed states, and
+  actual installed distributions; no lexical scanner substitutes for behavior.
 - Keep project coverage at or above the `90` floor in `pyproject.toml`.
 - Import figure builders from `witness_register.figures`, not from `scripts/`.
 

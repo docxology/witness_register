@@ -1,0 +1,136 @@
+{
+  "cohort_id": "witness-register-0.4.0-element-admission",
+  "reviewed_on": "2026-11-08",
+  "declared_next_use": "inspect the ten distinct native worked subjects as a transport demonstration, not a shared-subject record",
+  "classification_decision_ref": "registrar:element-admission-20261108",
+  "scope": "authored synthetic native worked examples, not observed allocations or recovery exercises; no shared-subject correspondence or native status interpretation is declared",
+  "siblings": [
+    {
+      "repository": "docxology/red_line",
+      "producer_package_version": "0.5.1",
+      "file": "red_line_worked.json",
+      "sha256": "db6506d04c42428e69f966478a5e46aaf7b2fbe1b25e227f549ff575b8113b29",
+      "commit": "643b5f76a43eb3ff8a991e20e2c9562d61eadcf9",
+      "source_tree": "8a21dd90dae3167b543e9bb507d0a0709c512cb7",
+      "source_manifest_sha256": "b6eacf3fa3ddfcc1bd57c9ee202a114d61862d62b599b41d3d7324d4a67b309c",
+      "export_recipe": "from red_line import review_engagement, finding_envelope, canonical_envelope, canonical_intake, replay_finding, envelope_contract_issues, envelope_finding_issues\nfrom red_line.analysis import canonical_battery, BATTERY_AS_OF\naction=canonical_battery()[-1].action\nfinding=review_engagement(action,reviewed_on=BATTERY_AS_OF)\nenvelope=finding_envelope(finding,subject_id=\"red-line-worked-non-compliant\")\nassert not replay_finding(finding,canonical_intake(action))\nassert not envelope_contract_issues(envelope)\nassert not envelope_finding_issues(envelope,finding)\nprint(canonical_envelope(envelope))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/black_line",
+      "producer_package_version": "0.6.1",
+      "file": "black_line_worked.json",
+      "sha256": "4b83699f79846a978090c06a9b3239007f4979ffaf629650dff5e2e463e85f4f",
+      "commit": "0993656739cea409f20ca1fdca39fa844b3013da",
+      "source_tree": "adcf1fc7c443c5192445661c8aba6090234ad6d2",
+      "source_manifest_sha256": "51ea11f8285e1a405939980ba7582f92183234e2818023e91ee263ba0361873b",
+      "export_recipe": "from black_line import evaluation_record,assessment_envelope,canonical_envelope,replay_evaluation_record,envelope_matches_record\nfrom black_line.figures.scenarios import SURFACES_ATTEMPT,SURFACES_AS_OF,SURFACES_WINDOW\nrecord=evaluation_record(SURFACES_ATTEMPT,as_of=SURFACES_AS_OF,max_evidence_age_days=SURFACES_WINDOW,subject_id=\"black-line-worked-surfaces\")\nenvelope=assessment_envelope(record.assessment,subject_id=record.subject_id,source_snapshot_refs=record.source_snapshot_refs,strict=True)\nreplay_evaluation_record(record)\nassert envelope_matches_record(envelope,record)\nprint(canonical_envelope(envelope))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/golden_line",
+      "producer_package_version": "0.6.2",
+      "file": "golden_line_worked.json",
+      "sha256": "92b6461c399a6a1c6a8c39e70e5a12ec89a703b25b7b51b0adaddff35d980fd0",
+      "commit": "67e0bdc5346034b276e4cfc0ff2a447f0124a6c0",
+      "source_tree": "07b3c74531385631135f1c057d02a3e4a3be9aa3",
+      "source_manifest_sha256": "0434ac00b5ab57daff146f9bdf2a335d158a68af233e2475603659d5e6213de4",
+      "export_recipe": "from golden_line import GOLDEN_ASPIRATIONS,HorizonEntry,progress_report,report_envelope,canonical_envelope,canonical_archive,decode_archive,validate_instrument_envelope\na,r=GOLDEN_ASPIRATIONS[0],GOLDEN_ASPIRATIONS[2]\nentries=[\"not an entry at all\",HorizonEntry(\"no-such-aspiration\",frozenset()),HorizonEntry(a.id,frozenset(a.markers)),HorizonEntry(a.id,frozenset()),HorizonEntry(r.id,counter_signals=frozenset(r.counter_signals))]\nreport=progress_report(entries,as_of=\"2026-07-29\")\nenvelope=report_envelope(report,subject_id=\"golden-line-worked-intake-case\")\nassert not validate_instrument_envelope(envelope)\ndecode_archive(canonical_archive(report),canonical_envelope(envelope))\nprint(canonical_envelope(envelope))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/white_line",
+      "producer_package_version": "0.9.1",
+      "file": "white_line_worked.json",
+      "sha256": "991934406a4770790e2357c6412b961dfc3297862a4cf5b838fbc30983461114",
+      "commit": "b73bf0466eaaa6579d9b1a57cc937fb6eef83941",
+      "source_tree": "04e8c400a9a7d1a406702c720c06c76b98584952",
+      "source_manifest_sha256": "b9b0b021b134a4efdf5a0b20370bc47ba8c941dd9839cea577b7bb7ec735b562",
+      "export_recipe": "from white_line import worked_report,report_envelope,canonical_envelope,envelope_matches_report\nreport=worked_report()\nenvelope=report_envelope(report,subject_id=\"white-line-worked-example\")\nassert envelope_matches_report(envelope,report)\nprint(canonical_envelope(envelope))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/silver_line",
+      "producer_package_version": "0.4.0",
+      "file": "silver_line_worked.json",
+      "sha256": "b897b74a25702d63d2563006db2304d58afead887805b48308dfb56d0e284017",
+      "commit": "cbf1c3bae2161babaf77cc8b4b9809af54e42f92",
+      "source_tree": "e8ea24457243011633a7261cd037d771c1eb8a69",
+      "source_manifest_sha256": "cd1778f26961e0ca503a9fee449c521aac330f7487d4172e76d56c033cfbb1d5",
+      "export_recipe": "import json\nfrom pathlib import Path\nfrom silver_line.artifacts import artifact_payloads\nenvelope,native_files=artifact_payloads(json.loads(Path(\"data/fixtures/silver_line_worked.json\").read_text(encoding=\"utf-8\")))\nprint(json.dumps(envelope,indent=2,sort_keys=True))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/violet_line",
+      "producer_package_version": "0.3.0",
+      "file": "violet_line_worked.json",
+      "sha256": "89080cab935ac57551cc5cf4ccf72d674ec799e48283871d97220c225501120d",
+      "snapshot_kind": "disclosure-reviewed-synthetic-envelope",
+      "disclosure_review": {
+        "reviewed_on": "2026-11-08",
+        "scope": "exact authored synthetic common-envelope bytes only; not empirical evidence or native source disclosure",
+        "subject": "violet-synthetic-study",
+        "source_references": "empty as exported; no inference or fill",
+        "private_producer_identity": "withheld; source revisions, module origins, native implementation and private custody remain private",
+        "prior_reviewed_on": "2026-11-07"
+      }
+    },
+    {
+      "repository": "docxology/blue_line",
+      "producer_package_version": "0.3.1",
+      "file": "blue_line_worked.json",
+      "sha256": "ce7658a59f39949260403a2db9cd3d0ff8d562541498ae36ab39c9d47db44c33",
+      "commit": "8ef0cc7630919bfd13f6364232b34ab385c49c7a",
+      "source_tree": "ef387bc6a87eeb414180d553fd830ceeb1334f68",
+      "source_manifest_sha256": "c748038eacf699139f98bab2ce8694796802f2fe35ad72c40cd3dfd7125d49c8",
+      "export_recipe": "import json\nfrom pathlib import Path\nfrom blue_line import read_with_surfaces,build_envelope,build_report,replay_report\nfrom blue_line.json_adapter import declaration_from_json\ncontext=json.loads(Path(\"data/example_contexts.json\").read_text())[\"blue_line_worked.json\"]\ndeclaration=declaration_from_json(json.loads(Path(\"data/declared_files/blue_line_worked.json\").read_text()))\nreading,surfaces=read_with_surfaces(declaration,as_of=context[\"review_date\"])\nenvelope=build_envelope(reading,subject_id=context[\"subject_id\"],source_snapshot_refs=tuple(context[\"source_snapshot_refs\"]))\nreplayed,_=replay_report(build_report(reading,surfaces))\nassert envelope==build_envelope(replayed,subject_id=context[\"subject_id\"],source_snapshot_refs=tuple(context[\"source_snapshot_refs\"]))\nprint(json.dumps(envelope,indent=2,sort_keys=True))",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/green_line",
+      "producer_package_version": "0.4.0",
+      "file": "green_line_worked.json",
+      "sha256": "ceb52442f76e46c760d0cf255ad081241e8d5aee881a97e09ecc6e1b189eaf1d",
+      "commit": "dc506111690ceac2043fbf6a594648dc800ff213",
+      "source_tree": "1cd05e9bc3b9e8d7c3f7ac1b3262f71e0c8ea9a3",
+      "source_manifest_sha256": "0871e32f1455f484f11363dd7b46734d2e4d06b75d4fb6c947ca59d5c5cd29e6",
+      "export_recipe": "from green_line.examples import build_examples\nfrom pathlib import Path\nimport os\ndestination=Path(os.environ[\"NATIVE_EXPORT_OUTPUT\"])\nbuild_examples(destination,source_commit=os.environ[\"NATIVE_SOURCE_COMMIT\"])\nprint((destination/\"green_line_worked.json\").read_text(encoding=\"utf-8\"),end=\"\")",
+      "snapshot_kind": "immutable-commit",
+      "source_path": null
+    },
+    {
+      "repository": "docxology/copper_line",
+      "producer_package_version": "0.1.0",
+      "file": "copper_line_worked.json",
+      "sha256": "a4a5e3ba8bd0371dbe6c87c590e98ec72b88bc60c0affe64d24aedb465c4b7fa",
+      "snapshot_kind": "disclosure-reviewed-synthetic-envelope",
+      "disclosure_review": {
+        "reviewed_on": "2026-11-08",
+        "scope": "exact authored synthetic common-envelope bytes only; not empirical evidence or native source disclosure",
+        "subject": "synthetic:maintainer-november",
+        "source_references": "empty as exported; no inference or fill",
+        "private_producer_identity": "withheld; source revisions, module origins, native implementation and private custody remain private"
+      }
+    },
+    {
+      "repository": "docxology/iron_line",
+      "producer_package_version": "0.1.0",
+      "file": "iron_line_worked.json",
+      "sha256": "58e70063b1fa66f87115c125cebc0d317cc4ca9cf97e5aabbc91f9be6a20410e",
+      "snapshot_kind": "disclosure-reviewed-synthetic-envelope",
+      "disclosure_review": {
+        "reviewed_on": "2026-11-08",
+        "scope": "exact authored synthetic common-envelope bytes only; not empirical evidence or native source disclosure",
+        "subject": "synthetic:artifact-service",
+        "source_references": "empty as exported; no inference or fill",
+        "private_producer_identity": "withheld; source revisions, module origins, native implementation and private custody remain private"
+      }
+    }
+  ]
+}

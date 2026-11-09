@@ -235,8 +235,6 @@ def _worked_chain():
 def _tamper_refusal_detail() -> str:
     """Mutate a freshly built state's record and capture the live refusal."""
 
-    first, _second = _worked_chain()
-    first.envelopes[0].native_status  # touch, then mutate a fresh copy below
     fresh_first, _ = _worked_chain()
     status = fresh_first.envelopes[2].native_status
     if isinstance(status, list) and status:

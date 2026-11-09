@@ -6,17 +6,23 @@
   separate Witness companion. Copper adds dimensioned resource use and
   commitments; Iron adds scenario-bound recorded recovery target comparisons.
   Witness stays outside `LINE_SET` and does not interpret native status.
-- Assign `v0.4.0-element-admission` its independent ten-member acceptance
-  contract. Retain each older edition's explicit eight-member expectation,
-  byte-custody and misattribution refusals, distinct subjects, and held posture.
-  Final native exports, manifest and co-registration are generated separately
-  from actual final producer sources, not fabricated in source preparation.
+- Build `v0.4.0-element-admission` from seven separately executed public
+  producers, disclosure-reviewed Copper/Iron synthetic exports, and Violet's
+  exact previously approved synthetic 0.3.0 bytes. Generate and replay its
+  two-state registration without relabeling older evidence. Retain every older
+  eight-member roster, custody refusal, distinct subject, and held posture.
 - Separate current citation references from the historical top-level corpus.
   Document disclosure-reviewed synthetic public Copper, Iron, and Violet
   exports with empty source references and full native provenance kept private.
-- Exercise standalone intake, state, and projection in an isolated standard-
-  library interpreter without any sibling package. Remove incidental AST,
-  source-text and documentation-sentence wiring assertions.
+- Exercise the actual ten-envelope cohort through public APIs installed from
+  both the current wheel and source distribution in isolated virtual
+  environments, without checkout source-path insertion or sibling imports.
+  Preserve opaque status, report references, nonclaims, private-source boundaries,
+  chain seals, and the authored held projection. Remove source-scanning and
+  docstring/wording assertions rather than pinning implementation details;
+  the no-mock policy remains unchanged.
+- Remove a redundant worked-chain allocation and unused status access from
+  the tamper-refusal figure detail; retain the live tamper and refusal.
 - Refuse duplicate JSON fields and nonfinite JSON extensions at cohort file
   intake without interpreting native status or changing register/envelope
   schemas. Preserve noncompensatory projection and every historical artifact.
