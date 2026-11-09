@@ -35,10 +35,15 @@ public manifest entries contain no private commit, tree, source path, or
 export recipe; full native provenance and replay evidence stay private.
 See the [complete authoring contract](../data/envelopes/README.md).
 
-Set `classification_decision_ref` to the new registrar's explicit reference.
-Manifests without it retain the historical 2026-10-21 authority reference
-solely for byte-identical historical replay. The builder records authored
-incomparability and a correspondence return obligation, not native
-correspondence or freshness. Status remains opaque and cannot clear these
-holds. Historical collections, subjects, dates and exported bytes remain
+Set `classification_decision_ref` to the new registrar's explicit nonblank string
+reference. Missing, blank, or nonstring references are refused for new cohorts;
+the builder never invents a historical authority for them. The only missing-field
+exception matches the SHA-256 of the entire exact retained v0.2.0 manifest bytes,
+not a directory name or editable cohort label. That manifest binds its full
+historical identity and producer custody; each exported byte hash is still checked.
+Even a reformatted or extended copy needs an authored reference. The unchanged
+historical manifest can replay after relocation without changing stored bytes.
+The builder records authored incomparability and a correspondence return obligation,
+not native correspondence or freshness. Status remains opaque and cannot clear
+these holds. Historical collections, subjects, dates and exported bytes remain
 unchanged; the ten-member edition is never inferred from the citation roster.

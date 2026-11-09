@@ -25,16 +25,24 @@ New serialized shapes require a versioned schema and migration rules; see
 `genesis_state` and `update_state` validate structure. `raw_state` only seals
 inspectable imports and defect fixtures. `project` repeats validation and raises
 `InvalidStateError` with typed issues, retaining the raw records for inspection.
-Relation and return string fields require actual strings; reference surfaces
-and live alternatives require immutable tuples of strings. False, zero,
-containers, and other nonstring identities, remainders, or authority references
-are structural defects (`RELATION_DOMAIN` or `RETURN_DOMAIN`). Shared domain
-admission precedes identity counting, reference lookup, truthiness, and hashing;
-it does not centralize or interpret any native evaluator.
+Relation, return, envelope, and holding string fields require actual strings;
+reference surfaces, live alternatives, and candidate readings require immutable
+tuples of strings. Envelope `native_status` remains opaque JSON and is checked
+by the existing intake path, never by a status vocabulary. False, zero,
+containers, and other nonstring identities, provenance, remainders, or authority
+references are structural defects (`RELATION_DOMAIN`, `RETURN_DOMAIN`,
+`ENVELOPE_DOMAIN`, or `HOLDING_DOMAIN`). Shared domain admission precedes local
+identity counting, reference lookup, truthiness, and seal validation; it does
+not centralize or interpret any native evaluator.
 Native envelope subject spelling need not equal the registrar's subject spelling.
-Malformed JSON-compatible reference surfaces are preserved by raw serialization
-instead of being iterated as if they were valid tuples. Valid canonical shapes
-and schema identities are unchanged; this is stricter admission, not a new format.
+Malformed JSON-compatible sequence surfaces are preserved by raw serialization
+instead of being iterated as if they were valid tuples. Transport intake still
+accepts lists or tuples and produces tuple fields; direct raw records must have
+their declared tuple domains before validated admission. Raw sealing is not
+admission. Valid canonical bytes and schema identities are unchanged; this is
+stricter admission, not a new format. Envelope intake remains open-shaped:
+unknown payload keys are not stored record fields, and stored `record_schema`
+wrappers still replay through intake.
 `verify_chain` requires a genesis and checks actual append context. Local state
 validation cannot prove that external history or an anchor is complete/current.
 

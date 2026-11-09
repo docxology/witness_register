@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from decimal import Decimal
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -19,6 +20,13 @@ from witness_register import (
     project,
     update_state,
     verify_chain,
+)
+
+
+# Exact retained v0.2.0 manifest bytes, including its full producer custody.
+# A copied label, changed date, changed sibling, or extension is not this replay.
+_LEGACY_MANIFEST_SHA256 = (
+    "68aaacd03282558c74e6ed959e7ea02f75c2071d3ac186ad0199ae3e221cce9e"
 )
 
 
@@ -40,7 +48,10 @@ def _reject_constant(value: str) -> None:
 def _strict_json(text: str) -> dict:
     """Decode one object as strict JSON; native status remains opaque."""
     payload = json.loads(
-        text, object_pairs_hook=_unique_fields, parse_constant=_reject_constant
+        text,
+        object_pairs_hook=_unique_fields,
+        parse_constant=_reject_constant,
+        parse_int=lambda value: int(Decimal(value)),
     )
     if type(payload) is not dict:
         raise ValueError("expected a JSON object")
@@ -49,10 +60,16 @@ def _strict_json(text: str) -> dict:
 
 def build_cohort(directory: Path) -> dict:
     """Bind exported bytes to one declared cohort, without claiming a shared subject."""
-    manifest = _strict_json((directory / "manifest.json").read_text(encoding="utf-8"))
-    classification_ref = manifest.get(
-        "classification_decision_ref", "registrar:release-cohort-20261021"
-    )
+    raw_manifest = (directory / "manifest.json").read_bytes()
+    manifest = _strict_json(raw_manifest.decode("utf-8"))
+    if "classification_decision_ref" in manifest:
+        classification_ref = manifest["classification_decision_ref"]
+        if type(classification_ref) is not str or not classification_ref.strip():
+            raise ValueError("classification_decision_ref must be a nonblank string")
+    elif sha256(raw_manifest).hexdigest() == _LEGACY_MANIFEST_SHA256:
+        classification_ref = "registrar:release-cohort-20261021"
+    else:
+        raise ValueError("classification_decision_ref is required for a new cohort")
     envelopes = []
     for entry in manifest["siblings"]:
         raw = (directory / entry["file"]).read_bytes()

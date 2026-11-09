@@ -144,6 +144,8 @@ def test_cohort_refuses_invalid_and_misattributed_exports(tmp_path, defect, edit
     payload["line_id"] = "" if defect == "invalid-envelope" else "foreign-line"
     path.write_text(json.dumps(payload))
     entry["sha256"] = sha256(path.read_bytes()).hexdigest()
+    # This edited manifest is a new probe, not the exact historical replay.
+    manifest["classification_decision_ref"] = "registrar:export-intake-probe"
     manifest_path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="refused export|does not match"):
         build_cohort(directory)
@@ -169,6 +171,68 @@ def test_new_cohort_uses_its_authored_classification_reference(tmp_path):
     assert (
         generated["states"][-1]["payload"]["envelopes"]
         == generated["states"][0]["payload"]["envelopes"]
+    )
+
+
+@pytest.mark.parametrize("value", (None, "", " \t\n", 17, False, [], {}))
+def test_cohort_refuses_unusable_authored_classification_reference(tmp_path, value):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY, directory)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["classification_decision_ref"] = value
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="classification_decision_ref"):
+        build_cohort(directory)
+
+
+@pytest.mark.parametrize(
+    "change",
+    (
+        "identity",
+        "date",
+        "use",
+        "producer-custody",
+        "export-hash",
+        "extension",
+        "spacing",
+    ),
+)
+def test_only_complete_unchanged_legacy_manifest_can_omit_classification(
+    tmp_path, change
+):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY, directory)
+    manifest_path = directory / "manifest.json"
+    original = manifest_path.read_text()
+    manifest = json.loads(original)
+    assert "classification_decision_ref" not in manifest
+    if change == "identity":
+        manifest["cohort_id"] = "new-declared-cohort"
+    elif change == "date":
+        manifest["reviewed_on"] = "2026-11-08"
+    elif change == "use":
+        manifest["declared_next_use"] = "a new use of the same exports"
+    elif change == "producer-custody":
+        manifest["siblings"][0]["commit"] = "a" * 40
+    elif change == "export-hash":
+        manifest["siblings"][0]["sha256"] = "a" * 64
+    elif change == "extension":
+        manifest["new_declaration"] = "a later manifest"
+    manifest_path.write_text(
+        original + " " if change == "spacing" else json.dumps(manifest)
+    )
+    with pytest.raises(ValueError, match="classification_decision_ref"):
+        build_cohort(directory)
+
+
+def test_unchanged_legacy_manifest_replays_after_relocation(tmp_path):
+    directory = tmp_path / "not-a-release-label"
+    shutil.copytree(DIRECTORY, directory)
+    generated = build_cohort(directory)
+    assert (
+        canonical_json(generated) + "\n"
+        == (directory / "co_registration.json").read_text()
     )
 
 
@@ -285,3 +349,24 @@ def test_ten_native_status_vectors_cannot_clear_authored_holds(tmp_path):
     reasons = generated["projection"]["reasons"]
     assert any("return_due" in reason for reason in reasons)
     assert any("CANNOT_COMPARE" in reason for reason in reasons)
+
+
+def test_oversized_integer_export_reaches_native_domain_refusal(tmp_path):
+    directory = tmp_path / "cohort"
+    shutil.copytree(DIRECTORY.parent / CURRENT_EDITION, directory)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    entry = manifest["siblings"][0]
+    target = directory / entry["file"]
+    payload = json.loads(target.read_text())
+    fields = [
+        json.dumps(key) + ":" + json.dumps(value)
+        for key, value in payload.items()
+        if key != "native_status"
+    ]
+    fields.append('"native_status":{"oversized_integer":1' + "0" * 4300 + "}")
+    target.write_text("{" + ",".join(fields) + "}")
+    entry["sha256"] = sha256(target.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="refused export .*MALFORMED_FIELD"):
+        build_cohort(directory)

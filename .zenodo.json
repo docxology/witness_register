@@ -12,7 +12,7 @@
   ],
   "license": "cc-by-4.0",
   "access_right": "open",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "keywords": [
     "co-registration",
     "append-only log",
@@ -109,5 +109,5 @@
       "scheme": "url"
     }
   ],
-  "notes": "The register stands beside the ten instruments and their reader, outside LINE_SET. Violet, Copper, and Iron repositories are private; their public Witness envelopes are separately disclosure-reviewed synthetic exports with empty source references. Full native provenance stays private. Prior archived DOI: 10.5281/zenodo.22833511 (version 0.1.1). No DOI has been reserved or minted for this version. This metadata does not authorize a deposit."
+  "notes": "Source metadata for version 0.5.0; a source declaration is not a release or deposit receipt. Previously verified source archive: 0.4.0 / 10.5281/zenodo.24069488, identifying that SOURCE ZIP only, not a standalone manuscript or this source edition. Historical 0.1.1 / 10.5281/zenodo.22833511 remains a separate reference. Cite later source through its repository until its exact edition/object is independently verified. Witness stands beside the ten instruments and Main, outside LINE_SET and the PRIVATE omnibus. Violet, Copper, and Iron remain private; public Witness envelopes are separately disclosure-reviewed synthetic exports with empty source references. Full native provenance stays private. This metadata does not authorize a deposit."
 }

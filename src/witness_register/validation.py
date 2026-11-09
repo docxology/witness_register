@@ -42,13 +42,19 @@ class InvalidStateError(ValueError):
 
 
 def _record_domain_errors(
-    records, kind: str, tuple_fields: frozenset[str]
+    records,
+    kind: str,
+    tuple_fields: frozenset[str],
+    *,
+    opaque_fields: frozenset[str] = frozenset(),
 ) -> tuple[str, ...]:
     """Admit record fields before identity, truthiness, reference, or hash work."""
 
     errors: list[str] = []
     for index, record in enumerate(records):
         for term in fields(record):
+            if term.name in opaque_fields:
+                continue
             value = getattr(record, term.name)
             if term.name in tuple_fields:
                 valid = type(value) is tuple and all(
@@ -87,8 +93,28 @@ def _return_domain_errors(returns) -> tuple[str, ...]:
     return _record_domain_errors(returns, "contract", frozenset(("alternatives_live",)))
 
 
+def _envelope_domain_errors(envelopes) -> tuple[str, ...]:
+    return _record_domain_errors(
+        envelopes,
+        "envelope",
+        frozenset(("source_snapshot_refs", "scope_and_nonclaims")),
+        opaque_fields=frozenset(("native_status",)),
+    )
+
+
+def _holding_domain_errors(holdings) -> tuple[str, ...]:
+    return _record_domain_errors(
+        holdings, "holding", frozenset(("candidate_relations",))
+    )
+
+
 def _domain_errors(state: WitnessState) -> tuple[str, ...]:
-    return check_relation_domains(state) + _return_domain_errors(state.returns)
+    return (
+        check_relation_domains(state)
+        + _return_domain_errors(state.returns)
+        + _envelope_domain_errors(state.envelopes)
+        + _holding_domain_errors(state.unclassified)
+    )
 
 
 def check_distinct_ids(state: WitnessState) -> tuple[str, ...]:
@@ -346,6 +372,8 @@ def validate_state(state: WitnessState) -> tuple[StructuralIssue, ...]:
     for code, messages in (
         ("RELATION_DOMAIN", check_relation_domains(state)),
         ("RETURN_DOMAIN", _return_domain_errors(state.returns)),
+        ("ENVELOPE_DOMAIN", _envelope_domain_errors(state.envelopes)),
+        ("HOLDING_DOMAIN", _holding_domain_errors(state.unclassified)),
     ):
         issues.extend(
             StructuralIssue(code, state.state_digest, message) for message in messages

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.0 — 2026-11-09
+
+- Preserve malformed raw envelope and holding sequence values for inspection
+  instead of splitting strings or blindly iterating them. Admit exact string and
+  tuple-of-string bookkeeping domains before validated registration, update,
+  projection, or chain acceptance; report `ENVELOPE_DOMAIN` and `HOLDING_DOMAIN`.
+  Opaque native status retains its existing JSON-domain handling.
+- Require an authored nonblank `classification_decision_ref` for new release
+  cohorts. Permit omitted authority only for the complete byte-identical retained
+  v0.2.0 manifest, bound by its exact SHA-256 regardless of directory location.
+  Copied labels, edited content, or formatting changes grant no exception.
+- Decode JSON integer tokens losslessly before native-domain admission, without
+  changing process-wide conversion limits. Oversized native status from actual
+  Copper envelope bytes reaches the existing 4096-bit typed refusal; the bound,
+  opaque status, duplicate-field refusal, and strict JSON rules are unchanged.
+- Preserve valid canonical encodings, raw observation whitespace, open-shaped
+  transport intake and historical wrapper replay, native-status opacity, schemas,
+  and projection rules. Historical cohort bytes and their authority are not
+  rewritten or reassigned.
+
 ## 0.4.0 — 2026-11-08
 
 - Orient the current family to ten instruments plus the Main reader and

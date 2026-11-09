@@ -115,6 +115,16 @@ budgets can still refuse a larger registration. Canonical record bytes,
 rather than Python equality, define unchanged history: JSON booleans,
 integers, floating values and signed zero retain their serialized identity.
 
+The JSON-domain integer bound is 4096 bits; default limits also cap depth at
+64, nodes at 10,000, and characters at 1,000,000. Intake applies additional
+state-wrapper headroom, so those defaults are not a promise that an envelope
+at every limit fits. These are local transport budgets, not native verdicts.
+For example, Copper can export a valid exact integer beyond this bound.
+Witness refuses that value with a named `MALFORMED_FIELD` issue at
+`native_status`; it does not round, stringify, truncate, or reinterpret it.
+Keep the producer's full native artifact and the refusal rather than changing
+the export to manufacture acceptance.
+
 `check_projection_binding` and `state_binding_fidelity` are narrow seal checks.
 `check_projection` replays all stored inputs. `chain_coverage` exposes preserved
 links and denominator, genesis coverage, full-chain validity and an optional

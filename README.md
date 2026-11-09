@@ -134,7 +134,7 @@ this separate companion register: twelve projects. Witness is outside
 `LINE_SET` and outside the eleven-work private omnibus. It co-registers report
 envelopes without aggregation:
 
-- [Black Line](https://github.com/docxology/black_line) — the practice registry of realized craft
+- [Black Line](https://github.com/docxology/black_line) — declared practice and evidence-label coverage
 - [Golden Line](https://github.com/docxology/golden_line) — the aspiration and horizon registry
 - [Red Line](https://github.com/docxology/red_line) — the cognitive-security registry of self-assessments
 - [White Line](https://github.com/docxology/white_line) — the absence and omission ledger
