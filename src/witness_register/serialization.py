@@ -96,7 +96,11 @@ def payload_digest(payload: Any) -> str:
 
 
 def canonical_envelope(record: EnvelopeRecord) -> dict:
-    """The stored form of an accepted envelope, verbatim fields included."""
+    """Store tuples as arrays; preserve malformed raw domains and opaque status.
+
+    Returned values are not detached copies; validation, not serialization,
+    admits the raw record's declared domains.
+    """
 
     return {
         "record_schema": ENVELOPE_RECORD_SCHEMA,
@@ -108,8 +112,16 @@ def canonical_envelope(record: EnvelopeRecord) -> dict:
         "registry_digest": record.registry_digest,
         "native_status": record.native_status,
         "report_ref": record.report_ref,
-        "source_snapshot_refs": list(record.source_snapshot_refs),
-        "scope_and_nonclaims": list(record.scope_and_nonclaims),
+        "source_snapshot_refs": (
+            list(record.source_snapshot_refs)
+            if type(record.source_snapshot_refs) is tuple
+            else record.source_snapshot_refs
+        ),
+        "scope_and_nonclaims": (
+            list(record.scope_and_nonclaims)
+            if type(record.scope_and_nonclaims) is tuple
+            else record.scope_and_nonclaims
+        ),
     }
 
 
@@ -175,14 +187,18 @@ def canonical_return_contract(record: ReturnContractRecord) -> dict:
 
 
 def canonical_unclassified(record: UnclassifiedHeld) -> dict:
-    """The stored form of an unclassified holding."""
+    """Store valid candidate tuples as arrays; retain malformed raw domains."""
 
     return {
         "record_schema": UNCLASSIFIED_SCHEMA,
         "held_id": record.held_id,
         "raw_observation": record.raw_observation,
         "provenance": record.provenance,
-        "candidate_relations": list(record.candidate_relations),
+        "candidate_relations": (
+            list(record.candidate_relations)
+            if type(record.candidate_relations) is tuple
+            else record.candidate_relations
+        ),
         "reason_unclassified": record.reason_unclassified,
         "review_moment": record.review_moment,
     }

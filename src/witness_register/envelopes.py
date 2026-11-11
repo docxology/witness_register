@@ -93,6 +93,11 @@ class EnvelopeRecord:
     an ordered per-record state list, for another a single verdict string;
     the register treats both as opaque. Holding this record asserts only
     that the payload had the published shape, never that its report is true.
+
+    Raw direct construction does not establish acceptance. Validated state
+    boundaries require the declared string fields and tuples of strings;
+    only ``native_status`` has an opaque JSON domain. Use intake to convert
+    transport lists or tuples into detached accepted records.
     """
 
     schema_version: str

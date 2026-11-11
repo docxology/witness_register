@@ -10,6 +10,7 @@ from conftest import (
     make_payload,
     make_relation,
     make_contract,
+    make_holding,
     supporting_context,
 )
 from witness_register import (
@@ -18,6 +19,7 @@ from witness_register import (
     anchor_statement,
     canonical_envelope,
     canonical_json,
+    canonical_unclassified,
     genesis_state,
     intake_envelope,
     project,
@@ -25,6 +27,7 @@ from witness_register import (
     state_content_digest,
     update_state,
     verify_chain,
+    validate_state,
     check_projection,
     check_projection_binding,
     project_chain,
@@ -247,6 +250,112 @@ def test_direct_non_json_payload_is_a_typed_structural_failure(envelope):
     with pytest.raises(InvalidStateError) as exc:
         project(invalid, "u")
     assert {i.code for i in exc.value.issues} >= {"ENVELOPE", "SEAL"}
+
+
+@pytest.mark.parametrize("field", ("source_snapshot_refs", "scope_and_nonclaims"))
+@pytest.mark.parametrize("value", ("AB", 17, None, {"AB": "reading"}, ["AB"], (17,)))
+def test_raw_envelope_sequence_domains_are_not_rewritten(envelope, field, value):
+    malformed = replace(envelope, **{field: value})
+    stored = canonical_envelope(malformed)
+    assert stored[field] == (list(value) if type(value) is tuple else value)
+    raw = raw_state("s", "2026-11-08", (malformed,))
+    assert getattr(raw.envelopes[0], field) is value
+    issues = validate_state(raw)
+    assert any(i.code == "ENVELOPE_DOMAIN" and field in i.message for i in issues)
+    assert any(field in issue for issue in verify_chain((raw,)))
+    with pytest.raises(InvalidStateError, match=field):
+        genesis_state("s", "2026-11-08", (malformed,))
+    with pytest.raises(InvalidStateError, match=field):
+        project(raw, "inspect the raw import")
+    prior = genesis_state("s", "2026-11-08")
+    with pytest.raises(InvalidStateError, match=field):
+        update_state(prior, "2026-11-09", (malformed,))
+
+
+def test_raw_envelope_reports_both_malformed_sequence_domains(envelope):
+    malformed = replace(envelope, source_snapshot_refs="abc", scope_and_nonclaims="NO")
+    raw = raw_state("s", "2026-11-08", (malformed,))
+    messages = [i.message for i in validate_state(raw) if i.code == "ENVELOPE_DOMAIN"]
+    assert any("source_snapshot_refs" in message for message in messages)
+    assert any("scope_and_nonclaims" in message for message in messages)
+    assert canonical_envelope(malformed)["source_snapshot_refs"] == "abc"
+    assert canonical_envelope(malformed)["scope_and_nonclaims"] == "NO"
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    (
+        ("candidate_relations", "AB"),
+        ("candidate_relations", 17),
+        ("candidate_relations", None),
+        ("candidate_relations", {"AB": "reading"}),
+        ("candidate_relations", ["AB"]),
+        ("candidate_relations", (17,)),
+        ("provenance", 17),
+        ("provenance", None),
+        ("provenance", ["receipt"]),
+        ("review_moment", 20261108),
+    ),
+)
+def test_raw_holding_domains_remain_inspectable_but_cannot_project(
+    envelope, field, value
+):
+    holding = make_holding(**{field: value})
+    stored = canonical_unclassified(holding)
+    assert stored[field] == (list(value) if type(value) is tuple else value)
+    raw = raw_state("s", "2026-11-08", (envelope,), unclassified=(holding,))
+    assert getattr(raw.unclassified[0], field) is value
+    assert any(
+        i.code == "HOLDING_DOMAIN" and field in i.message for i in validate_state(raw)
+    )
+    assert any(field in issue for issue in verify_chain((raw,)))
+    with pytest.raises(InvalidStateError, match=field):
+        genesis_state("s", "2026-11-08", (envelope,), unclassified=(holding,))
+    with pytest.raises(InvalidStateError, match=field):
+        project(raw, "inspect the raw import")
+    prior = genesis_state("s", "2026-11-08", (envelope,))
+    with pytest.raises(InvalidStateError, match=field):
+        update_state(prior, "2026-11-09", unclassified=(holding,))
+
+
+def test_raw_holding_reports_candidate_and_provenance_defects_together(envelope):
+    holding = make_holding(provenance=17, candidate_relations="AB")
+    raw = raw_state("s", "2026-11-08", (envelope,), unclassified=(holding,))
+    messages = [i.message for i in validate_state(raw) if i.code == "HOLDING_DOMAIN"]
+    assert any("provenance" in message for message in messages)
+    assert any("candidate_relations" in message for message in messages)
+    assert canonical_unclassified(holding)["candidate_relations"] == "AB"
+
+
+def test_valid_whole_strings_raw_observation_and_status_keep_their_bytes():
+    status = {"opaque": [True, 1, 1.0, None, "NOT A REGISTER VERDICT"]}
+    envelope = accept(
+        make_payload(
+            source_snapshot_refs=["abc"],
+            scope_and_nonclaims=["NO"],
+            native_status=status,
+        )
+    )
+    holding = make_holding(
+        raw_observation="  observation\n\tkept verbatim  ",
+        provenance=" receipt:authored ",
+        candidate_relations=("AB", " second reading "),
+    )
+    first = genesis_state("s", "2026-11-08", (envelope,), unclassified=(holding,))
+    second = update_state(first, "2026-11-09")
+    assert verify_chain((first, second)) == ()
+    assert project(second, "inspect the held reading").value == 0
+    assert envelope.source_snapshot_refs == ("abc",)
+    assert envelope.scope_and_nonclaims == ("NO",)
+    serialized = canonical_json(canonical_envelope(envelope))
+    assert '"source_snapshot_refs":["abc"]' in serialized
+    assert '"scope_and_nonclaims":["NO"]' in serialized
+    assert canonical_json(envelope.native_status) == canonical_json(status)
+    stored = canonical_unclassified(holding)
+    assert stored["raw_observation"] == "  observation\n\tkept verbatim  "
+    assert stored["provenance"] == " receipt:authored "
+    assert '"candidate_relations":["AB"," second reading "]' in canonical_json(stored)
+    assert second.unclassified == (holding,)
 
 
 def test_return_order_open_remainder_and_partial_ancestry_are_checked(envelope):

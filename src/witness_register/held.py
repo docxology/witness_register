@@ -20,11 +20,14 @@ class UnclassifiedHeld:
     """One observation held outside the status and relation alphabets.
 
     ``raw_observation`` is verbatim: the register does not normalize,
-    summarize, or reinterpret it. ``candidate_relations`` is free text — a
-    list of readings someone might later decide on, not a default decision.
+    summarize, or reinterpret it. ``candidate_relations`` is a tuple of free
+    text readings someone might later decide on, not a default decision.
     ``reason_unclassified`` states why no current category fits, so a later
     reviewer can tell a genuinely new kind of input from a lazily unfiled
     one.
+    Validated state boundaries admit actual string fields and an immutable
+    tuple of strings for candidates. Raw serialization retains malformed
+    domains for inspection; it never splits a reading into characters.
     """
 
     held_id: str

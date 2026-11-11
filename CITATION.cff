@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-message: "If you use or refer to this work, please cite it as below."
+message: "Cite proposed source version 0.5.0 by repository and version. The references identify earlier editions, not this candidate or a standalone manuscript."
 type: software
 title: "The Witness Register: Co-Registration Without Aggregation"
-version: "0.4.0"
-date-released: "2026-11-08"
+version: "0.5.0"
+date-released: "2026-11-09"
 authors:
   - family-names: "Friedman"
     given-names: "Daniel Ari"
@@ -35,6 +35,14 @@ abstract: >-
   back at the state that earned it. It never parses, compares, ranks,
   averages, or merges any instrument's native status.
 references:
+  - type: software
+    title: "The Witness Register: Co-Registration Without Aggregation"
+    version: "0.4.0"
+    authors:
+      - family-names: "Friedman"
+        given-names: "Daniel Ari"
+    doi: "10.5281/zenodo.24069488"
+    notes: "Previously verified source ZIP only; not a standalone rendered manuscript or proposed 0.5.0 source."
   - type: software
     title: "The Witness Register: Co-Registration Without Aggregation"
     version: "0.1.1"

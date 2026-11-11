@@ -19,6 +19,14 @@ source-byte custody, declared version, and the native export recipe actually
 executed. The registrar's review moment does not replace native review dates
 or make distinct worked subjects correspond.
 
+New manifests must author a nonblank string `classification_decision_ref`.
+No missing declaration inherits a prior registrar's authority. The only legacy
+exception is the complete, exact retained v0.2.0 manifest identified by its raw-byte
+SHA-256 in the builder; changing any field or formatting ends that exception.
+Directory names and a reused cohort label do not establish historical identity.
+Every export must still match that manifest's declared byte hash. This replay
+exception changes neither historical bytes nor the relation/projection schemas.
+
 Violet, Copper, and Iron are private. Their public entries use
 `snapshot_kind: disclosure-reviewed-synthetic-envelope`, identify only the
 approved exported bytes and disclosure review, and omit private commits,
