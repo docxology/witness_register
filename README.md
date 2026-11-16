@@ -6,6 +6,8 @@ The register sits BESIDE the line set: independent instruments and their set
 reader. It is not a line: it has no color, no substantive
 question of its own, and no verdict.
 
+![Witness Register architecture: ten-field line report envelopes co-registered beside typed relation records, append-only prior_ref digest chain, and non-compensatory posture projection](docs/assets/overview.svg)
+
 ## What it is never (read this first)
 
 **No score, no override, no rewriting of the instruments.** The register

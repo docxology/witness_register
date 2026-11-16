@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="450" viewBox="0 0 960 450" role="img" aria-labelledby="t d">
+<title id="t">Witness Register Architecture — Co-Registration Without Aggregation</title>
+<desc id="d">Ten-field report envelopes enter verbatim beside typed relation records, append-only prior_ref digest chain, and non-compensatory posture projection.</desc>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 1.5L9 5L0 8.5z" fill="#64748b"/></marker></defs>
+<rect x="0" y="0" width="960" height="450" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<rect x="20" y="18" width="920" height="64" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" data-card="1"/>
+<rect x="20" y="18" width="6" height="64" rx="3" fill="#475569"/>
+<text x="38" y="45" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#0f172a">witness_register — The Shared Witness Register</text>
+<text x="38" y="67" font-family="system-ui,sans-serif" font-size="12" fill="#475569">Co-registration without aggregation: sits beside the Line Set with no color, score, or override</text>
+<rect x="715" y="27" width="211" height="24" rx="12" fill="#e2e8f0" stroke="#475569" stroke-width="1"/>
+<text x="820.5" y="43" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11.5" font-weight="600" fill="#0f172a">line.report-envelope/1.0</text>
+<rect x="20" y="100" width="218" height="150" rx="9" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" data-card="1"/>
+<rect x="20" y="100" width="218" height="5" rx="2.5" fill="#2563eb"/>
+<rect x="32" y="110" width="60" height="17" rx="8.5" fill="#ffffff" stroke="#2563eb" stroke-width="0.9"/>
+<text x="62.0" y="122" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#1e40af">INTAKE</text>
+<text x="32" y="143" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#1e40af">1. Envelope Intake</text>
+<text x="32" y="161" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">intake_envelope() by value</text>
+<text x="32" y="179" font-family="system-ui,sans-serif" font-size="12" fill="#334155">10-field envelope schema</text>
+<text x="32" y="197" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">Keeps native_status</text>
+<text x="32" y="215" font-family="system-ui,sans-serif" font-size="12" fill="#334155">verbatim per instrument</text>
+<text x="32" y="233" font-family="system-ui,sans-serif" font-size="12" fill="#334155">Retains line non-claims</text>
+<line x1="238" y1="175" x2="254" y2="175" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="256" y="100" width="218" height="150" rx="9" fill="#fffbeb" stroke="#d97706" stroke-width="1.5" data-card="1"/>
+<rect x="256" y="100" width="218" height="5" rx="2.5" fill="#d97706"/>
+<rect x="268" y="110" width="82" height="17" rx="8.5" fill="#ffffff" stroke="#d97706" stroke-width="0.9"/>
+<text x="309.0" y="122" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#92400e">RELATIONS</text>
+<text x="268" y="143" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#92400e">2. Co-Present Relations</text>
+<text x="268" y="161" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">Typed RelationRecord:</text>
+<text x="268" y="179" font-family="system-ui,sans-serif" font-size="12" fill="#334155">blocks · dependencies</text>
+<text x="268" y="197" font-family="system-ui,sans-serif" font-size="12" fill="#334155">tensions · absences</text>
+<text x="268" y="215" font-family="system-ui,sans-serif" font-size="12" fill="#334155">due returns · agreements</text>
+<text x="268" y="233" font-family="system-ui,sans-serif" font-size="12" fill="#334155">incomparabilities</text>
+<line x1="474" y1="175" x2="490" y2="175" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="492" y="100" width="218" height="150" rx="9" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5" data-card="1"/>
+<rect x="492" y="100" width="218" height="5" rx="2.5" fill="#0d9488"/>
+<rect x="504" y="110" width="67" height="17" rx="8.5" fill="#ffffff" stroke="#0d9488" stroke-width="0.9"/>
+<text x="537.5" y="122" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#115e59">HISTORY</text>
+<text x="504" y="143" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#115e59">3. Digest-Sealed Chain</text>
+<text x="504" y="161" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">Append-only prior_ref</text>
+<text x="504" y="179" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">update_state() fail-closed</text>
+<text x="504" y="197" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">verify_chain() integrity</text>
+<text x="504" y="215" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">seal_tip() digest export</text>
+<text x="504" y="233" font-family="system-ui,sans-serif" font-size="12" fill="#334155">for external anchoring</text>
+<line x1="710" y1="175" x2="726" y2="175" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+<rect x="728" y="100" width="212" height="150" rx="9" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5" data-card="1"/>
+<rect x="728" y="100" width="212" height="5" rx="2.5" fill="#7c3aed"/>
+<rect x="740" y="110" width="82" height="17" rx="8.5" fill="#ffffff" stroke="#7c3aed" stroke-width="0.9"/>
+<text x="781.0" y="122" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#5b21b6">INTERFACE</text>
+<text x="740" y="143" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#5b21b6">4. Posture Projection</text>
+<text x="740" y="161" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">project(state, next_use)</text>
+<text x="740" y="179" font-family="ui-monospace,monospace" font-size="11.5" fill="#1e293b">Emits -1 | 0 | +1</text>
+<text x="740" y="197" font-family="system-ui,sans-serif" font-size="12" fill="#334155">Non-compensatory rules</text>
+<text x="740" y="215" font-family="system-ui,sans-serif" font-size="12" fill="#334155">Carries state digest &amp;</text>
+<text x="740" y="233" font-family="system-ui,sans-serif" font-size="12" fill="#334155">explicit holding reasons</text>
+<text x="24" y="276" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#1e293b">FIRST-CLASS SAFEGUARDS &amp; STRICT NON-CLAIMS</text>
+<rect x="20" y="288" width="454" height="98" rx="9" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5" data-card="1"/>
+<rect x="20" y="288" width="454" height="5" rx="2.5" fill="#ea580c"/>
+<text x="32" y="313" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#9a3412">UnclassifiedHeld Raw Holding</text>
+<rect x="367" y="298" width="97" height="18" rx="9" fill="#ffffff" stroke="#ea580c" stroke-width="0.9"/>
+<text x="415.5" y="310.5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#9a3412">RAW HOLDING</text>
+<text x="32" y="334" font-family="system-ui,sans-serif" font-size="12" fill="#334155">Holds unclassifiable observations outside every status alphabet;</text>
+<text x="32" y="352" font-family="system-ui,sans-serif" font-size="12" fill="#334155">promotion requires a human decision ref linked to original record.</text>
+<rect x="492" y="288" width="448" height="98" rx="9" fill="#fff1f2" stroke="#e11d48" stroke-width="1.5" data-card="1"/>
+<rect x="492" y="288" width="448" height="5" rx="2.5" fill="#e11d48"/>
+<rect x="504" y="298" width="82" height="17" rx="8.5" fill="#ffffff" stroke="#e11d48" stroke-width="0.9"/>
+<text x="545.0" y="310" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="600" fill="#9f1239">NON-CLAIM</text>
+<text x="504" y="331" font-family="system-ui,sans-serif" font-size="13.5" font-weight="700" fill="#9f1239">No Crown Without Return (What It Is Never)</text>
+<text x="504" y="349" font-family="system-ui,sans-serif" font-size="12" fill="#334155">Never ranks, averages, merges, or rewrites any line&#x27;s status;</text>
+<text x="504" y="367" font-family="system-ui,sans-serif" font-size="12" fill="#334155">-1 / 0 / +1 are interface postures, never an aggregate score.</text>
+<rect x="20" y="400" width="920" height="36" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1" data-card="1"/>
+<text x="34" y="422.5" font-family="system-ui,sans-serif" font-size="11.5" font-weight="600" fill="#334155">Authority: Each line remains sole authority over its report; conflicts stay co-present.</text>
+<text x="926" y="422.5" text-anchor="end" font-family="ui-monospace,monospace" font-size="11.5" fill="#475569">Standalone Python stdlib</text>
+</svg>
