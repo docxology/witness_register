@@ -1,6 +1,6 @@
 # Manuscript Status
 
-- **Project:** witness_register_top
+- **Project:** witness_register
 - **Manuscript title:** The Witness Register: Co-Registration Without Aggregation
 - **Location:** `docs/manuscript/` (this project's manuscript sources)
 - **Type:** Active publication-target manuscript (11 section files)

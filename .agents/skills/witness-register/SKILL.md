@@ -25,14 +25,11 @@ uv run mypy src/witness_register --check-untyped-defs
 uv run ruff format --check src tests scripts
 ```
 
-Figure generation requires the system `rsvg-convert` executable from librsvg.
-Render with an isolated detached checkout of `docxology/template` origin/main
-on GitVault. Put a fresh real clone of the source release commit, with its own
-`.git`, at `projects/active/witness_register`; build its figures first. Run
-`uv run --no-sync python scripts/pipeline/stage_03_render.py --project active/witness_register`
-then `uv run --no-sync python scripts/pipeline/stage_04_validate.py --project active/witness_register`.
-Inspect every validation result and the actual PDF/HTML. Follow
-`docs/publication.md` for provenance, metadata, independent audit and release.
+Follow the project guide in `docs/quickstart.md` for figure prerequisites,
+the pinned template checkout, and the render and validation stages. The
+workflow uses a real clone with its own Git index so `stage_04_validate.py`
+can bind the manuscript to the output. Follow
+`docs/publication.md` for provenance, metadata, independent audit, and release.
 
 ## States and the chain
 

@@ -5,15 +5,8 @@ and [publication procedure](publication.md) before changing behavior.
 Use the locked uv environment and preserve the Python floor in `pyproject.toml`.
 Figures require a working `rsvg-convert` executable.
 
-Install the project's complete locked development environment with
-`uv sync --all-extras --all-groups` before running the gates. Use that
-environment's Python and tools, not another project's interpreter: an unrelated
-installed `scripts` package can shadow this repository's script namespace.
-When checking a source checkout through a separate isolated environment, put
-the checkout root and `src` on both the parent import path and child
-`PYTHONPATH`; do not replace package namespaces with stand-ins.
-
-Type check: `uv run mypy src/witness_register --check-untyped-defs`.
+Use the [locked setup and native gates](quickstart.md#native-verification)
+from the source checkout to keep its scripts and package imports together.
 
 For a behavior defect, first run a regression that fails on the existing
 implementation. Keep the positive and planted-defect controls. Change the API,
@@ -50,7 +43,7 @@ Run every command in [AGENTS.md](../AGENTS.md). After touching figures, build
 twice and compare every artifact byte for byte. Regenerate the formalism ledger
 with `uv run python scripts/gen_formalism_ledger.py`; its tracked output must
 match. Render through the separate engine described in
-[STANDALONE.md](../STANDALONE.md) and inspect the rendered artifacts.
+[the pinned render guide](quickstart.md#render-the-manuscript) and inspect the rendered artifacts.
 
 Release packets record measured commands, sibling commit/tag provenance and
 artifact digests. Preserve prior packets and fixture custody. Refresh siblings
@@ -59,16 +52,6 @@ separately and storing only its published envelope by value. Never overwrite a
 retained historical envelope or manifest. Exported-byte custody and report-pointer
 syntax do not establish native correspondence, freshness, or shared subject identity.
 
-Run the existing publication stages from an isolated engine checkout, with a
-real release-snapshot clone at `projects/active/witness_register`:
-
-```bash
-uv run --no-sync python scripts/pipeline/stage_03_render.py --project active/witness_register
-uv run --no-sync python scripts/pipeline/stage_04_validate.py --project active/witness_register
-```
-
-Build the project's figures first. Inspect every validation result and the
-rendered-provenance receipt, not only the process exit code. The engine's
-own infrastructure test suite is a distinct additional check; it does not
-replace any repository or publication gate. Preserve failed attempts as
-failures. No project pipeline override or engine waiver is required.
+Inspect every validation result and the rendered-provenance receipt after
+following the render guide. Record failed runs alongside the successful
+receipt. The engine's own infrastructure tests are a separate check.

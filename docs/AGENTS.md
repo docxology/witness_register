@@ -18,6 +18,6 @@ records.
 
 ## What does not belong here
 
-- Prose that belongs in the manuscript (goes under `../manuscript/`)
+- Prose that belongs in the manuscript (goes under `manuscript/`)
 - Code-level documentation (stays in docstrings under `../src/`)
 - Test expectations (stays in test files under `../tests/`)

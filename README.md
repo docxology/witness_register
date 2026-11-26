@@ -49,26 +49,11 @@ The full non-claims are stated in the package docstring
   values, not the ontology: a projection always carries the state digest that
   earned it and the reasons it holds.
 
-## Quick start
+## Use and verify
 
-```bash
-uv sync
-uv run pytest tests/ --cov=src --cov-branch -q
-```
-
-```python
-from witness_register import (
-    genesis_state, intake_envelope, project, run_battery,
-)
-
-record, issues = intake_envelope(payload)   # payload: a line's exported dict
-assert record is not None, issues           # typed refusal, never silent
-state = genesis_state("subject-1", "2026-07-29", (record,))
-posture = project(state, declared_next_use="cite in the review meeting")
-print(posture.value, posture.reasons)       # the scalar never travels alone
-
-run_battery()                                # the review's 3x3 witness cases
-```
+Start with the [documentation index](docs/README.md), then follow the
+[setup, example, and verification guide](docs/quickstart.md). The
+[manuscript index](docs/manuscript/README.md) lists the authored sources.
 
 ## The envelope contract it accepts
 
@@ -107,7 +92,7 @@ permission. Every projection carries `state_ref` and `reasons`, and
 - `docs/manuscript/` — the short manuscript sources.
 - [docs/correspondence.md](docs/correspondence.md) — why this work exists:
   the 2026-07-29 design review, proposal by proposal.
-- [STANDALONE.md](STANDALONE.md) — what a separated clone can and cannot do.
+- [Standalone use](docs/standalone.md) — what a separated clone can and cannot do.
 - [AGENTS.md](AGENTS.md) — the validation contract and exact gate commands.
 
 ## The sibling works

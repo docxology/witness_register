@@ -57,8 +57,7 @@ guard undiscriminating fails the guard's positive control, not just review:
 ## Rendering (external, optional)
 
 The publication bundle is written by the `docxology/template` render engine,
-a separate repository; see [STANDALONE.md](STANDALONE.md). Nothing in this
-repository produces `output/pdf/witness_register_combined.pdf` on its own.
+a separate repository. Use the [pinned render instructions](docs/quickstart.md#render-the-manuscript).
 
 ## Editing rules
 
